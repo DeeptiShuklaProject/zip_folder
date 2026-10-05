@@ -1,0 +1,478 @@
+Hello all, welcome to another episode of AWS show and tell. I am Anil Nadimi, your host for today. We have Mani and
+0:4040 secondsAkasha joining us. We'll do introductions in a second here. Uh but we are doing a deep dive series on uh
+0:4848 secondsagent core. Uh before we get uh into the details u you know again I'm connecting from Princeton, New Jersey. Um we'll go
+0:5656 secondsinto introductions. I'm a senior solutions architect uh supporting enterprise customers in the green field area uh within AWS. Uh over to you Mani.
+1:041 minute, 4 secondsHi everyone. Uh very nice to be here.
+1:071 minute, 7 secondsI'm principal generative AI specialist solution architect at AWS and primary line with agent cover.
+1:161 minute, 16 secondsPerfect. Hi man. Um hi everyone. I my name is Akersha and I'm a data scientist
+1:231 minute, 23 secondsa geni data scientist with agenti orc uh of AWS and I'm working very closely with
+1:301 minute, 30 secondsagent core memory and I'm very excited to share all the details with you all here and excellent thanks uh thanks man and
+1:391 minute, 39 secondsakasha so where are you connecting from money oh I'm connecting from orange county near the LA Los Angeles area
+1:471 minute, 47 secondsokay yeah Akasha I am very central in New York. I'm in Manhattan. The midtown of Manhattan.
+1:541 minute, 54 secondsOkay. So, we have both both coast. Yeah.
+1:571 minute, 57 secondsSo, excellent. So, uh getting into the episode today, we are going to uh dive deep into agent core memory. We've been
+2:062 minutes, 6 secondsdoing this series uh uh deep dive series on agent core different suite of services that agent core offers. And
+2:142 minutes, 14 secondstoday's episode we have money and Akasha joining us. So uh you might be using or building agentic applications uh and
+2:232 minutes, 23 secondsmemory is a central component of of this right. So uh money and akash are going to dive deep and uh explain break it
+2:332 minutes, 33 secondsdown for us how things work. So we let uh we let the specialists uh give or you about this right. So yeah take it over.
+2:432 minutes, 43 secondsSounds good.
+2:492 minutes, 49 secondsAll right. So I mean we are today going to talk about u agent core memory which is a service for agent memory
+2:572 minutes, 57 secondsmanagement. Um, agent core memory makes it easier for developers to build context aware agents by eliminating the
+Chapter 2: Importance of context
+3:063 minutes, 6 secondscomplex memory infrastructure management, right? While providing full control over what exactly the II agent
+3:143 minutes, 14 secondsremembers. So first of all before we go into that why are we talking about this
+3:213 minutes, 21 secondsat the moment? Because till 2025 till today we have focused on creating
+3:283 minutes, 28 secondstechnically amazing agents providing them with a lot of tools with a lot of capabilities but however good agents are
+3:363 minutes, 36 secondsin giving humanlike responses they are fundamentally stateless. Think think about it this way. So imagine every time
+3:443 minutes, 44 secondsyou talk to a friend and they forgot everything about your previous conversation. That could be frustrating. Won't be good, right? So yeah.
+3:533 minutes, 53 secondsSo I mean the fact remains that the ability to remember the is the foundation of our meaningful human
+4:014 minutes, 1 secondrelationships, right? We remember the past conversations. We learn preferences of our friends over time. We build that share context and that's what deepens
+4:104 minutes, 10 secondsour connections. And this is what we want to uh replicate in our agents to provide truly great user experiences. We
+4:194 minutes, 19 secondsneed our agents to remember things the preferences your uh important facts about you uh you know the important the
+4:274 minutes, 27 secondspatterns of how you like to interact and that's what matters that's what will drive the user adoption for the applications.
+4:384 minutes, 38 secondsSo that brings us to what I believe is going to be huge and not just me. It's a
+4:454 minutes, 45 secondsclear consensus for what agents um for agents right now that in 2026 it's going
+4:524 minutes, 52 secondsto it's going to be the year of context engineering.
+4:574 minutes, 57 secondsSo I think we need to dive deep into this context changing topic itself. Right. So there it's it's huge. it's going to make a a fundamental uh you know shift impact on everything that's agentic in nature.
+Chapter 3: Context engineering challenges
+5:105 minutes, 10 secondsI completely agree. I mean think about it right we have all of these different kinds of context that we can give to our
+5:175 minutes, 17 secondsmodels um and we can engineer it so many different ways and that context is the
+5:245 minutes, 24 secondsonly thing that impacts how or you know how brilliant a response we're going to get or are we going to get complete hallucinations.
+5:325 minutes, 32 secondsSo this is especially critical for AI agents because let's be honest, they're
+5:385 minutes, 38 secondshandling pretty complex tasks today, right? We can have longunning sessions
+5:445 minutes, 44 secondsthat can go out for hours and we are providing them with so many tools and that feedback piles up in that context
+5:535 minutes, 53 secondswindow as well. So here's what we've observed. Most of the times when these agentic systems mess up, it could be one
+6:036 minutes, 3 secondsof the two reasons, right? It could be either the model itself, but to be honest, models are getting so much better.
+6:136 minutes, 13 secondsSo that's not that prominent a reason anymore.
+6:166 minutes, 16 secondsUh so moving to the second aspect which is the context itself. So what we are
+6:236 minutes, 23 secondsproviding and that impacts how much a model is going to hallucinate or how much how accurate responses how good responses uh it's going to provide.
+6:366 minutes, 36 secondsSo there's a quick question Nakasha like uh I think uh whenever we go into these customer conversations um one thing that
+6:436 minutes, 43 secondseveryone ask is like these days because you have touched based on this model thing right so these days models can handle like
+6:516 minutes, 51 secondsmillions of tokens of context so why are we talking about context because if I even if I provide like all these
+6:586 minutes, 58 secondsdocuments tool calls and everything comprehensive in instructions model can handle really long context
+7:057 minutes, 5 secondstext. So what is it driving? Because this is a common question and I'm putting you on the spot.
+7:147 minutes, 14 secondsBut so I mean it is it can take in so much tokens but then this also maybe misguides it. If you're providing it the
+7:227 minutes, 22 secondswrong context or it is not able to derive the right information from that context, it can uh maybe go into the
+7:317 minutes, 31 secondswrong direction. And that's where we have to make sure that you know if we want our agents to perform really well
+7:387 minutes, 38 secondsin all cases uh in all corner cases as well. We want to make sure that we are providing um everything that is cured
+7:467 minutes, 46 secondsout for the agent. So we are making sure that the context window is precise, accurate and uh complete.
+7:547 minutes, 54 secondsYeah. And also additionally like even if they can handle millions of tokens, imagine every call you giving millions of tokens. What about the cost?
+8:018 minutes, 1 secondExactly. Yeah.
+8:048 minutes, 4 secondsCaching may come to the rescue actually out there. Right. So caching may help but uh again yeah there's
+8:118 minutes, 11 secondsI mean caching will only help when it's repetitive information which in most of the cases uh like if you're
+8:188 minutes, 18 secondstalking about user uh messages, if you're talking about tools, this is not always the case, right? It might take in different pieces of information. So
+8:288 minutes, 28 secondsyeah, I think the bottom line is to have the relevant context every time. That's it.
+8:338 minutes, 33 secondsYes. Yes, 100%. Yeah, we have a question coming in from Ragu asking you know to share some realtime use cases as we speak about this.
+Chapter 4: Realtime agent use cases
+8:438 minutes, 43 secondsSure. Uh I think um I can take take up this one. So some of the real-time use cases for example if you have a customer
+8:518 minutes, 51 secondssupport agent right and then you are you have been talking to the customer support agent for quite some time and that customer support agent can fetch
+9:009 minutessome tools uh such as some of the data APIs and then it can also get information from your vector stores and
+9:099 minutes, 9 secondsby the way rag is still alive so not going anywhere and um because you always have these these documents right which
+9:189 minutes, 18 secondsuh which your company which reflects your company brands those are the polic can be policy documents can be you know to provide additional context. So the
+9:269 minutes, 26 secondsagents even if you give like ask like one question and if they need to fetch information from these various tools it
+9:339 minutes, 33 secondscan really grow and at the same time you want to make sure that you're providing personalized responses to your uh users
+9:409 minutes, 40 secondsas well right so that's the main reason why it becomes really important to provide the most relevant information to
+9:499 minutes, 49 secondsyour agent so that it can provide you with more accurate uh results. and the responses back. So one example is
+9:589 minutes, 58 secondscustomer support. Now think about another example. If you're doing deep research, now this is a long running agent, right? It's running for let's say
+10:0510 minutes, 5 secondsfive minutes or sometimes even more than an hour depending on the uh use case and how you have designed it. So this
+10:1310 minutes, 13 secondscontext can grow really big and again if you provide too much context, think of like I'm a human. I can only take so
+10:2010 minutes, 20 secondsmuch. I know AI models can take more but still uh if I still have to filter out
+10:2710 minutes, 27 secondsuh what is relevant what is not relevant and then you are adding this extra load uh to the model to figure out what's relevant what's not relevant right so
+10:3610 minutes, 36 secondsthe idea is while you're designing your application make sure that you are providing the relevant context design your application in such a way that it
+10:4410 minutes, 44 secondsalways provide more relevant context uh to your agent and I think uh this is great that we're talking about context
+10:5110 minutes, 51 secondsengineering. I think we should also focus on where memory plays a really important part in the context engineering. These user messages, this
+10:5810 minutes, 58 secondsmessage history, all of those among other histories, right? The chatbot chat histories. Exactly.
+11:0311 minutes, 3 secondsExactly. I mean, we have been talking about rag and prompt engineering for a while now. So today, let's focus on memory.
+11:1211 minutes, 12 secondsExactly. And you have to make sure that there is contextual intelligence um embedded into it because if you provide
+11:1911 minutes, 19 secondsaccurate and relevance um context that's what will lead to more accurate and relevant responses back. So it's
+11:2711 minutes, 27 secondsliterally like the principle of garbage in garbage out still holds true no matter how smart uh you know the models become and the stuff like that. So it's
+11:3511 minutes, 35 secondsimportant uh to do that and also while you're working with these applications it's super important uh sometimes I also
+11:4311 minutes, 43 secondstouched based about personalization I want my agent to remember to give me a better uh response so that I can connect
+11:5011 minutes, 50 secondswith my application all the time it if it remembers my past conversations or even just like my preferences so for
+11:5811 minutes, 58 secondsexample if I'm coding all the time and if I have to give instruction that I like to code in Python then uh that's like repetitive input that I'm providing
+12:0712 minutes, 7 secondsall the time. Why not my agent can remember that I code in Python, right? So just one example of user preferences.
+12:1312 minutes, 13 secondsIt can go even big and then also like retaining some of the knowledge while I'm interacting with the agent. So it should have like a way where it can
+12:2112 minutes, 21 secondsevolve and solve my problems and understand the process and the you know uh mindset on on how I like my responses
+12:2912 minutes, 29 secondsto be because I'll be ask keep asking follow-up questions and so so on you know it goes on and on and on. So uh so
+12:3712 minutes, 37 secondsall of these things are important like we don't have to just remember we have to be smart about what our agents are remembering.
+Chapter 5: Short-term vs long-term memory
+12:4612 minutes, 46 secondsWe we have a question coming from the pitch chat asking if this is a presentation or if it's uh uh you know if includes demo. This is a show and
+12:5412 minutes, 54 secondstell uh series folks. So which means that you know we're doing the tell part before we do the show part right. So it's like you know the other way around but we wanted to set some background
+13:0213 minutes, 2 secondsbefore we uh go into the demo and uh share more information about that. All right. Yeah.
+13:0813 minutes, 8 secondsLet's dive into this short-term memory, long-term memory. I mean there's already memory. Can you break this down for us?
+13:1413 minutes, 14 secondsWhat is this? Right. Yeah. And short-term memory, think of it as raw memory. like when I'm talking to the
+13:2113 minutes, 21 secondsagent there are like ongoing conversation uh that I'm having and I want to store and retain that ongoing conversation
+13:2913 minutes, 29 secondsum which which will include the user question that uh that the user is asking the response that the agent is giving back maybe sometimes tool information
+13:3813 minutes, 38 secondsand most importantly I might want to store my agent state so that it can resume from that if something goes bad right or also I might want to do check
+13:4613 minutes, 46 secondsuh checkpointing uh to make sure that you know I can resume from that particular state and I can retrieve
+13:5313 minutes, 53 secondsthose messages while I'm talking to the uh agent and then uh this is like when we are talking about short-term memory there are two things that are very
+14:0114 minutes, 1 secondimportant one is uh who the actor is like who these messages belong to and I'll do a little bit deeper uh dive into
+14:0914 minutes, 9 secondsthat um in in a moment and then also uh we are also we'll be calling like when I'm talking about raw memory or
+14:1714 minutes, 17 secondsshort-term memory I'll be using the term events. So that just shows that I'm talking about short-term memory. So uh
+14:2514 minutes, 25 secondsthat's what the idea is like within a session uh for that particular actor actor can be a user can be a agent can
+14:3214 minutes, 32 secondsbe a combination of the actor and the user ID any unique ID uh to reflect that. So this is the idea is that it's
+14:4014 minutes, 40 secondswithin a session right the long-term memory is more like where it can maintain the processed information like
+14:4714 minutes, 47 secondswhatever intelligent processed information not just the raw messages like for example if I'm saying that I like to code in Python then it should be
+14:5514 minutes, 55 secondsable to store that and it should be able to remember that across many sessions right or maybe I want to provide a
+15:0315 minutes, 3 secondssummary of my previous conversations uh from the previous session so that when the user returns back. uh there is a
+15:1015 minutes, 10 secondsbetter experience for the returning user where the user can say where the agent can say that you know what oh we talked about this particular thing last time
+15:1815 minutes, 18 secondswhen we met and do you want to continue with that or do you have new something new in your mind right and I'm just giving ideas
+15:2615 minutes, 26 secondsyeah so if you take an example of a travel booking portal maybe maybe let's run with this particular you know what is short-term memory and what's
+15:3415 minutes, 34 secondslong-term in that context right so yes you want to so if you're talking about a travel agent Let's say I provide
+15:4115 minutes, 41 secondsinformation. I uh I just uh ask a question to the agent that I'm planning a vacation from November 5th to November
+15:5115 minutes, 51 seconds10th and I want you to give me some options uh of the cities and I like the beaches and I love um you know maybe
+16:0116 minutes, 1 secondsmall cabins in the forest on the hills something like that right so those conversations literally like my question
+16:0816 minutes, 8 secondsthe agent responds the agent will pick up some uh we'll call some tools tools to get the relevant information. Uh so all those things will go into the
+16:1616 minutes, 16 secondsshort-term memory. Now in the long-term memory uh we'll extract the information, process it from the short-term memory
+16:2416 minutes, 24 secondsand store oh user preferences. User uh likes to go on a vacation and beaches, right? So maybe some water activities
+16:3116 minutes, 31 secondsmight be interesting, right? So it will keep uh uh saving the preferences which I'm providing in the short-term memory
+16:3916 minutes, 39 secondswhile talking to the agent. So it will basically extract that information from short-term memory and store it in the long-term memory. And it can also like
+16:4916 minutes, 49 secondsbased on the strategy that you're using, it can also summarize um that information. So we also have like
+16:5616 minutes, 56 secondssession summary which is one summary per session and it's like a rolling uh sum summary. So that would be one example.
+17:0617 minutes, 6 secondsExcellent.
+Chapter 6: Agent core memory features
+17:0717 minutes, 7 secondsPerfect. I think maybe this would make a bit more structural.
+17:1317 minutes, 13 secondsSo as money uh was already talking about right we have short-term acting like the raw storage. It's capturing everything
+17:2217 minutes, 22 secondsthat is happening right now. So the user interaction, the session attributes and you can retrieve all of this uh
+17:2817 minutes, 28 secondsinstantly. So this is kind of um real time, right? It's it can act as your agent's working memory essentially.
+17:3917 minutes, 39 secondsUm and here's where where it gets powerful. These events are also being processed through a memory extraction
+17:4717 minutes, 47 secondsmodule and being stored into a long-term memory um as memory records. So this could be you know the learn facts or
+17:5617 minutes, 56 secondsconcepts based on how you configure the long-term memory to be like.
+18:0118 minutes, 1 secondSo you know the first question comes in why should I use agent core memory? So first of all it is completely serverless
+18:0918 minutes, 9 secondswith minimal setup needed. So we talking about literally a couple of lines of code here. Plus we got built-in
+18:1618 minutes, 16 secondsencryption because I mean let's face it we are using we are dealing with user data here and we need it to be secure in
+18:2418 minutes, 24 secondstransit and in rest. Um and also we give uh flexible name spaces so you can
+18:3118 minutes, 31 secondsdefine how do you want the memory to be shared across um different agents or across different users. And we also have
+18:3918 minutes, 39 secondsflexible time tolift settings where so you can basically define everything and it's all in your control. And of course
+18:4718 minutes, 47 secondsthere's logging so so that you can observe everything that's happening behind the scenes.
+18:5318 minutes, 53 secondsSo before we go in a bit deeper into what short-term and long-term looks like perhaps we can understand the concept first and then uh go a bit more.
+19:0619 minutes, 6 secondsYeah. So with agent core memory like we're talking about short term uh and I've already explained when I talk about events they're literally like raw
+19:1419 minutes, 14 secondsmessages right and before you do or write any messages you first need to uh
+19:2119 minutes, 21 secondscreate the memory resource itself. So we have APIs which we are going to show you the demo of the create memory. You just need to know about that. You don't have
+19:3019 minutes, 30 secondsto worry about the underlying storage and also because the short-term memory has different uh properties. Uh so the
+19:3819 minutes, 38 secondsstorage for short-term memory is different from the storage u underlying storage for the long-term memory. Right?
+19:4419 minutes, 44 secondsSo in any ways what you have to do as a a developer is basically just focus on the APIs. it will automatically spin up
+19:5219 minutes, 52 secondsthe infrastructure behind the scenes and give you the memory ID. So memory ID represents the related memory resource
+19:5819 minutes, 58 secondsbecause you need to have a contain you know you know some space where you will write your messages. So that's literally
+20:0520 minutes, 5 secondsthe memory ID. Then actor ID is the identifier like who these messages belong to. Now you it can be like a user ID, agent ID or a combination of both.
+20:1620 minutes, 16 secondsAnd in some cases I have even seen people using project ID in combination with the user ID. So it really depends on your use case and how you design it.
+20:2520 minutes, 25 secondsWe are providing you with all the constructs to help you design your application effectively. And session ID very simple like group of related events
+20:3320 minutes, 33 secondstogether. And again you have the flexibility to define your session. You can define it by uh by related events or you can define it by u the time period.
+20:4620 minutes, 46 secondsSo the main idea is to group these events together. The payload is can be a conversation like a me user message
+20:5420 minutes, 54 secondsagent message or it can be just a JSON blob right the blob which it can store the entire state of the agent and we
+21:0021 minutesalso need like a time stamp to understand when these events are coming up right. So those are basically when
+21:0821 minutes, 8 secondsyou call uh or when you create the events that's uh when in the response uh you can pass in and it or it will uh
+21:1521 minutes, 15 secondsretrieve back as well and then branch I very that thing because um it it basically supports the alternate paths.
+21:2521 minutes, 25 secondsNow what do you mean by that? So let's say you are designing a AI assistant right and and an already mentioned about
+21:3221 minutes, 32 secondslet's take an example of the travel assistant. So I'll continue with the travel assistant example. Now let's say you are saying that okay one option is
+21:4221 minutes, 42 secondsthat I want this agent to talk to give me uh ideas about beach vacations another is I also like hiking so what
+21:5021 minutes, 50 secondsabout those mountain locations right so it can have like alternate paths but how do you design that so for that we have a
+21:5821 minutes, 58 secondsfeature called branching and where you can which enables like advanced event organization so if you don't provide the
+22:0622 minutes, 6 secondsbranch Everything goes in the main but you can literally call the create event, provide your own branch and then you can have scenarios like when you have to
+22:1422 minutes, 14 secondsedit a message or when you have the alternative conversation paths concurrent event streams for example. So
+22:2122 minutes, 21 secondsyou can use uh branching. This is a very nice construct uh and a tool that we are giving you in your back pocket. So when
+22:2922 minutes, 29 secondsyou design your agent applications think about branching. So is it it's more like you know these are my favorite foods going to the foods branch travel going
+22:3822 minutes, 38 secondsto travel branch right so yeah yeah you can organize it also sometimes think about like multi- aent
+22:4522 minutes, 45 secondsum interactions so again talking about the travel agent maybe I just I only don't need the hotel or the location
+22:5322 minutes, 53 secondsonce I finalize that I also need the flights so maybe there is a flight agent who can work on the flight branch the hotel agent can work on the hotel branch
+23:0123 minutes, 1 secondonce I've provided them of uh the location where I want to go right so they can work parallelly as well. It again dep and share the same memory
+23:0923 minutes, 9 secondsresource but they have different branches that they are working on. So it's still se level of separation of soft separation of concern that goes in
+23:1823 minutes, 18 secondsthere right so those are the areas uh where it's very helpful and this is like a
+23:2523 minutes, 25 secondspictorial representation which I think you'll be the best person to talk about.
+23:3123 minutes, 31 secondsPerfect. Uh thank you. I mean you have covered everything you know this makes it so much clear already but I think
+23:3723 minutes, 37 secondsstill p picture speaks louder than words and therefore this would help. Okay. Um
+23:4523 minutes, 45 secondsso overall what we are uh showcasing here is let's let's say your agent is having a conversation with the user
+23:5223 minutes, 52 secondsright it needs to have uh it needs to store all of the immediate context that is happening and that is being stored in
+24:0224 minutes, 2 secondseither conversational information or uh conversational sorry conversational messages or it could be a blob. This is
+24:1024 minutes, 10 secondsessentially going in as a binary piece of information and this is where it's slightly uh the two
+24:1824 minutes, 18 secondsdiffer to some extent. So the conversational event think of it as you know chat messages, user input, agent responses
+24:2624 minutes, 26 secondsuh or tool messages, right? This is this the the piece of information that actually enriches your long-term memory
+24:3524 minutes, 35 secondsuh because this is where you know the meaningful interaction data lies.
+24:3924 minutes, 39 secondsSecond here is the blob which mostly stores the session information. So this is the key
+24:4824 minutes, 48 secondsdifference. So here it uh the events that are in here would not uh be extracted as insights later. So this you
+24:5724 minutes, 57 secondsknow mostly includes checkpoints or session state. Now just to clarify the difference between checkpoints and
+25:0525 minutes, 5 secondssession states. I've heard a lot of people are very confused about that. So checkpoints are basically um snapshots
+25:1225 minutes, 12 secondsof uh of your application state. So think of it in terms of fall tolerance or recovery. So if something goes wrong,
+25:2025 minutes, 20 secondsyou can pick pick back up right from where you left off, you know, and session state is mostly around uh the
+25:2725 minutes, 27 secondsuser specific data across multiple requests. So your session ID, your agent state, this kind of thing. Um and then
+25:3625 minutes, 36 secondsto you know when you need to work with this data you have got simple operations that we provide like list events or get
+25:4325 minutes, 43 secondsevent to retrieve specific events that you need and you can filter them um and
+25:5025 minutes, 50 secondsto understand that I think uh we will go deeper into it once um you you will see
+25:5725 minutes, 57 secondsit in the demo but overall the beauty here is that the short-term memory acts like the agent in scratchpad. So it
+26:0526 minutes, 5 secondscaptures everything in real time categorizing it you know in uh categorizing it properly and making sure that nothing gets lost in the process.
+Chapter 7: Long-term memory strategies
+26:1426 minutes, 14 secondsNow let's move on to long-term memory and you've you know previously we mentioned about name spaces. So now we
+26:2426 minutes, 24 secondsunderstood like in short-term memory there are uh there is a concept of actor ID there is a concept of session ID that we have talked about and how you you
+26:3326 minutes, 33 secondsknow how they are used to organize the short-term memory and to identify okay these are the messages that belong to my calling uh uh calling user right
+26:4226 minutes, 42 secondsbut what about the long-term memory because long-term memory we are saying that oh it keeps um you know uh extract the processed information from the
+26:5126 minutes, 51 secondsshort-term memory and goes into the long-term memory, but how does it really go and how do we organize our long-term memory? Because long-term memory can
+26:5926 minutes, 59 secondsspan across sessions, right? So, how do we uh organize it? That's where the concept of name spaces comes into play.
+27:0827 minutes, 8 secondsSo, again, you are all aware of the actor ID, you're all aware of the session ID, but what about the strategy?
+27:1527 minutes, 15 secondsSo, how do we know what to fetch from the short-term memory that goes into the long-term memory? So that is defined by
+27:2227 minutes, 22 secondsthe strategy. So with long-term memory we have uh three built-in strategies.
+27:2727 minutes, 27 secondsOne is the semantic basically just the facts during the conversation and it will capture that. User preferences
+27:3427 minutes, 34 secondsliterally as the name suggest extracting preferences of the user. Summary is per session. I think I've already talked
+27:4127 minutes, 41 secondsabout that enough. Uh then override is basically you can uh so there are some
+27:4827 minutes, 48 secondsuserdefined extraction rules and with this override strategies what you can do is uh there are two things that comes
+27:5527 minutes, 55 secondsinto play one is the extraction logic the other is the consolidation logic because if my information or my
+28:0228 minutes, 2 secondspreference is already stored or extracted I don't want it to store like duplicate things and also if I'm
+28:0928 minutes, 9 secondsupdating my preference Like let's say I love to code using Python but now I like Java hypothetical example it should
+28:1928 minutes, 19 secondsupdate my preference so that's the consolidation logic but if I want to override that and provide my own prompts
+28:2528 minutes, 25 secondsand provide my own model to do that then that goes into the override uh strategy so you can do that so you have that
+28:3228 minutes, 32 secondsoption as of today right and then you have defined the strategy but how do I organize let's say I have this user
+28:4128 minutes, 41 secondspreference reference uh long-term memory that I have enabled like I have provided that strategy then the namespace is a
+28:4928 minutes, 49 secondshierarchical concept where literally it's nothing more than the prefixes hierarchically arranged which can take these three ids which you can provide uh
+28:5928 minutes, 59 secondsbecause you also want to make sure at runtime it's able to resolve the actor.
+29:0429 minutes, 4 secondsSo my user preferences should only be visible to me when I'm interacting with the agent. But if Akasha is interacting
+29:1229 minutes, 12 secondswith the same agent, only her user preferences should be shown to her.
+29:1729 minutes, 17 secondsRight? So that's the main idea. So then in the name spaces and one of the examples that we have given on the slide is like retail agent/c customer ID/
+29:2629 minutes, 26 secondspreferences and then you provide and this customer ID is actually resort at runtime because you can pass these variables. So this is just one example.
+29:3429 minutes, 34 secondsSo think of it as a way to organize your memory records into logical categories so that you it's easier for you to
+29:4329 minutes, 43 secondsretrieve it. And one quick thing uh one strategy can only have one nameace and
+29:5129 minutes, 51 secondsyou can provide whatever namespace it is as it so things change in future. You never know what happens. So as
+29:5929 minutes, 59 secondsI mean you only need one name space, right? Yeah, you do.
+30:0530 minutes, 5 secondsAll right. So here's where things get very interesting. So now we have the full picture and now we look at everything of how it flows.
+Chapter 8: Asynchronous extraction pipeline
+30:1730 minutes, 17 secondsSo we talked about the raw events, right? They just don't sit in there. we discussed uh so there's an asynchronous
+30:2530 minutes, 25 secondspipeline a memory extraction module which does some pretty smart work behind the scenes. So this is the module that
+30:3230 minutes, 32 secondstakes in all the raw data um and depending on the strategies that you have defined of what you've configured
+30:4030 minutes, 40 secondswhile you created that uh the memory uh resource um based on that it extracts the
+30:4930 minutes, 49 secondsrelevant piece of information and as money was mentioning we can also override one of these um strategies.
+30:5830 minutes, 58 secondsNow I mean why would I override these?
+31:0131 minutes, 1 secondThey are uh they are pretty defined, right? What else can I need? But I guess so we were talking about this uh travel
+31:0931 minutes, 9 secondsagent, right? Uh let's let's take it that way. So when I'm let's say when I'm building an application for a travel
+31:1631 minutes, 16 secondsagent, I only want users preferences of their you know if they of uh if they
+31:2331 minutes, 23 secondsprefer budget hotels versus luxury resorts or are they adventurous travelers or you know they are into relaxed beach vacations but do I care if
+31:3231 minutes, 32 secondsthey prefer their coffee black or if they code in Python? No, probably not.
+31:3731 minutes, 37 secondsSo that's where you want to override and maybe focus uh these strategies more onto the use case. So that's where you
+31:4531 minutes, 45 secondsmight want to override um these the prompts that are already defined in there.
+31:5131 minutes, 51 secondsSo I mean once you have it all stored, you have these uh long-term strategies uh then you can access them uh via the
+32:0132 minutes, 1 secondretrieve memory record. So you can list them uh retrieve them based on the name spaces that you have provided. Um and you can combine this with the list
+32:1032 minutes, 10 secondsevents from the short-term memory. So for for example, one of the very common patterns that we see out there is uh the
+32:1732 minutes, 17 secondslast end messages. So let's say the last five messages that you get through list events and then you get the relevant
+32:2432 minutes, 24 secondsuser preferences or the relevant um summary of the let's say summary of that session uh from the long-term memory. So
+32:3332 minutes, 33 secondsyou can combine that and therefore compress the the the context of the agent to more or less like 60 70%. And
+32:4432 minutes, 44 secondsstill get good quality responses equally good responses as you would uh if you provided the entire context history. So
+32:5332 minutes, 53 secondswe have kept this memory extraction module uh a bit hidden. So let's go into this a bit. So when we
+33:0233 minutes, 2 secondsthere's one question that's coming in from Ragoian asking uh if we can set a time duration is it like for example is it possible to retain only the past 5
+33:1033 minutes, 10 secondsdays of discussion we can also cover that.
+33:1333 minutes, 13 secondsSo for shortterm Mhm. For short-term events you can configure a TTL uh where you can define how long do you
+33:2133 minutes, 21 secondswant. So this can be between uh 7 days to 365 days. So you can configure anything in between that.
+33:3033 minutes, 30 secondsOkay. Um, moving on on to the our memory extraction module. So, this extraction
+33:3833 minutes, 38 secondspipeline runs asynchronously after every k messages or after every x seconds of inactivity because we don't want it to
+33:4733 minutes, 47 secondswait for too long waiting for more messages uh before it's it you know stores the summary for example or or the
+33:5433 minutes, 54 secondslong-term uh information. So overall the module has uh three steps. So first of all we start with the extraction. This
+34:0234 minutes, 2 secondsis where it talk uh it extracts the relevant info. And now as mentioned here this per strategy. So depending on what
+34:1134 minutes, 11 secondsstrategies you've defined you can you can uh define zero or more strategies.
+34:1634 minutes, 16 secondsSo depending on which strategy you've defined this extraction module will run per strategy for every for each of them.
+34:2334 minutes, 23 secondsUm okay. So first step is the memory extraction module right this is where we extract the relevant piece of information. So if let's say we are
+34:3134 minutes, 31 secondstalking about user preferences it'll only extract user preferences from all the messages that we have provided and
+34:4034 minutes, 40 secondsone thing we skipped to uh skipped to mention we can provide up to 100 messages in the in one event right so it
+34:4834 minutes, 48 secondsis essentially extracting only the relevant parts where the user is uh giving out some information about a preference.
+34:5834 minutes, 58 secondsThe next step is the consolidation part.
+35:0035 minutesSo this is an interesting one. So remember um we were talking about this travel agent, right? Uh imagine the user
+35:0735 minutes, 7 secondsmentioned in April 2025 that hey I like to go for camping spots and now in
+35:1435 minutes, 14 secondsOctober the user is exhausted from work and they suddenly prefer beach vacation.
+35:2035 minutes, 20 secondsHappens to all of us, right? But exactly this is the piece of information that we need to update and not either and not
+35:2935 minutes, 29 secondslike create two entries or remove the previous one. Um but we should have update of this uh information that's
+35:3835 minutes, 38 secondssaying that hey user preferred um a camping spot in in April but they prefer
+35:4535 minutes, 45 secondsa beach vacation in October because they they feel exhausted. So something a bit more complete, a bit more exhaustive
+35:5435 minutes, 54 secondspiece of information, right? Instead of replacing the old one or um yeah, ignoring the new one. So this is just
+36:0236 minutes, 2 secondsone example of when would update be uh in the situation. So what consolidation step does is it retrieves similar
+36:1036 minutes, 10 secondsmemories from the existing vector store of existing long-term memory and it consolidates the new memories as per
+36:1936 minutes, 19 secondswhat already exists. So it can add new information if let's say that information did not exist before it can
+36:2636 minutes, 26 secondsupdate it based like just uh with the example I just shared or it can just skip it because maybe that information
+36:3336 minutes, 33 secondsalready exists. So user mentioned in April that they want to go in camping spots and they mention it again in October. So we don't really need to
+36:4136 minutes, 41 secondsupdate any part, right? So we we can skip that part. And then based on what the outcome is, it can it it embeds and
+36:4936 minutes, 49 secondsindexes that into uh the long-term memory which essentially is a vector store. Yeah.
+36:5836 minutes, 58 secondsAnd we have talked about vacation so much. I think all like will be tempted to go to the beach or for a walk or take
+Chapter 9: Deployment and integration
+37:0537 minutes, 5 secondsa vacation. I am. I don't know about others. And started it. I'm thinking about it.
+37:1537 minutes, 15 secondsYeah. So I mean this way we avoid redundancy. We avoid any duplicates. We avoid any incomplete pieces of
+37:2237 minutes, 22 secondsinformation. So we make sure that our memory is always updated. Right? So we are not creating any duplicate
+37:2937 minutes, 29 secondsinformation inside the vector store which I would say is a very important aspect of when you are trying to
+37:3637 minutes, 36 secondsremember something right things get updated things change over time that has to be captured and also it's an important thing tying
+37:4537 minutes, 45 secondsit back to our context engineering stuff right uh it becomes important we don't have redundant information in our context that's one way tying it back to what we shared in the beginning Right.
+37:5637 minutes, 56 secondsSo I think now we talked about a lot of things. We talked about short-term memory. Uh we talked about the concept of events, actor ID, session ID. How do
+38:0638 minutes, 6 secondswe ex, you know, uh fetch that information. We can filter events. We can if you don't want to use long-term memory and you only want to use agent core memory for short-term, you can
+38:1438 minutes, 14 secondsactually do that. And if you want to use long-term for storing just the user preferences, you can do that. So you can have one strategy, multiple strategies
+38:2338 minutes, 23 secondsand all. We also talked about how you will organize your long-term memory using namespaces. Um so there are so many concepts that we have touched upon
+38:3138 minutes, 31 secondsand uh not but not uh you know not the last but not the least we also talked about the vacation which all I think uh
+38:4038 minutes, 40 secondsneeds at some point in time. So but now let's say we have talked so much about all of these things right and now you
+38:4938 minutes, 49 secondsshould be ready to deploy the travel agent. Kasha, what do you think?
+38:5338 minutes, 53 secondsI agree. I think Yeah.
+38:5538 minutes, 55 secondsOkay. So, let's deploy it. So, do we want to deploy it with runtime agent runtime or do we want to deploy it with
+39:0339 minutes, 3 secondssome other thing like other EKS or Fargate? So, I prefer runtime. I prefer runtime.
+39:1139 minutes, 11 secondsI mean, why do we want to build everything from scratch, right? So, yeah. Yeah. But there is option. That's what I want to uh share that you can if you already have a deployment pipeline.
+39:2139 minutes, 21 secondsWe want to meet the customers where they are in their journey. So you have an option but for now we'll focus on the
+39:2839 minutes, 28 secondssample deployment with agent core runtime uh because we love runtime and uh that's the main idea right? Yeah. And
+39:3639 minutes, 36 secondssince you mentioned that money um just as we talk about that now agent core memory if it's deployed in AWS can
+39:4439 minutes, 44 secondsexternal services integrate with agent core memory so all of these are APIs or the SDK behind the scene right so you can uh
+39:5439 minutes, 54 secondsbased on the permissions that you have defined based on the resource access permissions that you have provided you should be able to call it from anywhere
+40:0140 minutes, 1 secondso you can integrate it with any framework you can use it with any model.
+40:0640 minutes, 6 secondsUh only uh c only thing that I want to consideration that I want to call out is that we talked about the override
+40:1440 minutes, 14 secondsstrategy and you can change your model for extraction and consolidation because that's handled by a large language model
+40:2240 minutes, 22 secondsand that model has to be the bedrock model but your agent can be any model.
+40:2640 minutes, 26 secondsIt can be like uh open AAI model or a Gemini model or u something or any or or one of our favorite models.
+40:3440 minutes, 34 secondsOne of the many models that's out there.
+40:3640 minutes, 36 secondsYeah. One of the many models. Right. So so that's the key idea and the tenant for all agent core services and that includes memory as well.
+40:4640 minutes, 46 secondsAll right. Yeah. Sure. Excellent. So I can't wait to uh get to the demo part. Yeah.
+Chapter 10: Demo: Math agent checkpointing
+40:5140 minutes, 51 secondsSo okay, enough of talk, right?
+40:5440 minutes, 54 secondsYes. People were very keen on looking at the code. Yep. Okay.
+41:0041 minutesCan you uh remove this uh left navigation so that our users can only focus on the code? So, click on the folder on the top.
+41:0841 minutes, 8 secondsYep. Awesome.
+41:0941 minutes, 9 secondsThank you. Okay. Okay. Perfect. So, we look at two examples. One with
+41:1641 minutes, 16 secondscheckpointing uh and one with uh long-term memory. I mean it's not that these are uh either or but it's just to
+41:2541 minutes, 25 secondskind of keep it separate and show a very easy demo right so first we see uh a
+41:3241 minutes, 32 secondslangraph agent being created which um has a memory um so we are using the
+41:4041 minutes, 40 secondsdefault agent core memory saver from langraph checkpoint and that is where uh it will by default create the
+41:4941 minutes, 49 secondscheckpoints behind the scenes. So there's an automatic event store in place uh and that will store all the events in the short-term memory and we
+41:5741 minutes, 57 secondscan retrieve those events through list events and we can um yeah talk to the agent and it can continue continuously
+42:0642 minutes, 6 secondskeep uh the uh checkpointers in the memory. So what do we need to do for that?
+42:1442 minutes, 14 secondsWe firstly import a memory client. we create um a memory or get memory based
+42:2242 minutes, 22 secondson the name maybe we have already created it in this case for example we have already created it so it retrieves
+42:2942 minutes, 29 secondsa memory ID and that memory ID we can provide in our react agent as a
+42:3642 minutes, 36 secondscheckpoint right so the checkpointer that we have uh sorry not memory ID we we create a checkpointer uh using the memory uh
+42:4642 minutes, 46 secondssaver class from Langraph AWS and from here we provide in the uh memory id and
+42:5342 minutes, 53 secondsthe region where it is supposed to store and that we provide as a default checkpoint within the um within the
+43:0143 minutes, 1 secondgraph. So we created a very simple graph we can just run it uh and we provide when in the runtime we can provide some
+43:1043 minutes, 10 secondsconfiguration. So two that are required is the thread ID which is a session ID uh and the actor ID. So the actor ID
+43:1943 minutes, 19 secondscould be an agent level uh could be on the actor could be on the user level could be a project ID could be an org ID
+43:2643 minutes, 26 secondscould be a common one for every uh everything if you want to share um the entire memory resource with everyone
+43:3443 minutes, 34 secondscould also be the case but uh essentially as money mentioned this is a construct that we are providing you to
+43:4043 minutes, 40 secondsuse to get that flexibility uh for your application. So you provide in the config here and then you uh send in the
+43:4843 minutes, 48 secondsinput and based on that it it streams in the output of you know what tools it has used what it has done.
+43:5643 minutes, 56 secondsYeah. And just before you go further a I want to clarify something because this is a very common question and while you
+44:0344 minutes, 3 secondswere presenting it was literally jumping in my head and I couldn't stop myself.
+44:0744 minutes, 7 secondsSo uh one common question that I know that everyone has asked us most of the time like literally 99% of the time
+44:1644 minutes, 16 secondsone question is uh especially when we go into this uh demo piece right so one question that I get is uh do I need to
+44:2544 minutes, 25 secondscreate the memory every time I initialize the agent the answer is no that's a very good point
+44:3444 minutes, 34 secondsyeah because we have seen like you know uh those mistakes happening and then it was like let's let me just guide uh it
+44:4244 minutes, 42 secondsover here so that it becomes like a common practice. So while you are creating the memory it's a one-time activity right you create the memory
+44:5144 minutes, 51 secondsresource and when you initialize the agent you only need to provide the memory ID and that's the reason why we have this helper class create or get ID
+45:0045 minutesso that you don't accidentally keep creating the memory ID. So make sure that when you whenever you are create uh
+45:0745 minutes, 7 secondscalling create memory it is creating the resource itself. You don't need to create the resource every time you initialize the you only need to create it once.
+45:1645 minutes, 16 secondsIn the subsequent steps you only need to provide the memory ID.
+45:2045 minutes, 20 secondsNow question number two very important question how do we manage these ids because this is memory ID there is
+45:2745 minutes, 27 secondssession ID there is actor ID and Aasha you have provided that in the demo but I want to call it out. so that we
+45:3445 minutes, 34 secondsunderstand what that is. So if you scroll down uh Akasha like where you were initializing the checkpointter
+45:4245 minutes, 42 secondsitself right oh that was up where you were providing the memory ID right so this is a initialization step so when
+45:5145 minutes, 51 secondsyou are actually working with these frameworks you can just provide the memory ID once right so that the agent
+45:5845 minutes, 58 secondsknows where to store these messages and then you need to provide the config where you were again providing these ID
+46:0546 minutes, 5 secondsonce Because once you get into the session, you need to identify the calling user or the agent. So you provide the agent ID or the user ID or a
+46:1346 minutes, 13 secondscombination based on your use case and then you pass in the session ID, right?
+46:1846 minutes, 18 secondsSo that goes into the config and I think Akasha the config is um was in was in the cell downstairs. Yeah. Yes.
+46:2546 minutes, 25 secondsSo yeah, so that's where you would provide it and then when you are interacting with the agent, it's simple.
+46:3146 minutes, 31 secondsYou just interact with the messages and all and the agent knows that who is it talking to and which session is it in. Right.
+46:3746 minutes, 37 secondsYeah. And in most of the cases you will see that this part where the with the thread ID and the actor ID comes in from the payload that the back end is
+46:4646 minutes, 46 secondsinteracting with the front end with. So based on the authentication that the user has done you would have the user credentials and user information and
+46:5446 minutes, 54 secondsbased on that usually uh you would create uh an actor ID versus the memory ID something you can store as an
+47:0247 minutes, 2 secondsenvironment variable or you can store as a SSM parameter so in a in your secrets manager or something which you can
+47:0847 minutes, 8 secondscontinuously um repeatedly retrieve from so it's a constant that once you've created it you can you know use the same
+47:1647 minutes, 16 secondsover and over And and even the session should come from your like u for example if you're deploying it in the runtime or some
+47:2547 minutes, 25 secondsother things. So it should come from uh from your environment or or the payload.
+47:2947 minutes, 29 secondsYeah. You mentioned that session right? Yeah. Yeah.
+47:3247 minutes, 32 secondsSo we have 12 more minutes just a time check. Yeah.
+47:3547 minutes, 35 secondsOkay. Okay. So just to um yeah just to showcase here uh what we are doing here is just like having a simple
+47:4247 minutes, 42 secondsinteraction. It's a math agent with multiply and addition as options as tools. So we can uh you know kind of
+47:5047 minutes, 50 secondsinteract with the agent continuously in multiple steps and we can also retrieve the checkpoint um different checkpoints
+47:5847 minutes, 58 secondsat different time that we have created and we can also actually look at a very
+48:0748 minutes, 7 secondssimple memory browser that we have created that lets us inspect. So we created this react agent one as an actor
+48:1548 minutes, 15 secondsID, right? So let's configure that. And I think the session ID was session one.
+48:2248 minutes, 22 secondsAnd can you make it bigger like zoom in?
+48:2848 minutes, 28 secondsYes. So as you see since we have checkpoints in here, we are creating events of type blob.
+48:3548 minutes, 35 secondsAnd one thing with lung graph you would see is that it creates the blobs of either it creates the checkpoints or it
+48:4248 minutes, 42 secondscreates uh writes. So you can also have event types of rights which are intermediate checkpoints that it creates. uh but it creates a lot of
+Chapter 11: Demo: Customer support agent
+48:5048 minutes, 50 secondsevents which are of the type blob which you know it can uh it can store and retrieve from and those are the events
+48:5848 minutes, 58 secondsthat you basically would keep storing by default if you want to make sure that you know
+49:0449 minutes, 4 secondsyour your um state is being persisted and let's go to the long-term memory
+49:1249 minutes, 12 secondspiece right because uh short-term memory is literally like this and if you're saving the conversationals you can see that and all this code like the memory
+49:2049 minutes, 20 secondsbrowser and all that Akasha has shared in our GitHub so you'll be able to quickly find that and we've already provided that link. Okay.
+49:2949 minutes, 29 secondsYes. Perfect. So the second one is a bit more interesting. Um so here we have created a customer support agent uh
+49:3749 minutes, 37 secondsusing strands agents framework and here we have provided some functionalities so some tools that we have uh provided
+49:4449 minutes, 44 secondslocally and we are connecting it with agent core memory. Now what we have done just for the demo sake is seated this
+49:5449 minutes, 54 secondswith uh some previous information. Now we have like uh provided this context.
+50:0550 minutes, 5 secondsUm first of all let's look at how do we create the long-term strategies. Right?
+50:1250 minutes, 12 secondsSo in this case we just to show you we have created all three strategies as options. So we define a list uh of a
+50:1950 minutes, 19 secondsdictionary which is the strategy type user preference and we define the name.
+50:2450 minutes, 24 secondsThis is on you. You can des uh you can name it anything you want uh with a description also uh editable and uh
+50:3250 minutes, 32 secondsbased on your choice just for you to remember. And this is the important part here. So name spaces that you're providing here
+50:4050 minutes, 40 secondsuh is going to take in a pathlike structure. So it's the hierarchy uh that money already discussed or was was
+50:4850 minutes, 48 secondssharing before with one or more uh of these uh variables that you can provide.
+50:5650 minutes, 56 secondsSo it can be actor ID, strategy ID or uh session ID. So in here for example, if I'm talking about a summary, I can al I
+51:0351 minutes, 3 secondsalso provide a session ID because my summary would be dependent on a session, right?
+51:0851 minutes, 8 secondsUm and then for semantic I say okay just divide it based on the actor. Similar for preferences I only want to divide it
+51:1651 minutes, 16 secondsbased on the actor. And so maybe a question here right is uh if we're doing the same travel agent use case and we have a session going on for
+51:2551 minutes, 25 secondsa particular user who's interacting with the travel agent chatbot.
+51:2951 minutes, 29 secondsWhat would be the actor ID? Right. So is that the actor ID some ID that we are giving to the user like a user ID? Yes,
+51:3851 minutes, 38 secondsit's so in the travel agent case mostly it's going to be the user ID but it can also be a combination of the user and the agent ID if we are considering
+51:4551 minutes, 45 secondsbranching concept so it can be a mix I mean really depends on what use case are you building and
+51:5251 minutes, 52 secondshow do you want to separate um separate out so here yes so here we have uh the
+52:0152 minutes, 1 secondmemory client we can get create or get memory and we provide in the memory name we provide in the description and the
+52:0952 minutes, 9 secondsstrategies. So the the list of dictionaries that we have created here, right? So this is what we provide as strategies and an event expiry date. So
+52:1752 minutes, 17 secondsthis is as I said is between 7 and 365 days. So you can define how long do you want the events to be stored and based
+52:2552 minutes, 25 secondson that it you will get a response. So this usually takes a couple of minutes to run only the first in initiation of a
+52:3352 minutes, 33 secondsnew resource. So this is going to be only for the first time when you're creating a new memory resource, not when
+52:4052 minutes, 40 secondsyou're creating events or uh getting the uh memories or retrieving memories. So that's um not the case. But here you
+52:4952 minutes, 49 secondswill get a new memory ID that is being created for you. And this you as I said you can define how you want to store it.
+52:5652 minutes, 56 secondsSo you can put it as an SSM parameter so that you can always retrieve the same.
+53:0053 minutesAnd I think we should also call that out. This few minutes that we are talking about is only for the long-term memory and this event expiry days is
+53:0953 minutes, 9 secondsonly for the short-term memory. For the long-term memory, we currently uh we don't have any TTL but you can always we
+53:1653 minutes, 16 secondsprovide you all the APIs where you can uh delete the messages based on your uh business uh use case. So I just want to
+53:2353 minutes, 23 secondscall it out because sometimes people understand that event expiry days is for both. So, it's only for short-term memory and um also only for if you're
+53:3353 minutes, 33 secondsusing long-term memory, it will take like uh like about 2 minutes to create it because we are creating a vector store behind the scenes. But for the
+53:4153 minutes, 41 secondsshort-term memory, it's really fast. Go ahead. I just wanted to clarify.
+53:4553 minutes, 45 secondsThank you. Um yes. So going to so we have created the memory resource and now
+53:5253 minutes, 52 secondswe want to um seed in some interactions previously because maybe you know my agent has already interacted with it
+54:0054 minutesbefore um and therefore we can batch in the previous interactions or send them one by one. It's really your choice. And we
+54:0854 minutes, 8 secondssend it to the memory client through a create event API which takes in the memory ID an actor ID which in this case
+54:1754 minutes, 17 secondsis a customer ID which uh we have just created for demo purposes and a session ID which let's say I want to group all
+54:2554 minutes, 25 secondsof them right so I can also hardcode a session or I can take a UYU ID like a unique ID that I can create for every
+54:3254 minutes, 32 secondssession that that comes in. It's again dependent on what use case are you uh planning to build and then we are
+54:4054 minutes, 40 secondssending in the messages uh one or up to 100 messages you can send in. So you're sending in all of those interactions and
+54:4954 minutes, 49 secondsbasically seeding it in so that it can process it for long term. Now it'll take around about uh 20 to 30 seconds for it
+54:5854 minutes, 58 secondsto reflect in the long term. In this case, it was really fast.
+55:0255 minutes, 2 secondsUh but in general, it takes around about 20 seconds depending on how much the payload um is and how many requests are there.
+55:1255 minutes, 12 secondsSo in this case, we have uh you remember us creating three different strategies, right? So maybe we look at different
+55:2055 minutes, 20 secondsstrategies. So in this case, we retrieve from preferences, right? uh we call the retrieve memories API with the name
+55:2755 minutes, 27 secondsspace that we provide and we fill in the actor ID with the customer ID in this case. So you see the um the string that
+55:3455 minutes, 34 secondsis being um filled with the customer customer ID and we get uh let's say
+55:4255 minutes, 42 secondsthese this interaction back. So based on what we fed in, we just was talking, we were talking about, you know, MacBook
+55:4955 minutes, 49 secondsPro overheating issues, um my gaming headphones, I like um competitive FPS games, and then we had user messages and
+55:5755 minutes, 57 secondswe had assistant messages. So what the agent responded back with and these were like three conversations.
+56:0556 minutes, 5 secondsUm so here you would notice something um is that we we for preferences we get in
+56:1256 minutes, 12 secondsa context we get in preference and we get in some categories right so it's the formatting that it does so it is giving
+56:2156 minutes, 21 secondsus some tags that we can use as categories of what the user uh what these this uh topic is and some context
+56:3056 minutes, 30 secondsof why did the model extract this information or why does the model think that this is a preference?
+56:3856 minutes, 38 secondsUm in case you want to you know roll back and understand how did it uh extract this piece of preference. So in
+56:4556 minutes, 45 secondsthis case concern about laptop performance and thermal uh thermal management during intensive tasks because the user reported experiencing overheating issues with MacBook Pro.
+56:5656 minutes, 56 secondsSo Kasha can you also show like the memory browser where we can see that uh information because I mean they can
+Chapter 12: Summary and next steps
+57:0457 minutes, 4 secondschange the name our you our viewers can change the name space and experiment with the notebook themselves and let's
+57:1257 minutes, 12 secondssee how this will look in the browser so that we are clear and after that we can quickly summarize
+57:1957 minutes, 19 secondswhat we have discussed 100% okay we are we are we are short on time.
+57:2757 minutes, 27 secondsI mean there's so much to share. Yeah. So, okay.
+57:3357 minutes, 33 secondsSo, we have um so while Akasha is uh you know working
+57:4257 minutes, 42 secondson that um I just want to like we can talk about what we have discussed so far. So a few things that we have talked
+57:5057 minutes, 50 secondsabout is first we started with our context engineering like why do we really need memory we talked about there
+57:5657 minutes, 56 secondsis like there's so much focus on the technical capabilities but what about the good experience that we want to give
+58:0458 minutes, 4 secondsit to our end users right that's the whole idea of creating this application in the first place and then also how can we be smart about context engineering
+58:1358 minutes, 13 secondshow can we uh smart about what goes into the memory what uh goes into our vector store like your documents the static uh
+58:2158 minutes, 21 secondsdata and what where should you call the APIs like with real time data APIs where you need like literally real time data
+58:2958 minutes, 29 secondsright and then the memory comes into place where we talked about long-term memory like user preferences summary and we also talked about semantic facts
+58:3858 minutes, 38 secondsthose are the different kind of memories how you can override based on your business logic and we also talk a lot about the short-term memory because
+58:4758 minutes, 47 secondswhile you are interacting with the agent. That's the first piece that you need to do. You need to persist that information, those raw messages, that
+58:5558 minutes, 55 secondstooling and maybe you know save the session state checkpointing so many things and I'm so excited over here and
+59:0359 minutes, 3 secondsI'm very passionate about as you can see my face when I talk it's literally visible uh when Akasha and I when we talk like it's literally visible how
+59:1159 minutes, 11 secondspassionate we are about this. So and we really want you to go and try uh some of these samples. We have shared the GitHub
+59:1959 minutes, 19 secondsuh with you and we have also shared the memory browser. All you need to do is provide the memory ID, your actor ID and a session ID and you should be able to
+59:2759 minutes, 27 secondsdo that. Um and even if Akasha you are unable to show it over here, it's fine.
+59:3359 minutes, 33 secondsYeah, don't worry about it because there's a lot to show. What we could do is definitely come back and have like all these different moving parts and
+59:4159 minutes, 41 secondsshow our viewers how everything connects together, right? How the Lego blocks connect.
+59:4559 minutes, 45 secondsBut uh since we're at time, we'll uh thanks for money for you know summarizing everything. We can't wait
+59:5259 minutes, 52 secondsfor our viewers to explore experiment and come back and ask us u uh you know more about you know agent core memory.
+1:00:011 hour, 1 secondRight. So with that, signing off uh for this week. Uh we'll join you next week again.
+1:00:081 hour, 8 secondsLooking forward to more questions. Yeah. All right.
+1:00:111 hour, 11 secondsAbsolutely. Thank you. Bye-bye. Have a great rest of Bye. Thank you. Bye-
