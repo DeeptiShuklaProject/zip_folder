@@ -1,0 +1,492 @@
+0:3232 secondsHello all, welcome to AWS show and tell.
+0:3535 secondsUh I am Anil Ladinti. I'm a senior solutions architect here um at AWS working with the enterprise customers.
+0:4141 secondsWe have uh Isan, Myra and Mark. Today we're going to go to the introductions but today we have a very special episode. It's agent core uh general
+0:5050 secondsavailability and we want to go uh cover a whole lot of details. We have a pack demos. We are probably going to do uh
+0:5858 secondslittle bit of uh show and tell, but the tell part comes here first and then we're going to go into a lot of demos. I promise you there's exciting demos here.
+1:071 minute, 7 secondsSo u let's go through the through through the round of introductions here. Mark.
+1:121 minute, 12 secondsHey. Uh thanks Sil. Yeah, it's great to be back uh on show and tell here. Uh Mark Roy here. Been with AWS a little
+1:201 minute, 20 secondsover seven years. uh got to start with a IML, moved on to Gen AI and now agents.
+1:261 minute, 26 secondsSo I feel like I've uh aged another like 20 years here because now with agent years every every few days is a full
+1:331 minute, 33 secondsagent year but uh yeah good to be this is new Mark like yeah agent years is the is the new trend I guess. Absolutely. Yeah.
+1:421 minute, 42 secondsI used to be every month is a year I think is even faster now every few days we are getting old. Okay. So, hi
+1:501 minute, 50 secondseveryone. Myra here. I'm a tech lead for Agent AI here at AWS. I've been here for almost six years now. Uh I'm a data
+1:591 minute, 59 secondsscientist uh from heart. Uh have been working on all the ML fun genai
+2:062 minutes, 6 secondsexcitement and now having a lot a lot of fun with Asian AI and yeah things are
+2:142 minutes, 14 secondsmoving fast. We are moving fast and it's exciting and G. Yeah, it's amazing to be here.
+2:212 minutes, 21 secondsCool.
+2:232 minutes, 23 secondsYeah. Uh, hi everyone. Great to be back again. Uh, finally we are here. Uh, we have agent core generally available. Uh,
+2:302 minutes, 30 secondsreally excited to see what you all build with it, but we have so many cool stuff to show you today. Uh, I won't, uh, take
+2:382 minutes, 38 secondsany more time. I'll just dive right into it. We have so much to cover. So, uh, give it back giving it back to Mark.
+2:462 minutes, 46 secondsSounds good. Uh let's dive right in.
+2:482 minutes, 48 secondsI'll probably spend about you just a few minutes here giving you an introduction, then we'll we'll get into serious showand tell mode as well. Uh so uh let
+2:572 minutes, 57 secondslet's get into it. Um so uh yesterday in fact uh we hit our uh GA milestone. Uh
+Chapter 2: Agent Core GA highlights
+3:053 minutes, 5 secondssuper exciting. We announced we launched Agent Core back in July at the New York Summit. The response has been amazing.
+3:123 minutes, 12 secondsUh we've seen just so many customers getting excited. It sounds like the timing was perfect uh with some of the challenges that they're all facing and
+3:213 minutes, 21 secondsin our work. We see it day-to-day with uh with all of our customer engagements.
+3:253 minutes, 25 secondsBut big milestone uh fun show today to bring you up to speed on all that's happening. This is uh agent core and all
+3:313 minutes, 31 secondsof its services here. Let me let me set a little backdrop as to why it's so important, why it's so interesting. Uh
+3:393 minutes, 39 secondswhat we found uh is that uh customers are getting trapped in in prototype purgatory. Uh so agents are living on
+3:473 minutes, 47 secondslaptops, no real business value because of all of the challenges. You see a few mentioned here, but we'll go into a
+3:543 minutes, 54 secondsbunch more as we as we dive into uh uh what's what's being offered here. But what we found is that just like with the
+4:034 minutes, 3 secondsintroduction of the cloud back in 2006, customers needed an enterprise
+4:104 minutes, 10 secondsscale, enterprise security, uh an enterprise time to value. And what we're finding is that with agents, we need the
+4:174 minutes, 17 secondssame exact thing. So with agent core, we're delivering uh a comprehensive agentic platform. There's a few, you
+4:254 minutes, 25 secondsknow, core uh pieces of that that make us unique that make us really excited. Number one, build it the way you want.
+4:334 minutes, 33 secondsWe're very open. You pick your agent framework. You pick your model. Uh deciding your protocols. We're open to
+4:404 minutes, 40 secondsusing uh hotel for observability. Uh pretty much uh meeting customers where they're at. Uh the next big one uh is
+4:484 minutes, 48 secondsenterprise level security. So, you can't trust your agents uh unless you've got uh security figured out. At AWS, we've
+4:574 minutes, 57 secondshad uh you know, a huge long history of security uh doing that right. We're doing it with agents uh as well. Uh I
+5:055 minutes, 5 secondswon't go through all of these, but let me just wrap up with we're basically combining speed, scale, and security for
+5:135 minutes, 13 secondsagents, and that's what our customers have been uh demanding. Uh so let's get into uh some of what's uh been added to
+5:215 minutes, 21 secondsuh agent core since we launched uh three months ago.
+Chapter 3: New enterprise features
+5:265 minutes, 26 secondsthe biggest focus has been uh uh introducing all the things that you would expect with a GA uh platform and
+5:345 minutes, 34 secondsthat for enterprises tends to be more and more security right so what we've added is private link and VPC so you can
+5:425 minutes, 42 secondsrun all of your agents in a fully secure environment uh infrastructure as code uh you've got to have repeatable uh
+5:505 minutes, 50 secondsdeployments repeatable um uh creation of agents gateways and so forth. All of
+5:575 minutes, 57 secondsthat's done uh just like with any of your traditional uh workloads as well.
+6:016 minutes, 1 secondNow, we've got infrastructure as code for the entire platform. Tagging uh is critical because you want to know uh
+6:086 minutes, 8 secondswhich agents uh uh which teams are are spending on which components. uh you want to be able to look across uh uh
+6:176 minutes, 17 secondsdifferent teams, different business units, be able to associate tags with all of your agent resources uh and manage them effectively. And then of
+6:266 minutes, 26 secondscourse uh most of our customers aren't just in in one region. They're uh there's a lot of global uh need for
+6:346 minutes, 34 secondsthis. So we've basically expanded our initial four regions. Now we've got nine. Uh so if you uh are are in uh it'd
+6:416 minutes, 41 secondsbe interesting to hear where you're all from today, but I'm sure some of these regions are are pretty important to you.
+6:476 minutes, 47 secondsUh so we've upgraded to nine regions. Um now let me just cover a few of the upgrades that we've made to some of the
+6:546 minutes, 54 secondscore services. Probably the most fundamental part of the platform is our runtime service. It's the piece that really emphasizes that bring your own
+Chapter 4: Runtime and memory updates
+7:037 minutes, 3 secondsagent framework, bring your agent code, pick your model. Uh we're basically giving you a secure, scalable, fully
+7:117 minutes, 11 secondsmanaged way to to host your agents. Uh you've asked for A2A support and and that's our uh one of our big
+7:187 minutes, 18 secondsdeliverables here uh for GA. We've got a A2A support. We'll I don't think we'll show you a little bit of that today, but we'll be back uh in a week or two to to
+7:277 minutes, 27 secondsdemonstrate that. Uh and we've done a bunch of usability uh enhancements as well to just make it as simple as
+7:347 minutes, 34 secondspossible. The balancing act here is we want people to be able to build agents quickly and get started quickly, but we also are are giving them full
+7:437 minutes, 43 secondsconfigurability and scalability. So, we've done things like uh make the AM role creation automatic, giving it, you
+7:517 minutes, 51 secondsknow, lease privilege access to only the pieces that you need. We've added an ability to stop sessions. So, if you
+7:587 minutes, 58 secondswant to tightly manage your agents, make sure they're not going too far, we've got APIs for that. you can configure how
+8:058 minutes, 5 secondslong an agent can run. Uh we've got header propagation which is basically uh giving you a couple of things. One is uh
+8:138 minutes, 13 secondsidentity aware authorization. So when you call your agent, the agent knows who's calling, who is the user, and you
+8:218 minutes, 21 secondscould use that to do your own uh additional logging. You could do that to hook to the right uh short-term and long-term memory, things of that nature.
+8:308 minutes, 30 secondsAnd we've also Sorry, Mark. I love how easy it is to get started but also how much flexibility you get with all these new
+8:388 minutes, 38 secondscapabilities right so it's really uh having the full spectrum of getting your uh IM role created automatically and
+8:468 minutes, 46 secondsit's fine grain so it's already secure it's enterprisegrade security and then you want to move to production you want
+8:538 minutes, 53 secondsto have that on a CI/CD pipeline you want to have infrastructure as code you can build up from it maybe you're adding more services you're adding
+9:039 minutes, 3 secondsmore things to your agent, it becomes more complex. You can do that incrementally and this is really the core of what we are offering here. So,
+9:119 minutes, 11 secondsit's really really exciting to see all of these capabilities that will keep the developer experience great while also providing a lot of flexibility.
+9:229 minutes, 22 secondsSpeaking of flexibility, if we talk about runtime itself, you know, one of the core capabilities of course is to host agents, but we also let you make
+9:319 minutes, 31 secondsyour own MCP servers and host those using runtime using the same great capabilities of uh longunning workloads,
+9:399 minutes, 39 secondslarge payloads. All of these things are are supported by uh runtime, but now we're adding uh native A2A capability.
+9:469 minutes, 46 secondsWe'll deep dive on that soon. But you get things like built-in uh agent card support, uh agent agent communication
+9:539 minutes, 53 secondswith JSON RPC. Uh all of that's built in. So you can really easily take your A2A code uh hosted in runtime and get
+10:0110 minutes, 1 secondall the benefits of of agent core runtime for those uh workloads and get your interoperability. Uh a couple of
+10:0810 minutes, 8 secondsnew pieces with respect to memory. We've got a fully managed short-term and long-term memory. you've asked for customizations there. So, now you have a
+10:1610 minutes, 16 secondsfully uh customizable self-managed strategy. So, we give you built-in ones to do session summaries, extract user
+10:2410 minutes, 24 secondspreferences, things of that nature. Now, if you've got your own ideas or if you want to do maybe migrations from other memory platforms, all of that's doable
+10:3310 minutes, 33 secondswith these custom strategies and with the batch APIs to uh inject long-term memory. We also heard loud and clear
+10:4010 minutes, 40 secondsthat you want these things as easy as possible to integrate with your agent framework. So we've taken care of that with lang chain, langraph and more. And
+10:4910 minutes, 49 secondswe've got uh metadata filtering and short-term memory. Uh um two more quick things and then we'll
+Chapter 5: Gateway and developer tools
+10:5610 minutes, 56 secondsget our first demo here. Uh on the gateway front, uh if you remember, Agent Core gateway is a an excellent way to
+11:0411 minutes, 4 secondstake all of your existing APIs and tools and expose them as MCP and then they plug right into your coding assistance.
+11:1011 minutes, 10 secondsThey plug right into your agents. We heard you loud and clear that you wanted MCP server as a new target type. So now you can create gateways that add in Open
+11:1911 minutes, 19 secondsAPI REST services, Lambda, and existing MCP servers all within the same gateway.
+11:2711 minutes, 27 secondsuh you get this full security benefits, you get the full search benefits. All of that is is built in. Speaking of
+11:3311 minutes, 33 secondssecurity, you also asked for doing uh inbound authorization using IM. A lot of our enterprise customers have a huge
+11:4211 minutes, 42 secondsinvestment in IM and although MCP has OOTH as a standard protocol, they also wanted to support MCP using IM
+11:5011 minutes, 50 secondsauthorization. So, we've got you covered there.
+11:5411 minutes, 54 secondsUm, I'm going to skip this one. I want to hit this uh last point and then show you our our first demo. And that is uh
+12:0212 minutes, 2 secondswe wanted to uh make it even easier to get started, even easier to use uh both strands agents uh and uh agent core and
+12:1212 minutes, 12 secondswith any agent framework. So, we've got a new MCP server uh that's easy to just drag into whatever coding assistant you're using uh and then it knows about
+12:2012 minutes, 20 secondsagent core uh and it can make your agent core development life uh easier. So, let's let's flip to the first demo.
+Chapter 6: Demo: Building a basic agent
+12:2812 minutes, 28 secondsYeah, I mean there are so many capabilities here, right? So, it's like I mean obviously the time is not sufficient to demo all of these capabilities, but we're here to uh
+12:3712 minutes, 37 secondsdefinitely add more videos to this playlist that we have. Um, we have a deep dive playlist on agent core. U please be sure to check that out. We'll
+12:4612 minutes, 46 secondsadd that uh to the description of the streams as well.
+12:5012 minutes, 50 secondsAnd the good news is even though we don't remember all the launches that we are getting because they are coming up every day, our MCP server does and this
+12:5912 minutes, 59 secondsMCP server can really help you uh bringing your agents to life and it can really help you uh creating very uh nice
+13:0713 minutes, 7 secondsapplications. So, it's a great way to get started as well.
+13:1113 minutes, 11 secondsSo, I'll be linking the agent code MCP server in the chat.
+13:1513 minutes, 15 secondsAwesome. Yeah. So, uh for those of you that don't know, uh Curo is uh AWS's, um coding assistant. Uh it's like cloud
+13:2313 minutes, 23 secondscode, uh cursor, and more. It's it's got some advanced capabilities that kind of go a step further. Uh we won't dive into all of that in this show, but let me just show you a couple of quick things.
+13:3313 minutes, 33 secondsUh when you uh uh let's see where do they go? There's a Curo ghost right there. Uh when you
+13:4113 minutes, 41 secondsbring up Curo, you can uh manage your MCP servers. So this is how you can uh add in whatever MCP servers you want. So
+13:5013 minutes, 50 secondsI've added in uh Strand agents uh MCP server. You can get that from the Strand
+13:5713 minutes, 57 secondsagents website uh and from our MCP server for agent core. You can just pop that right in here as well. Um, and what
+14:0514 minutes, 5 secondsI did earlier, uh, actually just about a half hour ago, uh, I asked, uh, Kira to
+14:1214 minutes, 12 secondsuh, make me a simple strand agent to just do uh, f Englishtorench translations. So, uh, it it did that for
+14:1914 minutes, 19 secondsme. So, if I just run that interactively locally, uh, I can say um,
+14:2814 minutes, 28 secondswhatever I'd like here, and it's coming back with uh, with French. That's great.
+14:3114 minutes, 31 secondsAnd then I I asked Kira, "Hey, please uh take that uh let's see, here it is. Take
+14:4014 minutes, 40 secondsthat simple strands agent uh and uh make it ready for agent core. Uh so it looked up uh all the information about agent
+14:4914 minutes, 49 secondscore and it figured out that all it really needs to do is these two lines of code.
+14:5514 minutes, 55 secondsuh add this decorator here to to make an entry point uh and then run the app. And
+15:0315 minutes, 3 secondsuh it was able to uh automatically do that and then uh automatically uh
+15:1115 minutes, 11 secondsconfigure the app, deploy it to the cloud and then we can actually run that uh here.
+15:1915 minutes, 19 secondsLet's see.
+15:2115 minutes, 21 secondsYeah. So here I'm uh actually running agent core invoke from the command line uh and it's able to
+15:3015 minutes, 30 secondsdo a French translation. So all of this I didn't write a single line of code here. Uh and and Myra just to see uh to
+15:3715 minutes, 37 secondspush the limits here let's say all right hey Kira um why not make this
+15:4615 minutes, 46 secondssupport Portuguese instead?
+15:5115 minutes, 51 secondsUh, please update it to translate to Port.
+15:5915 minutes, 59 secondsOkay, let's see what it does.
+16:0916 minutes, 9 secondsIt's making those changes.
+16:1816 minutes, 18 secondsThis is what we get for doing a live demo. Here we get to wait a few minutes here.
+16:3016 minutes, 30 secondsLong pause. Maybe we shouldn't done that. Shouldn't have done that live uh update. Why don't we come back? Portuguese.
+16:3916 minutes, 39 secondsYeah.
+16:3916 minutes, 39 secondsYeah. Portuguese is too difficult. Why don't we switch to uh to the next demo?
+16:4516 minutes, 45 secondsYes. Sounds great. So, we see how you can get started. You see that you can do a lot of things uh with agent core. You
+16:5316 minutes, 53 secondscan start very simple. You can use the MCP server to create your applications.
+16:5816 minutes, 58 secondsUh but then we want to move to production, right? We want to go and do some more complex applications and we
+17:0617 minutes, 6 secondswant to start setting up the CI/CD pipelines. We want to use infrastructure as code. We want to have VPC support
+17:1317 minutes, 13 secondstagging all of those. So to demonstrate this uh real life example here uh I'm
+Chapter 7: Demo: Complex customer agent
+17:2017 minutes, 20 secondsgoing to uh walk you through our customer support agent and I'm going to share my screen for that.
+17:2917 minutes, 29 secondsYeah. Anal can we switch to Marley? Here we are.
+17:3217 minutes, 32 secondsAwesome. There we go. Yes. So let's go through our customer support example.
+17:3917 minutes, 39 secondsAll of these examples are available on our GitHub samples repository. We have a bunch of samples there to get started
+17:4617 minutes, 46 secondswith the new GA capabilities with the capabilities of agent core overall and we also have some use cases there end to
+17:5517 minutes, 55 secondsend use cases and uh this customer support assistant is one of my favorites uh that uh Ishan put together here. So
+18:0318 minutes, 3 secondsit's a pretty awesome example that will demonstrate h all of those different capabilities. So we have VPC support, we
+18:1118 minutes, 11 secondshave a infrastructure as code. So everything is deployed with a cloud for templates in this uh situation. Uh for
+18:1918 minutes, 19 secondsthe folks asking about CDK, asking about Terraform, don't worry, it's also available. We just wanted to demonstrate
+18:2618 minutes, 26 secondsone of them. We need so many hours to demonstrate all the different functionalities here. Uh yeah, but all
+18:3318 minutes, 33 secondsof this we get deployed, we get some taggings and yeah, here is the architecture of what we're going to do.
+18:4018 minutes, 40 secondsSo we are going to have a runtime that has a couple of different tools. So we have tools that are available locally uh
+18:4918 minutes, 49 secondswith this uh MCP server that it's uh deployed in the same runtime container locally to the agent and this MCP server
+18:5718 minutes, 57 secondscan look at some data and can analyze some uh tables. Uh then we have another
+19:0519 minutes, 5 secondstool that is also an MCP server but it is hosted in its own agent core runtime.
+19:1319 minutes, 13 secondsSo agent core runtime can host both agents and tools and here we are going to demonstrate that. So we are hosting
+19:1919 minutes, 19 secondsthe agent as an MCP server. In this uh in this tool here we can do get reviews, we can get the products, we can do a
+19:2819 minutes, 28 secondsbunch of things that a customer support agent would need. And then uh on top of that we have a gateway that will check
+19:3619 minutes, 36 secondsfor warranty supports and warranty claims to see if a certain product still has warranty. And uh all of this is
+19:4419 minutes, 44 secondsdeployed inside of VPC. So runtime everything is inside VPC and uh we are using private link to the
+19:5219 minutes, 52 secondscommunications. We are deploying everything with a cloud form and we are adding a bunch of text. Uh before I show
+20:0020 minutesyou real code, let's just uh look at the data. So the data here is also pretty complex. We have different systems. We
+20:0820 minutes, 8 secondshave data available on Amazon Aurora Postgree SQL. So we if you want to ask things about users, about products,
+20:1820 minutes, 18 secondsabout orders, they are all on PostgreSQL.
+20:2220 minutes, 22 secondsUh then we also have some data on Dynamob table. So when we are talking about uh reviews when we're talking
+20:2920 minutes, 29 secondsabout products those are on Dynamo DB tables and uh exposed via gateway we
+20:3620 minutes, 36 secondsalso have uh data on Dynamo DB for warranty and customer profile. Now uh EK
+20:4320 minutes, 43 secondsis asking me why do we need uh all of these different data exposed via gateway not via gateway? Why do we have all of those different ways of accessing data?
+20:5420 minutes, 54 secondsbecause we are talking about enterprise uh use cases right so we are talking about reusability we are talking about different teams collaborating with each
+21:0321 minutes, 3 secondsother warranty is super common I need that for customer support but EK also needs that for IT support right like
+21:1221 minutes, 12 secondssomeone has to actually work on the claims so someone has to actually fix the things so it's a tool that is shared
+21:1921 minutes, 19 secondsbetween different uh teams while when we are talking about uh uh user here. So when we are talking about like the
+21:2721 minutes, 27 secondsreviews, when we are talking about some of those products, this is more specific to this use case. For instance, in this
+21:3321 minutes, 33 secondsuh scenario here, you can have different scenarios. Now, we also didn't h expose
+21:4021 minutes, 40 secondsthe MCP server on the gateway, but that's your homework, right? Like all the code is available after you finish
+21:4721 minutes, 47 secondstoday. uh you're super excited and you want to have this MCP exposed on the gateway, you can also change that and uh build up on it.
+21:5821 minutes, 58 secondsUh okay. So, why don't you walk us through the code for it? And I'm just going to change to
+22:0622 minutes, 6 secondsmy ID here so that we can see a bit of the code. But yeah, how are you structuring all of this uh code?
+22:1522 minutes, 15 secondsRight. So uh here first of all if you see under customer support assistant VPC we have quite a bit of folders here. So
+Chapter 8: IaC and pipeline details
+22:2222 minutes, 22 secondsthe first one that Myra is highlighting right now is the agent folder. Here is the main agent code the one that you saw. Now here I have my docker file which is used to build this container.
+22:3322 minutes, 33 secondsBy the way all of this is through GitHub. So whatever is on GitHub my code build takes that builds it puts into a
+22:4122 minutes, 41 secondsECR builds my runtime. This is the code pipeline that you must be uh you must have in your enterprises. So we have
+22:4922 minutes, 49 secondsdocker file, we have main.py and main.py is the entry point to my agent.
+22:5522 minutes, 55 secondsI just want to take a step back here to say how amazing that is. That means that you're having CI/CD pipelines. So you
+23:0223 minutes, 2 secondscan change in the code things are getting improved every day. You can trigger the pipeline. Your code build is
+23:0923 minutes, 9 secondsuh deployed again. Your agent is updated. you have a new version, everything is automated. That's production readiness.
+23:1723 minutes, 17 secondsYep. And how do I trigger that pipeline?
+23:1823 minutes, 18 secondsI just push push to my GitHub repository. That triggers my pipeline.
+23:2223 minutes, 22 secondsThat triggers a new version of my agent on agent core runtime. Uh so that is number one. Uh I also have MCP Dynamob
+23:3123 minutes, 31 secondsuh folder over there. That is my MCP server. Uh now this server, it's a very easy server. Uh if you want to go into
+23:3823 minutes, 38 secondsit, it's actually just querying my Dynamob table. It's just read only MCP server. I have deployed this using uh
+23:4523 minutes, 45 secondsfast MCP SDK. Uh and all of that code you can see in main.py as well. Uh finally under the cloud form I have all
+23:5423 minutes, 54 secondsthe cloud for stacks and here I'm following the best practices. Each of these stacks are repeatable sort of uh sort of stacks that you can use. If you
+24:0224 minutes, 2 secondswant to just do VPC stack, you have all the VPC setup. If you just want MCP Dynamo DB, you have the MCP server
+24:0924 minutes, 9 secondsstack. All of this is repeatable and I've deployed uh I've uh created it as such. When you deploy actually all you
+24:1724 minutes, 17 secondshave to do is run a script and it deploys all of these cloud formations into your AWS account and you will have all of this running end to end
+24:2724 minutes, 27 secondsand this is all documented for you as well. So you can uh go through the readme and you can do deployments here.
+24:3324 minutes, 33 secondsYou can do the standard deployment or you can h create more h complex ones.
+24:3924 minutes, 39 secondsOne thing that I want to highlight here as well is that uh this is connecting with agent core identity and this agent core identity is using cognto. So here you have to set an admin uh cognto user.
+24:5224 minutes, 52 secondsSo you are passing your email and passwords and those are uh securely stored as a in the yeah as a secret
+25:0025 minutesmanager in this application so that you can use that and you can connect with your application. Uh we also have like
+25:0825 minutes, 8 secondsdetails of everything that it's deployed in this stack uh and how to test the different uh pipelines. So you can test
+25:1625 minutes, 16 secondseverything together but you can also test uh connection to the agent test gateway all of those as you would have
+25:2425 minutes, 24 secondsin a project that it's running production. So the readmi here is a fantastic job as well. Uh you also can
+25:3225 minutes, 32 secondssee a video of like the customer support agent working as well. Uh but we will do that live.
+25:4025 minutes, 40 secondsUh cool. So we just saw Mark's agent and we saw that Mark's agent had the import of the SDK. It had the init in
+25:4925 minutes, 49 secondsinitiation of the app. It had an entry point and it would run the agent. It was a very simple example. It's the same for
+25:5625 minutes, 56 secondscomplex ones. So we still have all of this when you're using the SDK. When we are uh looking here at the uh agent that
+26:0526 minutes, 5 secondsis being deployed to runtime, you're still going to import the agent core app. You're still going to initiate this
+26:1526 minutes, 15 secondsapp here, mark the entry point and have the run.
+26:2226 minutes, 22 secondsBut this can be more complex as well, right? So, EK, what are we doing with lifespan here? What can you do?
+Chapter 9: Advanced runtime configuration
+26:3026 minutes, 30 secondsYeah, so uh let's talk about lifespan events. So, lifespan events lets you execute a piece of code before your
+26:3726 minutes, 37 secondsserver is initialized and just before your server is shut uh is shut down. So, at two places. So, before it is
+26:4526 minutes, 45 secondsinitialized and then finally before it is shut down. So, it lets you do a lot of things. For example, you want to initialize some connection to resources
+26:5326 minutes, 53 secondswhich take time and you want that to happen once just before the initialization of the server. You can do that using lifespan. And then finally
+27:0127 minutes, 1 secondonce the agent uh has completed processing and now the server is going down you want to uh clean up some resources or clean up some connections.
+27:1027 minutes, 10 secondsAll of that you can do in the lifespan.
+27:1327 minutes, 13 secondsHere for this particular scenario what I do is uh whenever initial uh whenever the a uh the server is initialized I
+27:2127 minutes, 21 secondscreate my MCP clients I start my connection and just before it is shut down I stop all of my connections. So just following best practices here
+27:3027 minutes, 30 secondsstarting and stopping of connections and uh here you can see that uh in the lifespan code as well if you scroll up myra.
+27:3827 minutes, 38 secondsYes. So this is important here because we are creating a lo a local MCP server right. It depends on your code. It
+27:4627 minutes, 46 secondsdepends on what you want to have but it is pretty flexible. So you can have a bunch of different uh applications built up with a agent core runtime.
+27:5827 minutes, 58 secondsUh okay. So when we are talking about a local MCP servers, we also need to have those in the docker file, right? And
+28:0628 minutes, 6 secondswhen we are talking about a starter toolkit and I think here let's take a step back and let's discuss all the different ways you can interact with
+28:1428 minutes, 14 secondsagent core. So you can interact with agent core using the basic APIs. You can
+28:2128 minutes, 21 secondsinteract with agent core using the agent core SDK which is an abstract abstraction on top of it. And then you
+28:3028 minutes, 30 secondscan interact with agent core using the starter toolkit which is even a bigger uh abstraction on top of all of this
+28:3728 minutes, 37 secondsthat makes it pretty easy to get started and then you can also interact with agent core using infrastructure as code.
+28:4328 minutes, 43 secondswhen we are talking about the starter toolkit h you don't need to create your docker file because everything is done for you because it is made to make your
+28:5228 minutes, 52 secondslife very easy so you can h create your code you can deploy it and you can uh just get things done really quickly
+Chapter 10: Docker and tool integration
+29:0029 minuteshowever when we are going to more complex applications and you don't want the standard docker file you want to start doing more complex uh things you
+29:0829 minutes, 8 secondswant to start uh getting your MCP server downloaded here for instance like EK is doing in this example. You want to have
+29:1729 minutes, 17 secondsthis control, you want to have this flexibility, you want things to become more complex. So this is also possible.
+29:2429 minutes, 24 secondsWhat we want to do with Asian core is keep things super simple so that you can have a great developer experience while
+29:3229 minutes, 32 secondsgiving you a lot of freedom to customize everything. So to build very complex applications and here is a great example
+29:4029 minutes, 40 secondsof a EK building a more complex application. So can you explain your docker file here as well?
+29:4729 minutes, 47 secondsSure. Yeah. So uh here if you see I have a bunch of environment variables. As you can see I have my region that I configured. So I just do this for US
+29:5529 minutes, 55 secondsWest 2. Of course you can do this for other regions in the read me. If you see right now it's compatible for US West 2 because of uh these environment
+30:0330 minutes, 3 secondsvariables right here. uh then you see the docker container being one. So just telling that okay you're being part of the docker container just following the
+30:1130 minutes, 11 secondsbest practices here installing the dependencies uh as you can see in line 13 uh and then finally here if you see
+30:1830 minutes, 18 secondson line 26 27 28 is where I install first the requirements uh here I'm running a strands app right so I want to
+30:2730 minutes, 27 secondsinstall the strands SDK the strands tools SDK uh all the good stuff that I'm doing inside the code I do that in requirements txt then I install AWS open
+30:3730 minutes, 37 secondstelemetry DRO. This package alone lets me export my hotel traces to agent core
+30:4430 minutes, 44 secondsobservability and we'll be we'll be showing showca uh we'll be showcasing that too. This package alone once you install it and you use it, you'll be able to export all of your hotel traces
+30:5330 minutes, 53 secondsto agent core observability. Finally, I install uh AWS Labs Postgress MCP server. Now uh I install this once and
+31:0231 minutes, 2 secondsthen inside the code I initialize the connection. I talk to it and you will see uh the run query whenever you see
+31:0931 minutes, 9 secondsthe run query during the demo this is the server that is being used and the transport that I'm using here is std IO so it's not streamable HTTP it's running
+31:1831 minutes, 18 secondson the same server as the agent uh another great point here that I wanted wanted to highlight was since the agent
+31:2531 minutes, 25 secondsis running inside a VPC now with no internet access uh I I I don't get to download this inside the code I can do
+31:3331 minutes, 33 secondsthat using ubx But uh I don't get to do that because now it's a enterprise agent core runtime, right? I don't have
+31:4231 minutes, 42 secondsinternet access. I cannot download just about anything from the net. So I download here first in the docker file and then start using it inside the code.
+31:5131 minutes, 51 secondsSo that's a question that was asked you know a couple of times in the recent times about uh enterprise applications that are within the VPC that need you
+32:0032 minutesknow that need this agent core connectivity right yep uh and I think I think we'll be talking a little bit about that too when
+32:0832 minutes, 8 secondswe talk about gateway uh but uh yeah okay so this was about the docker file itself uh what is nextra
+Chapter 11: Deploying MCP servers
+32:1732 minutes, 17 secondsyes let's talk about uh now using agent core runtime to deploy a MCP server.
+32:2532 minutes, 25 secondsRight? So we got our local MCP, we got our local uh we got our agent, but we
+32:3132 minutes, 31 secondsalso want to have a runtime deploying an MCP service. So what changes here? How different is that?
+32:3932 minutes, 39 secondsUh not different at all actually. So here what I do is I use the fast MCP library. So you must have written uh fast MCP code already. you already have
+32:4832 minutes, 48 secondsthose fast MCP servers. How do you get size session isolation, enterpriseg grade security and all of the good stuff just put into runtime. So here uh I've not changed any line of code by the way.
+32:5832 minutes, 58 secondsThis is uh as you would see in any uh MCP code, right? So you see I have a few tools defined. Uh I have my two tables
+33:0733 minutes, 7 secondswhich is the reviews and products. Uh I do read queries on them and so on and so forth. One thing that I've added here is
+33:1533 minutes, 15 secondson line 99, if you see, I've added a middleware. And what middleware lets me do is it captures the request when
+33:2233 minutes, 22 secondsthey're coming in and captures the responses when they're about to go out from the server. All I'm doing there is I'm just creating my open telemetry
+33:3133 minutes, 31 secondstraces so that I can actually see what's going on inside my MCP server. So I log everything. What tool is being invoked?
+33:3933 minutes, 39 secondsUh what are the parameters? What are the responses? all of that being part of uh my agent observability. So uh yeah, I
+33:4833 minutes, 48 secondsmean this is this is you can do this with any MCP code by the way. When you want to deploy this, you either use a
+33:5533 minutes, 55 secondsstarter toolkit or the docker file that you can see here and just deploy it into agent core runtime.
+34:0234 minutes, 2 secondsThe MCP docker must be very complex, right?
+34:0534 minutes, 5 secondsUh you tell me actually no is very simple. So it's simple to deploy to uh runtime and it's
+34:1534 minutes, 15 secondsamazing that you didn't have to change any lines of code. So it is like building your MCP server but now it's on runtime. Now it has enterprise security.
+34:2534 minutes, 25 secondsNow it's scalable and available, right?
+34:2834 minutes, 28 secondsSo it's pretty awesome. Uh let's talk about infrastructure as code. I I read somewhere people asking if you can uh
+34:3634 minutes, 36 secondsdeploy the agent core components as infrastructure as code and the answer to this question is yes you can. There are
+Chapter 12: IaC infrastructure setup
+34:4434 minutes, 44 secondsnew uh new cloud for templates that allow you to deploy your runtime that allows you to deploy your
+34:5234 minutes, 52 secondsgateway that allows you to deploy agent core components as infrastructure as code. So here uh what are you doing with your runtime?
+35:0235 minutes, 2 secondsYep. So here you can see first of all uh I'm creating my AWS bedrock agent core runtime uh resource. Uh I provide my
+35:1035 minutes, 10 secondsrole. Uh definitely recommend uh diving deep into that as well. Uh so that role lets me execute uh code inside my runtime with some certain privileges.
+35:2135 minutes, 21 secondsFor example, if I want to query my Dynamob table or secrets manager or agent code identity more importantly. So
+35:2735 minutes, 27 secondsI have my role then I have VPC uh and inside the VPC I provide security group and subnet. Now this security
+35:3635 minutes, 36 secondsgroup and subnet has access uh has the Aurora instance. So uh you'll see in the demo we are running SQL queries on pro
+35:4435 minutes, 44 secondsPostgress Aurora uh server that is inside a private subnet. It has no internet access. So through this network
+35:5335 minutes, 53 secondsconfiguration I'm able to connect to it uh without parsing the public internet.
+35:5835 minutes, 58 secondsThen I have my ECR repository as you can see line 827 uh I have my ECR repository then the authorization configuration on
+36:0836 minutes, 8 seconds831. Right now I'm using uh custom jot so I'm using uh oath 2.0 cognto to uh
+36:1536 minutes, 15 secondsmanage inbound authentication. You can use IM if you want. Uh but here I'm using Cognto. And you'll see when you log in into your in the demo through
+36:2436 minutes, 24 secondsemail, password. This is what allows uh inbound to your agent core runtime. And finally, environment variables. So you can pass environment variables. And this
+36:3336 minutes, 33 secondscan be the model ID. I want to use sonnet 4 uh or the region, the MCP ARN, provider ARN, Aurora secret ARN. All of
+36:4236 minutes, 42 secondsthese you can pass. Finally, tagging which is g uh which is great for variety of purposes. For example, you want to
+36:4936 minutes, 49 secondssee what is the cost associated with uh certain tags of yours. This can be development environment, production environment, test environment and so on
+36:5736 minutes, 57 secondsand so forth. So definitely recommend tagging here all the way.
+37:0237 minutes, 2 secondsI saw a question in the chat about having all of the hotel logs saved on S3 or somewhere. Uh here is the answer to
+37:1037 minutes, 10 secondsyour question. So you can have a log group on cloudatch and you can have all of your hotel logs saved there. So with
+37:1737 minutes, 17 secondsthat you can export it to any third party tool you want to use and we also have samples to do that on our GitHub
+37:2537 minutes, 25 secondsrepository. Uh when you go to agent co serverability third party integration you can also see those there. M uh yeah
+37:3437 minutes, 34 secondslast thing before we go and see everything on our AWS account that I wanted to highlight here is that you can also get a gateway uh here. So uh also
+37:4437 minutes, 44 secondscreated with uh infrastructure as code everything created uh with our cloud for template here. Uh cloud for is great but
+37:5337 minutes, 53 secondsyou can also do CDK you can also do terraform. Uh we are uh working to get all of those samples out and they will
+38:0038 minutesbe out on the repositories. So start this repository and we are going to give you more and more uh content there as
+38:0738 minutes, 7 secondswell. So we are working uh to make this uh more digestible as well. You think this is too complicated to get started?
+38:1438 minutes, 14 secondsNo worry, we got you. We also have a folder for cloud for templates that have much simpler uh use cases. So you can
+38:2238 minutes, 22 secondshave a hello world agent there that showcases the different uh cloudformation templates and that can get you started pretty quickly. Uh but
+38:3138 minutes, 31 secondswe are talking about real world applications. Let's uh showcase them, right? Let's go and have some fun on the console.
+38:4138 minutes, 41 secondsMara I wonder if I wonder if you want to leave make sure we leave time to show uh where this will all land as well. You want to show the experience that uh is offered by the chat uh as well.
+Chapter 13: Live demo of complex queries
+38:5338 minutes, 53 secondsAbsolutely. And we are going to do some live demo. It's not live if we don't try and execute stuff by ourselves. So yeah,
+39:0139 minutes, 1 secondhere are all the cloud for templates that have been deployed. I've already deployed this because it takes a little bit to get everything running. But
+39:1039 minutes, 10 secondsessentially what this will do is uh create all the infrastructure that uh we need. So it will create your uh
+39:1839 minutes, 18 secondsruntimes. So here for instance we are talking about uh our agent itself. So the customer support agent I've enabled
+39:2639 minutes, 26 secondslogging enabled tracing all of this there by default. Uh we got a bunch of tagging as well. So if you want to do
+39:3439 minutes, 34 secondsthis tagging it is there. uh you can see your cloudatch logs, you can uh see your endpoints, all of this gets deployed for
+39:4139 minutes, 41 secondsyou. uh then we also have gateway. So in the gateway we are deploying our gateway. We have our target as a lambda
+39:5039 minutes, 50 secondsfunction that can check the warranties also a log enabled. So everything there
+39:5739 minutes, 57 secondsfor you and we have our identity providers here as well. So we have identity for our MCP server and for
+40:0640 minutes, 6 secondsgateway here and yeah all of those uh available here. Uh okay so let's go and
+40:1440 minutes, 14 secondsdo some demo. Uh first of all uh we've integrated identity. So we get Cognito
+40:2040 minutes, 20 secondsto uh work here and I need to create a token. So I'm going to log uh to my
+40:2740 minutes, 27 secondsCognto user. I got my customer support here and now I'm going to start asking
+40:3440 minutes, 34 secondssome queries. So we are just uh starting with a hi how are you and we get some
+40:4240 minutes, 42 secondsreply from the agent. So let's now ask a question. I I like the streaming response as well.
+40:4740 minutes, 47 secondsRight. So that's yes and uh the visibility of what is being done here. So for instance, I'm
+40:5440 minutes, 54 secondsasking to uh get a complete profile of a customer with a customer ID including their uh purchase history and details.
+41:0341 minutes, 3 secondsRight? So uh here it will first try to get uh the customer profile and uh it will give me the results for this
+41:1141 minutes, 11 secondscustomer profile. So this is uh using the gateway and then uh now it will run a query to see what this uh customer is
+41:2041 minutes, 20 secondsdoing from orders perspective. So in this case it's using our local MCP to run this query and see the recent orders.
+41:3141 minutes, 31 secondsI think I think a great point here is uh a lot of the times everyone is talking about how to do text to SQL. Uh so just with that MCP server that we installed
+41:3941 minutes, 39 secondsin the docker file and now we are using with the agent we're able to do text to SQL. We are converting language into SQL
+41:4741 minutes, 47 secondsqueries and then executing them. So if you see the results as well for this run query, you'll see the text to SQL uh output that you get out of your uh MySQL Postgress SQL databases which is great.
+41:5941 minutes, 59 secondsIt's so much easier to get started.
+42:0242 minutes, 2 secondsAbsolutely. And it can get complex because we do have our agentic uh AI, right? So that means that our agent can
+42:1042 minutes, 10 secondsdecide what to do and that means that our agent can decide to uh check different uh systems and invoke
+42:1742 minutes, 17 secondsdifferent tools. So here I'm going to uh be a bit more ambitious and I'm going to ask a query to the agent that will
+42:2642 minutes, 26 secondsrequire lots of different tools. So I'm going to ask about uh this laptop pro.
+42:3142 minutes, 31 secondsIn this case, I'm passing the serial number and reviews because of the way our tools are implemented. Once you implement better uh tooling
+42:4042 minutes, 40 secondscapabilities, you don't need those, but in this case, we need uh but I'm going to ask uh about this laptop. I'm going
+42:4742 minutes, 47 secondsto ask about customer reviews, inventory statuses, and warranty information for this serial number. So, in this case, we are going to go to the warranty first.
+42:5742 minutes, 57 secondsWe are going to get the serial number, see the information about this one. We are going to go to the reviews, see the
+43:0343 minutes, 3 secondstwo reviews uh about this computer. So, it's excellent. It has a good value.
+43:0943 minutes, 9 secondsAnd then the last one, it is h a bit less uh less defined what it needs to
+43:1743 minutes, 17 secondsdo. So uh in this case it needs to go to the products table but we don't have like APIs that are h exactly mapping to
+43:2743 minutes, 27 secondsthis products table but we do have the text to SQL and based on this text to SQL now we can get this information so
+43:3543 minutes, 35 secondswe can uh see what is the information about this product. So now we got our product we have inventory we have
+43:4243 minutes, 42 secondswarranty status we have the reviews all of this done for you. What if we want it? It looked like uh those tools were
+43:5043 minutes, 50 secondsbeing executed in parallel. Was that uh happening there? Yeah, for a few of them. Yes. Yeah. Nice.
+43:5843 minutes, 58 secondsWhat about the metadata? Myra, we can also see the metadata on the UI if you want to showcase that as well. Uh on the
+44:0444 minutes, 4 secondschat itself. So there is a metadata. Um Oh, yep. Awesome.
+44:1044 minutes, 10 secondsSo you can see how many tokens it consumed and so on and so forth, which is great for any debugging purposes. So, so Ian for this demo here like how much
+44:1944 minutes, 19 secondsof uh schema did we have to define for the agent to understand uh details about the database
+44:2544 minutes, 25 secondsright? So uh for Aurora database uh what my MCP server exposes is get schema as a
+44:3344 minutes, 33 secondstool. So using strands what I do is I load the schema of my Aurora database during the initialization. So during the
+44:4144 minutes, 41 secondslifespan I load the schema of my Aurora database into strands. so that my agent is aware of what the schemas look like
+44:4944 minutes, 49 secondsfor all of the tables that are in SQL and then it is much more aware and that's why you see uh it just writes the query once and gets a great response
+44:5844 minutes, 58 secondsright it it's not redoing it again and again because it's aware of what the schema looks like so uh yeah so but my MCP server here uh comes to the win
+45:0645 minutes, 6 secondsbecause it exposes a tool to actually get the schema of my Aurora databases Aurora tables
+45:1445 minutes, 14 secondsawesome let's try and ask some more difficult questions and I want to see the whole customer journey for Jane.
+45:2445 minutes, 24 secondsLet's ask like the complete customer journey for James Smith from registration to her last interaction. So
+45:3145 minutes, 31 secondshere we are h starting to ask very complicated queries right and we are getting our agent to uh work and uh this
+45:3945 minutes, 39 secondsagent is going uh to the user database it's getting information about uh Jane it is going to the customer profile gets
+45:4745 minutes, 47 secondsmore information about Jane again and h it will tell us a lot about Jane right
+45:5645 minutes, 56 secondslike when did she join what's her current status so she's a gold tier a customer. She has ordered uh last
+46:0546 minutes, 5 secondsOctober and yeah like she still have some pending order. Uh now
+46:1346 minutes, 13 secondswhat about finding discrepancies right like we're talking about different tables that handle customer data. Uh
+46:2046 minutes, 20 secondslet's see if our agencies is smart enough to find discrepancies in the database.
+46:2746 minutes, 27 secondsSo here we are getting the customer information and then when we get the customer information we are also getting
+46:3446 minutes, 34 secondsuh the customer ID and uh getting it from the user table. So we have two different tables and uh now we are
+46:4246 minutes, 42 secondsgetting the orders as well and what we can see is that there is a discrepancy.
+46:4746 minutes, 47 secondsSo Alysia has two different emails and yeah like also the order is not really
+46:5446 minutes, 54 secondsmatching. So look how awesome your agent can also help you debugging the quality of your data and can help you finding uh those kind of issues in your data.
+47:0847 minutes, 8 secondsHey Myra, I'm wondering if you could pop back to the architecture diagram and kind of recap what we've seen here. This is incredible uh how many different
+47:1647 minutes, 16 secondspieces we've shown here. So much different than uh my hello world uh that we showed at the beginning here. This is
+47:2447 minutes, 24 secondscloser to a realworld scenario uh where you need the security, you need the scalability, the performance and the repeatability. So
+47:3247 minutes, 32 secondsabsolutely and here is the architecture again. So we do have a tool that is
+47:3947 minutes, 39 secondsunder the gateway that will check for warranties that will get a customer profile. We do have a local MCP that
+Chapter 14: Architecture recap
+47:4847 minutes, 48 secondswill run the SQL queries that can access our order databases and can get all of this information about users and uh
+47:5647 minutes, 56 secondsorders and then we do have a a MCP server running in an agent core runtime that can get uh product reviews and can
+48:0548 minutes, 5 secondsget product informations. So a bunch of very very important tooling for customer
+48:1248 minutes, 12 secondssupport uh types of use cases right uh so let's one question that's coming in the chat
+48:1948 minutes, 19 secondsuh and Philipe has touched a point right I mean he's saying uh can you make sure agent will not accept any SQL injection
+48:2648 minutes, 26 secondsso maybe let's talk about let's talk about uh SQL injection maybe security some guardrails that we can include in
+48:3448 minutes, 34 secondsour architecture right so how would we do Absolutely. I mean you can add guard rails to your agent. So adding
+48:4148 minutes, 41 secondsguardrails to avoid SQL injection is an important one. H the other point here is that our SQL are more for getting data.
+48:5048 minutes, 50 secondsIt's not writing anything back in the database. Uh so this is an important point for writing things back in the
+48:5848 minutes, 58 secondsdatabase. You need to have uh to be very careful on what your agent is doing uh there as well. And then of course like
+49:0649 minutes, 6 secondsall the identity uh parts of it is really important and setting h like writing your agent in the way that it
+49:1549 minutes, 15 secondswill uh work for your use case is really important here.
+49:2149 minutes, 21 secondsUh okay let's take a look on our observability here. So we just run a bunch of queries
+49:3049 minutes, 30 secondsfor the last five minutes and let's just take a look at what we got here. So we got a bunch of traces because everything
+49:3749 minutes, 37 secondsis a trace here. Uh we got two uh agent endpoints. We can see our sessions. We
+49:4449 minutes, 44 secondscan see our different uh traces. Uh we can see the different uh agents as well.
+49:5049 minutes, 50 secondsSo you can uh deep dive into the agent core one and get information about uh
+49:5849 minutes, 58 secondslatency about token usage h any error that you might have had uh throttling
+50:0550 minutes, 5 secondsall of this uh information is available here. You can also deep dive on your traces and everything. Uh but you can
+50:1350 minutes, 13 secondsalso get information about a gateway. So the gateway here we got two invocations to it. You can see uh information about
+Chapter 15: Observability and security
+50:2250 minutes, 22 secondslatency. H all of this is available on our observability capabilities here as well.
+50:3250 minutes, 32 secondsUh yes, I think this was uh a lot and again like all of this code is available
+50:3950 minutes, 39 secondsfor you on GitHub and you can uh explore, you can play around, you can change things, you can do the homework
+50:4750 minutes, 47 secondsof exposing the MCP server as a target in the gateway as well. So like uh
+50:5450 minutes, 54 secondschanging the architecture is also pretty uh important here. Uh but Mark, do you want to talk a little bit more about
+51:0251 minutes, 2 secondslike agent core overall and about our resources because we what we have is a lot of resources for you to get started.
+51:1251 minutes, 12 secondsSure. Why don't we flip back to uh my screen for a minute and um you'll be happy to know that uh my hello world uh
+51:2051 minutes, 20 secondsFrench translator learned a little Portuguese here. Let's see how well it does. You can you can judge it. Uh good morning. How are you today? Let's see.
+51:2851 minutes, 28 secondsUh, is that any good? Not bad.
+51:3451 minutes, 34 secondsIt didn't take that much time to get back, right? So that's the latency is low.
+51:3851 minutes, 38 secondsYeah. Yeah. Uh, so let let's uh let's remind folks what agent core uh offers
+Chapter 16: Platform recap and resources
+51:4551 minutes, 45 secondsuh overall. So you're basically giving uh your agent builders the opportunity to
+51:5351 minutes, 53 secondsgo with whatever they've got. if they're comfortable with langraph crew AI strands uh open AAI uh agents whatever
+52:0152 minutes, 1 secondyou want to use you can use your framework define your own instructions use your own tools and then host that in
+52:0852 minutes, 8 secondsagent core runtime and then uh take advantage of memory to to deal to make your you see how uh easily the
+52:1652 minutes, 16 secondsconversations in the agent were handled you you can use agent core memory to do short-term as well as automatically
+52:2452 minutes, 24 secondsmake your agent more personalized by taking all those events and and summarizing them. Uh then the next time you're coming back to your agent, you
+52:3252 minutes, 32 secondscan take advantage of what happened in the past make for a much more positive experience for users. Um everything is
+52:4152 minutes, 41 secondsunder uh pinned by observability. All of these services are giving you what Myra was just showing you with traces and
+52:4952 minutes, 49 secondssessions and spans and metrics. uh you can see what's going on end to end across your agents, your MCP servers, uh
+52:5852 minutes, 58 secondsgateways, identity, uh memory and and more. uh agent core identity solves one of the truly most difficult problems on
+53:0753 minutes, 7 secondsthis uh whole uh agent spectrum is uh yeah you can build some simple prototypes when you need to be looking
+53:1553 minutes, 15 secondsat how is your user going to work with an agent which is going to then use some tools maybe local tools uh proprietary
+53:2353 minutes, 23 secondstools third-party tools uh maybe talk to other agents uh interoperate using A2A
+53:3053 minutes, 30 secondsyou need an incredibly robust robust identity capability to know the agent identities, know their agent workloads,
+53:3753 minutes, 37 secondshandle inbound authorization uh from uh uh users uh using agents and then outbound authorization to get at
+53:4653 minutes, 46 secondstools. All of this is covered for you uh and flexibly letting you use your IDPS.
+53:5353 minutes, 53 secondsSo if you're using Ping or Octa, Microsoft Entra, whatever you'd like to use, plugs right in. uh as well as integrating with thirdparty
+54:0254 minutes, 2 secondsuh providers like Slack or Jira, Salesforce, Service Now. All of those credential providers can easily be uh uh
+54:1154 minutes, 11 secondsincorporated into agent core identity as well. Uh so you're basically giving this entire platform to your agent builders
+54:1854 minutes, 18 secondsto just accelerate the time to market as well as let you trust uh your agents because you know they're secure. you
+54:2754 minutes, 27 secondsknow, you can look at observability to understand what your agents been doing.
+54:3154 minutes, 31 secondsUm, and then, uh, I, uh, should mention agent core gateway as well. Uh, we saw a
+54:3854 minutes, 38 secondslittle bit of that today. Um, basically with gateway, you're making every uh,
+54:4654 minutes, 46 secondsavailable resource more easily exposed as MCP.
+54:5154 minutes, 51 secondsAnd I would like to highlight here as well that you can use all of it together or each piece individually. And for
+54:5854 minutes, 58 secondstoday's demo, for instance, we had a agent core runtime, we had gateway, we had identity. We didn't add memory. We could add memory. It would make our
+55:0655 minutes, 6 secondscustomer support better uh to have these interactions, but we chose not to. And you can do that uh to your applications
+55:1455 minutes, 14 secondsas well. So everything together fits pretty well and helps you creating very powerful applications but you can also
+55:2155 minutes, 21 secondsuse them individually and then you can also uh match and h different applications. So thinking about uh
+55:2955 minutes, 29 secondsdifferent teams in an organization one loves lingraphs and wants to create a lot of agents with lingraph. The other
+55:3655 minutes, 36 secondsone loves the trends and it's creating different applications and trends and we have a third one that really is a fan of
+55:4255 minutes, 42 secondscrew AI. uh we can uh interact with all of them. We can uh deploy all of them on runtime and then you can use things like
+55:5055 minutes, 50 secondsHA to uh create complex applications that will uh combine those agents and I
+55:5855 minutes, 58 secondswould like to also highlight that this samples repository is really awesome and it has a bunch of those examples. So we also have like examples of multi- aent
+56:0756 minutes, 7 secondscollaboration combining langraph and strands for instance. So you can see how flexible uh this whole capability is. So
+56:1556 minutes, 15 secondsflexibility is something we really took to heart and we really h implemented on all of the different capabilities.
+56:2256 minutes, 22 secondsWe have a couple of questions that are coming up and maybe I'll just pop them here. U like Amuseva is asking how do I
+56:2956 minutes, 29 secondsimplement multi-tenency uh you know how do I do this with this architecture right? So maybe just maybe speak about this for a second.
+56:3856 minutes, 38 secondsYeah. So multi-tenants you could get that uh on the tooling capabilities. So having like different toolings available
+56:4656 minutes, 46 secondsfor it. H gateway is a good way of doing that. So you can uh have like gateway getting the tools for your uh agent as
+56:5656 minutes, 56 secondswell. Uh then uh like custom header is a a good one that Mark was mentioning
+57:0357 minutes, 3 secondstoday, right? So you can pass the tenency deck. uh when we are talking about memory you have actor ids so you
+57:1057 minutes, 10 secondshave a bunch of different ways of also getting this multi-tenency uh mark ek what else
+57:1957 minutes, 19 secondsyeah I guess we'll see more demos I mean samples in the in the GitHub repository so please be sure to check that out um
+57:2757 minutes, 27 secondsto cover those topics right so yeah uh let's go back to the resources that we have here yeah a few quick resources uh we've got
+57:3657 minutes, 36 secondssome pretty robust uh documentation uh available. Uh we added quite a few quick start uh examples where within
+57:4457 minutes, 44 secondsfive minutes you can have something fully running with runtime uh with gateway with memory all each of the
+57:5157 minutes, 51 secondsdifferent services and then uh in under 15 minutes you can have an end toend example running in your environment. Uh so check out the quick starts the API
+58:0058 minutesdocumentation it's all very good. Uh we've got some really strong workshops.
+58:0558 minutes, 5 secondsThese have been used by I don't know how many thousands, many thousands of uh builders already just in the last couple of months. There's a getting started
+58:1458 minutes, 14 secondsworkshop and then there's a deep dive workshop. So check those out. Uh we're happy to work with you uh to uh take you
+58:2158 minutes, 21 secondsthrough those as well, but they're self-service also. Uh we've we've uh beaten to death here the the samples repo. Uh but we do love it. We think
+58:3058 minutes, 30 secondsit's pretty impressive. We've got a lot of tutorials, some end to end examples, some integrations. Uh check those out. Let us know what else you'd like there.
+58:3858 minutes, 38 secondsAnd then uh we've got this series that we've been contributing to here. So there's a playlist out there to uh go
+58:4558 minutes, 45 secondsinto runtime as a deep dive, go into gateway, go into memory. Uh all of those are are covered. Uh we've got we had the
+58:5458 minutes, 54 secondsintroduction of agent core before and and of course today's uh GA deep dive as well. We'll have more to come as well.
+59:0159 minutes, 1 secondMulti- aents, observability, there's a bunch more that we need to talk about in the coming weeks. So, and a question for Isan, right? So, as
+59:0859 minutes, 8 secondswe wrap, as we come to closing, Ian, you built this sample application here. How long did this take for you to, you know,
+59:1559 minutes, 15 secondsbetween all the other things that uh that you're doing? You know, how long did this take to build this?
+59:2159 minutes, 21 secondsGreat question. Uh, and I would say two to three days. And most of the time I actually spent on the front end uh and managing my data so that the data is
+59:2859 minutes, 28 secondscorrect. but might have found a problem apparently with the email still. But with agent code in the picture, I could actually just sit back, relax, and focus
+59:3659 minutes, 36 secondson what actually mattered. The system prompts uh uh are tools responding correctly, is my data correct and so on
+59:4359 minutes, 43 secondsand so forth. So yeah, two to three days.
+59:4659 minutes, 46 secondsThere you go folks, you heard it. So uh you know built this in a couple of days.
+59:5059 minutes, 50 secondsSo definitely explore agent core uh use all the resources that are here to explore start building agentic applications is uh this is the best time
+59:5859 minutes, 58 secondsto build uh out there right cool thank you thanks uh so we'll uh you know come back
+1:00:061 hour, 6 secondsto you next week with more uh show and tell episodes and we'll dive deep into the other resources that we have. Thanks for watching.
+1:00:191 hour, 19 seconds[Music]
+
+
+
+
+
+resources
+
+https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-agentcore-is-now-generally-available/
+
+https://github.com/aws/bedrock-agentcore-sdk-python
+https://github.com/aws/bedrock-agentcore-starter-toolkit
+https://github.com/awslabs/agentcore-samples
