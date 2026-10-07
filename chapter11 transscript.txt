@@ -1,0 +1,476 @@
+0:3232 secondsHello all, welcome to another episode of AWS show and tell. I am Anil Nadimi. Uh joining from New Jersey today u and
+0:4040 secondswe're going to dive deep into agent core evaluations. Joining with me today uh are Ishan Singh and Akasha Seawat. So uh Ishan, you want to introduce yourself?
+0:5252 secondsYes, absolutely. Uh hey everyone, I'm Ishan Singh. I'm a senior data scientist on the uh Amazon betro go to market team and uh very excited to be here.
+1:031 minute, 3 secondsThanks Ishan. Um hi everyone my name is Akasha Seag.
+1:081 minute, 8 secondsUh I'm a part of uh agent core go to market team as well. I'm working as a ji data scientist and we are excited to be here today to share with you uh what
+1:171 minute, 17 secondsagent core evaluations is all about and what uh can it provide you with. Thank you for joining. Thanks uh Ishan and
+1:251 minute, 25 secondsAkasha. So uh uh I know you're you're in the same room in uh is that in Seattle? Yes. Yes.
+1:331 minute, 33 secondsExcellent. So yeah, I'm joining from uh New Jersey folks and let us know where you are joining from.
+1:401 minute, 40 secondsUh today's session we're going to focus on agent core evaluations. Right. So we had uh a session on observability last week. Same time I'll post a link in the
+1:471 minute, 47 secondschat. But uh uh let's let's take an example of a use case. Right. So where where do we need evaluations and let's
+1:541 minute, 54 secondsuh try to picture this. So um let's say we have a use case where we are building an agentic application and we need to uh
+2:022 minutes, 2 secondsevaluate whether the agent is performing uh according to any of those metrics right so uh and then we had to see if uh
+2:112 minutes, 11 secondsyou know the agent is calling the right tools is it calling with the right parameters and uh we are here to dive deep with Ishan and Akasha today and
+2:192 minutes, 19 secondsunderstand how this fits into the big picture right especially uh today we had an announcement of uh uh set 4.6 that's
+2:272 minutes, 27 secondsavailable. Ishan uh how does that uh you know do we do we get started with 4.6 [laughter] valuations how do we where do we get started?
+2:352 minutes, 35 secondsYeah. Yeah. No the these are ready to go solutions. Um so yeah we we should definitely start using them. Um and
+2:432 minutes, 43 secondstoday as we are diving deeper into evals we will talk a lot about uh how these different evaluators and uh you how you can use different type of models for
+2:522 minutes, 52 secondsyour evaluation tasks. So we will really really uh get deeper into those today. Excellent.
+3:003 minutesVery cool. Uh I think with that we can get started. Um I will start with um laying out some agenda for today. So
+3:083 minutes, 8 secondsfirst we will start with just like a very high level overview of uh what agent core is. Then we will dive deeper into the evaluation specifics. Um
+Chapter 2: Why evaluate agents
+3:163 minutes, 16 secondstalking about the agent code evaluation service. We also have some demos and best practices for you. Precisely. We
+3:223 minutes, 22 secondshave five different demos uh so that we are really trying to uh make sure that you are able to learn how to set things
+3:303 minutes, 30 secondsup and be able to use those as you put your agents in production.
+3:353 minutes, 35 secondsAll right. So with that said um so um agent core um Amazon metro agent core it has been out for a while now. We
+3:443 minutes, 44 secondslaunched this uh in preview um I think July last year and then it went GA and u
+3:513 minutes, 51 secondsamong the offerings of agent core we have now added evaluations which uh sort of sits with uh observability and I
+3:583 minutes, 58 secondsthink uh Anit as you mentioned last week or last last week you had a deep dive session on agent core eval sorry agent core observability so agent core
+4:064 minutes, 6 secondsevaluation builds on top of that observability so think of it like now that you are measuring what um the
+4:134 minutes, 13 secondsagents are doing in production. Now what you measure now you can improve using evaluations. So uh it sits right there
+4:214 minutes, 21 secondsand with that let's uh dive into the next uh topic.
+4:274 minutes, 27 secondsPerfect. Um I mean today everything we are doing right we're building all of these agents with so much focus on
+4:354 minutes, 35 secondstechnical capabilities you know which protocol to use are we using A2A MCP um which new protocols are coming out which
+4:444 minutes, 44 secondsfeatures are we going to build with uh what tools are we going to use which model um is is going to is going to be
+4:524 minutes, 52 secondsused but taking a step back thinking about the bigger picture right The end goal is to make sure that our agents are
+5:015 minutes, 1 secondproviding a good user experience and the good user experience to the parody uh to the mark that our humans
+5:105 minutes, 10 secondsare able to provide. So we want to be able to give the same experience as our experts are are providing but with the
+5:185 minutes, 18 secondsspeed of an agent. So that's the idea uh that we're building.
+5:235 minutes, 23 secondsUh so the focus has to be to build trusted agents such that you're able to create a good user experience.
+5:325 minutes, 32 secondsUm a big part of building that consumer experience is
+5:395 minutes, 39 secondsto be able to trust uh our new let's say digital workforce that we are creating
+5:475 minutes, 47 secondsuh with these agents to to do this job correctly. And for a fact agents are noneterministic by nature, right? Which
+5:555 minutes, 55 secondsmeans we are allowing them uh to act autonomously.
+6:016 minutes, 1 secondAnd one way we can build these agents um is to is by making sure that these
+6:096 minutes, 9 secondsagents uh have a job performance review of some form. So we are able to evaluate if this agent that we're building is
+6:186 minutes, 18 secondsdelivering the correct results. it is effective. It can be relied to do a good job consistently.
+6:266 minutes, 26 secondsUh so it's all about, you know, are your agents making the right decisions? Are they using the right tools? Um are they
+6:356 minutes, 35 secondsproviding the answers that are relevant and appropriate as well? Um are they polite to the customers that they are
+6:426 minutes, 42 secondstalking to? Uh are they, you know, representing the correct brand value that you want them to represent? And
+6:496 minutes, 49 secondsthese are all difficult dimensions to measure um because often they are very
+6:566 minutes, 56 secondssubjective and they are critical to assess 100%.
+7:027 minutes, 2 secondsBecause we want to be able to rely on these agents to do a task, right? And that's why evaluating an agent is an imperative.
+Chapter 3: Evaluation strategies
+7:107 minutes, 10 secondsWould you say this is called as a evaluationdriven development?
+7:157 minutes, 15 secondsYeah, that's definitely that's a that's a nice nice way to put it. Yes.
+7:187 minutes, 18 secondsAnd I I really like the point that Akasha shared here like your agents need a job performance review like all of us
+7:267 minutes, 26 secondsright we all work different type of uh teams companies and all those things. So yeah even agents as we work more with
+7:337 minutes, 33 secondsthem uh as like our co-workers definitely we need to make sure they're doing the best possible right. So they have to be evaluated at every step of the way.
+7:447 minutes, 44 secondsSo what's the goal of this right? So we evaluate the agent and do we uh make our agent uh you know maybe the prompts
+7:527 minutes, 52 secondsbetter, maybe the uh tool calling better. Is that the goal of this whole evaluationdriven development? Do you say that?
+7:597 minutes, 59 secondsSo I think I would pivot to what Akasha shared initially. I think the goal is to build trustworthy agents and whatever it
+8:078 minutes, 7 secondstakes to get there. So if it requires to update system prompts, yes, absolutely.
+8:128 minutes, 12 secondsIf it requires to like update tool descriptions, yes. But you know it may also require you to build like or sort
+8:198 minutes, 19 secondsof break the agents down into like specialist agent build like multi- aent architectures and such. So it it can be
+8:268 minutes, 26 secondsvery complex but it um you usually start with like just getting to work things done in a way that you're working
+8:348 minutes, 34 secondsbackwards from what your end goal is which and we will talk uh deeply about success criteria in in a few slides uh
+8:438 minutes, 43 secondsbut yeah that's that's what I would work backwards and also Ian like you know again when we talk about evaluations we always talk about LLM as a judge right so where does that fall in the big picture here? Yeah.
+8:548 minutes, 54 secondsNo, that's a very uh important question actually and also like it's it's a part of your strategy too like hey I need
+9:029 minutes, 2 secondsLLMS judge to evaluate where I know that the agent is making decisions and where the output that it needs to
+9:129 minutes, 12 secondsevaluate is coming based off of some sort of natural language. So for an example, you don't need LLM as judge
+9:199 minutes, 19 secondswhere you are using some sort of an API call which always returns a fixed sort of a string value. Let's say you're
+9:289 minutes, 28 secondslooking up for employee ID for whatever reason, right? You don't need LLM as judge to verify whether employee ID was returned or not.
+9:369 minutes, 36 secondsYou need LLM as judge when your agent is using the whole context in order to answer something whether it's passing
+9:439 minutes, 43 secondsthe correct parameters or not. things like those.
+9:469 minutes, 46 secondsSo maybe like in the case of a research agent which probably gathering in uh information from the internet, you're doing some tool calling. Maybe after
+9:539 minutes, 53 secondsthat you're doing a summarization, right? So maybe the summarization can be validated using an LLM as it exactly and and think of this case also.
+10:0010 minutesSometimes what happens with agents is that they would make all the right tool calls or they would also pass the right parameters but for some reason they just
+10:1010 minutes, 10 secondsdecide not to use any of that context and just answer things from memory like complete hallucination of sort. So you need LLM as judge in order to judge
+10:1810 minutes, 18 secondsthose kind of things but not necessarily that hey if it is uh picking up like um
+10:2610 minutes, 26 secondslet's say if there is employee ID type of a u yeah if if something is deterministic you should not use an LMS for it
+10:3410 minutes, 34 secondsperfect okay thanks and also I think the other approach could be that you could introduce a human in the loop to do the same but at
+10:4310 minutes, 43 secondsthe scale that these agents are operating it's difficult to actually have you know
+10:5010 minutes, 50 secondshumans evaluate uh the responses and on every level and on every trace that's
+10:5610 minutes, 56 secondshappening. So that's why LLM as a judge is a very good middle ground to allow us to do that.
+11:0311 minutes, 3 secondsYeah. And I think you you sort of um so Akasha just gave you like a peak of one of the demos that we have today. Like
+11:1111 minutes, 11 secondswhen you run things at scale, it's impossible for humans and subject matter experts to go and read everything. What
+11:1811 minutes, 18 secondsdo you do with all these scores, all these responses and u reasoning of evaluations? So we will also be diving deeper into that aspect today.
+11:2711 minutes, 27 secondsExcellent.
+11:2811 minutes, 28 secondsOkay. So getting back to um why are we evaluating agents, right? because agents
+11:3511 minutes, 35 secondsmay fail. Every time we are rolling out a new version of the agent, uh we are updating a model or perhaps changing the
+11:4411 minutes, 44 secondssource prompt, adding or removing the tools. So any of these could result in key failures um and therefore the agent
+11:5311 minutes, 53 secondsnot not achieving the goal or not doing the job in an optimal way. Um so this
+Chapter 4: AgentCore evaluation features
+12:0012 minutesusually starts with a quality failure which includes you know hallucinations, poor reasoning, uh selection of the
+12:0812 minutes, 8 secondswrong tool or just inconsistent outputs right and then these failures cascades
+12:1412 minutes, 14 secondsto reliability issues. Now these include you you can have context loss, you can have um bad or poor error handling uh or
+12:2512 minutes, 25 secondssome security or vulnerability gaps that come in and then those result in the agent efficiency on a on a bigger level,
+12:3312 minutes, 33 secondsright? So that in that includes uh having to pay higher costs, having much higher latency and therefore leading to
+12:4212 minutes, 42 secondsthe loss of customer trust. And that's where um you know that is let's say the
+12:4812 minutes, 48 secondsthe peak of panic in a way. So um we do not want to have any sort of loss of
+12:5612 minutes, 56 secondscustomer trust or conf or any loss of confidence in in our product because that is the worst case scenario and by the time that happens it's already too
+13:0413 minutes, 4 secondslate. So that has already created a bad reputation for the product or the company and might uh you know result in
+13:1313 minutes, 13 secondsa loss of the current or future business and we cannot afford to do that. Um this is why we need to be able to understand
+13:2213 minutes, 22 secondswhere the agent went wrong so that you can fix it before uh the customer even experiences that failure. Right?
+13:3113 minutes, 31 secondsAnd that's where uh agent core evaluations uh comes into play. I will let Isan talk about that.
+13:4113 minutes, 41 secondsYeah. No and and thanks so much for bringing in the customer trust side of the things and uh latency and cost because uh a lot of times what happens
+13:5013 minutes, 50 secondswith these AI agents is that when we build them, we think about like hey I want to give the fastest response. I
+13:5613 minutes, 56 secondswant to like minimize the cost and want to generate some sort of like good experience. Good experience could be like for customerf facing app it's c uh
+14:0614 minutes, 6 secondsa customerf facing app has a different type of customer experience versus processdriven event driven agent has a
+14:1314 minutes, 13 secondsvery different type of uh success criterias and like uh trust things. So as you work through these, it's super
+14:2214 minutes, 22 secondsessential to manage it because evaluation not only helps you to generate higher quality response, but it also helps you like minimize the cost,
+14:2914 minutes, 29 secondsimprove the latency and finally maintain the trust that you want to build and the good experience you're building continuously keep improving it.
+14:3714 minutes, 37 secondsYep. Exactly. So uh in order to um help uh our customers build u agents in a trustworthy way we launched agent goore
+14:4614 minutes, 46 secondsevaluations in u during reinvent um this past December just like couple months ago. Uh currently the service is in uh
+14:5414 minutes, 54 secondspublic preview. So all of us can go and use it try it out. um it gives like lot of out ofthe-box features that you need
+15:0215 minutes, 2 secondsin order to like get started, get going with your agents and be able to track the performance. Uh so some of the quick
+15:0915 minutes, 9 secondsfeatures I want to cover today is um one that there are 13 built-in evaluators and these evaluators helps you assess
+Chapter 5: Metrics and criteria
+15:1815 minutes, 18 secondsperformance of your agent across like different dimensions at different levels as well. And we will look into what these 13 evaluators are and what I mean
+15:2615 minutes, 26 secondsby different dimensions and levels in a in just a couple of slides. Um you can also build your own custom uh
+15:3415 minutes, 34 secondsevaluators. And when I say evaluators, so currently the service supports uh LMS judge uh in a reference free style. So
+15:4215 minutes, 42 secondsyou could really build um any type of evaluator be it like on your tool uh selection or tool uh parameter accuracy
+15:5115 minutes, 51 secondsside or like across the entire session looking at hey is my agent meeting the goal or not and things like those.
+15:5815 minutes, 58 secondsSo in this case these are the 13 ones are the built-in ones and then uh we can always customize these to our needs
+16:0616 minutes, 6 secondsright because we may have like a specific use case that we want to evaluate on and maybe that could be done as well.
+16:1116 minutes, 11 secondsYeah. Exactly. And and I think one of the best practice is also that hey as you get started right um there are lot
+16:1816 minutes, 18 secondsof moving things that you have while you're building an agent because often times what happens with the speed of genai is that you started building today
+16:2716 minutes, 27 secondsum or let's say if you just started building earlier this week and you were experimenting with model X but as you
+16:3416 minutes, 34 secondsknow sonnet 4.6 six is here now. So things are moving so fast within Gen AI that you need some of these undifferiated uh heavy lifting to be
+16:4216 minutes, 42 secondsdone by like let's say these hyperscalers. So AWS is providing you with these built-in so that you get started quick and as you sort of
+16:5016 minutes, 50 secondsgraduate from it you can customize those specific tool like hey now that I understand what my agent does what it
+16:5716 minutes, 57 secondsdoesn't do I can customize specifically to those type of problems or the areas that I want to improve it on. So maybe
+17:0417 minutes, 4 secondsto think of it in a different perspective to say that you know maybe even if we use a smaller model and we get a good score out of the evaluation
+17:1217 minutes, 12 secondsmaybe we can still continue to use that instead of uh you know paying more for a larger model with reasoning capabilities right so that could be
+17:2017 minutes, 20 secondsyeah yeah exactly and um so one of the good things with these 13 built-in evaluators is that uh that inference is
+17:2817 minutes, 28 secondsmanaged for it so what I mean by that is um typically what happens when you evaluate it uh using LLMS charge is that
+17:3617 minutes, 36 secondsyou're using your AWS account kota of sort right for your number of tokens number of request and all of that for
+17:4317 minutes, 43 secondsthe 13 built-in evaluators a u agent core evaluation is managing that for you so it doesn't affect the kota that you
+17:5117 minutes, 51 secondshave for your account you can still continue to use your application in the way you are using and it doesn't affect that it's a very big uh plus point with
+18:0018 minutesusing the 13 built-in evaluators that's a Great point.
+18:0418 minutes, 4 secondsYeah. So, yeah, other than this, uh there are so many other features, but I'm just going to focus more on like how
+18:1218 minutes, 12 secondsdo I get started with building agents and evaluating. So, there are uh like you get a built-in dashboard uh ready to
+18:1918 minutes, 19 secondsuse and it uh so agent core evaluation is a part of like agent core observability. So, you get integrated dashboard you can look at your trace but
+18:2718 minutes, 27 secondsnow also get scores for those traces specifically exactly in the same place.
+18:3218 minutes, 32 secondsSo you have latencies, you have your information about what the agent did, the trajectories and all those info along with evaluation in just one place.
+18:4118 minutes, 41 secondsAnd since everything with agent core observability as well as evaluation is powered by cloudatch. So you have all the amazing features that cloudatch
+18:5018 minutes, 50 secondssupports. So alarms uh you could uh trigger downstream tasks using those alarms and things like those.
+18:5818 minutes, 58 secondsAll right, let's dive deeper into uh the evaluators that we have and then we will u sort of get into the demos.
+Chapter 6: Evaluation modes
+19:0819 minutes, 8 secondsPerfect. So the 13 built-in evaluators that Ian was talking about um they are organized across three different
+19:1519 minutes, 15 secondsdimensions, right? So first one is the session level metrics. This is where you are evaluating the entire conversation, right?
+19:2519 minutes, 25 secondsthinking in terms of uh did the agent achieve the user goal? What was uh assigned to it? Uh did the conversation
+19:3319 minutes, 33 secondssucceed end to end? So this is where we are talking about the goal success rate.
+19:3819 minutes, 38 secondsUm or we can even create uh a custom metric to have that. Um the second dimension would be the trace level,
+19:4619 minutes, 46 secondsright? The trace level is where we are assessing the individual responses. So most of the quality signal um that comes
+19:5519 minutes, 55 secondsin this is where it goes. Um so thinking in terms of uh let's say was the response uh that the agent gave was it
+20:0320 minutes, 3 secondscorrect? Was it faithful to the provided context? Um was it helpful for the user and is it you know following the
+20:1120 minutes, 11 secondsinstructions correctly or not. Uh so this is where the trace level metrics comes in. The third one is the span
+20:1920 minutes, 19 secondslevel. So this is where we are talking about the tool usage uh for you know the agents that are using the tools. Um was
+20:2720 minutes, 27 secondsit able to select the right tools for the task? Did it uh perhaps use the exact parameters that were uh that were
+20:3620 minutes, 36 secondsassigned for that per that user query which were the relevant ones uh or let's say the correct ones for that uh certain
+20:4320 minutes, 43 secondstool. Right? And here's the thing we don't need all 13. we are able to mix
+20:5020 minutes, 50 secondsand match and use the you know the three or four or any number that actually matter to your specific use case and if
+20:5920 minutes, 59 secondslet's say this is not enough this is not covering what you need you can also built in the custom metrics so to select
+21:0921 minutes, 9 secondsum to select the ones um we have this broad criteria uh that we want you to
+21:1721 minutes, 17 secondsunderstand um have you you know defined a clear success criteria for the agent
+21:2521 minutes, 25 secondsand what is the level that you want to evaluate the agent at. So first talking
+21:3221 minutes, 32 secondsabout the success criteria this is where we are uh talking about a bare minimum performance benchmark that you want to
+21:4121 minutes, 41 secondsachieve so that you're able to successfully launch an agent into production. Right? And this is you know
+21:4821 minutes, 48 secondsum often a balance between the operational cost the latency and then the acceptable error on quality that we
+21:5821 minutes, 58 secondshave. Um so perhaps talking about an example let's say I want my customer
+22:0522 minutes, 5 secondsservice agent to give a response under 5 seconds and now this is a non-negotiable for me. Um, and I want 90% of my
+22:1322 minutes, 13 secondsresponses to be of good quality that are solving the users's problems and I want
+22:2022 minutes, 20 secondsthe cost per user session to be let's say less than $5. So something like this, right? So we create the success criteria um so that we can evaluate our
+22:2922 minutes, 29 secondsagents on different levels to achieve this goal. Right? Right. So session level evaluation
+22:3622 minutes, 36 secondsuh would let's say in this case uh track something where we are uh talking about is this solving all of the pain points of the
+22:4522 minutes, 45 secondsuser across all the questions that they have asked. Right? And then we talk about trace level evaluation where it's
+22:5222 minutes, 52 secondsit's talking about um the quality of response of which uh of every question
+23:0023 minutesthat the user has asked, right? And then the span level would be uh the individual tool calls. Is it making it the correct way? Is it using the right parameters?
+23:1023 minutes, 10 secondsUm so we are here. Um so the main thing we have to think about is how do you
+23:1723 minutes, 17 secondsselect the metrics that you should use right and for the most part it depends on the use case um on the business domain and you know what kind of
+23:2523 minutes, 25 secondscompliance needs that you have um but on a general level uh to give you know more generic
+23:3323 minutes, 33 secondsguideline we start with the output evaluation. So this includes metrics like faithfulness uh correctness
+23:4223 minutes, 42 secondsum perhaps response relevance and the goal success rate. Um if your agent is
+23:5023 minutes, 50 secondsuser centric you know add more helpfulness or harmlessness metric to it. Um if we are talking about having
+23:5923 minutes, 59 secondsyou know the multiple tools uh that are being used by the agent add tool evaluators to it. Um, and for custom
+24:0724 minutes, 7 secondsevaluators, if you're looking at solving perhaps a specific pattern or very nuanced, a very niche use case, uh, you
+24:1624 minutes, 16 secondscan think about adding like trajectory evaluator, uh, perhaps to debug or to do the some reasoning analysis. And now
+24:2524 minutes, 25 secondsthis is a great start. Um, now let's look at what are the different ways we can evaluate.
+24:3224 minutes, 32 secondsSo that right. So if if anyone wants to dive deep into what is behind this uh these uh built-in evaluators, I put a link in the chat. So you can see the
+24:4024 minutes, 40 secondsprompt itself, the prompt template that is used to build those built-in evaluators. So it's it's kind of available and for anyone to look at, right? So but one question here is uh we
+24:4924 minutes, 49 secondsalways talk about uh hallucination, right? So uh how do we measure like uh like if an uh particular response is hallucinated you know is if if the model
+24:5824 minutes, 58 secondsis hallucinating on a particular response do we take all of these uh entries and say you know maybe get a
+25:0525 minutes, 5 secondscustom metric or how do we approach that?
+25:0825 minutes, 8 secondsYeah that's an interesting question. So for hallucination um you you so well there are different types of
+25:1625 minutes, 16 secondshallucination. Hallucination can be that u your agent or your model did not decide to use context and gave answer on
+25:2425 minutes, 24 secondsits own knowledge based off of what it knows right from its training that's also hallucination. Uh hallucination can
+25:3125 minutes, 31 secondsalso be it used it incorrectly and you know it can have number of things there.
+25:3525 minutes, 35 secondsUh usually a combination of faithfulness and correctness helps you get like a balanced view of hey is this
+25:4225 minutes, 42 secondshallucinated or not and the way agent core evaluators work. So everything is open telemetry based. So it looks at the
+25:4925 minutes, 49 secondsfull context of what the agent has the instructions that's your system prompt which defines the behavior of the agent.
+25:5625 minutes, 56 secondsSo it looks at that looks at the trace looks at the whole context and the final response that's generated and then it
+26:0326 minutes, 3 secondssort of judges based on the rubric that we have across these uh different evaluators. So in short a combination of
+26:1026 minutes, 10 secondsfaithfulness and correctness would uh help you with that and even response relevance can be a part of it because
+26:1726 minutes, 17 secondsyou know it can also happen that you may have asked like hey what's um and just just to keep it simple maybe you just ask like hey what's the weather right
+26:2526 minutes, 25 secondsnow in Seattle and it sort of gives you some you know like a random answer. Mhm.
+26:3226 minutes, 32 secondsSo response relevance can also be a part of your but usually balance of faithfulness and correctness.
+26:3726 minutes, 37 secondsExcellent. So it's a combination of those uh metrics that you will look at right. So perfect. Yeah. All right. Let's keep moving.
+26:4426 minutes, 44 secondsAll right. So uh let's look at um the two common ways of doing evaluation. So um I'll start with what we have on the
+26:5226 minutes, 52 secondsright hand side here the on demand evaluation. Um so as you are building your AI agent or let's say if you have already put it in prod but now you want
+27:0127 minutes, 1 secondto dive deeper into specifics you would use something more of like a real-time style uh API where um you have your agent you have some test scenarios and
+27:0927 minutes, 9 secondsyou're testing it getting a sense of what does this agent do in these specific uh situations maybe you're changing the environment of the agent
+27:1727 minutes, 17 secondsand things like those so um on demand uh uh is uh an API that uh agent code evaluation supports exactly for these
+27:2527 minutes, 25 secondstype of use cases. Uh another type of a use case that uh the on demand supports is like let's say you are building CI/CD
+27:3227 minutes, 32 secondspipelines because you want to make sure that no faulty deployment uh goes in the production so that your agent is
+27:3927 minutes, 39 secondsperformant and it's performing on you know your selected test cases. So uh on demand really helps along those lines and we will be doing a demo uh shortly.
+27:4927 minutes, 49 secondsWe only have a couple of slides left. So u that's where the on demand piece comes in. Uh agent core evaluation also has
+27:5627 minutes, 56 secondsonline evaluation which is where like the end toend management of like uh fetching the trace from uh the agent
+28:0428 minutes, 4 secondscore observability to applying evaluations on top of it and giving you in a dashboard form happens within the
+28:1128 minutes, 11 secondsuh online evaluation. In case of ondemand evaluation, you do not get a dashboard because hey, this is for you
+28:1828 minutes, 18 secondsas a developer to use it in your IDE in your environment. So you are taking the decisions right there live in real time because hey, you don't want to like go
+28:2728 minutes, 27 secondsinto some dashboard and see what's going on there because you know like it's just a matter of fractions which is where you might lose an idea that you may have or
+28:3628 minutes, 36 secondsyou want to try. So on demand really helps along those lines.
+28:4228 minutes, 42 secondsAll right. So, here's a very quick view of um how agent code evaluation generally works. And this is more so
+Chapter 7: Configuration and custom evaluators
+28:4828 minutes, 48 secondsyour um online style evaluation. But you know it can also be for your on demand uh depending on how you see it. So if
+28:5728 minutes, 57 secondsyou start from the right hand side again um which is the on demand from the previous slide. So you as a agent owner
+29:0529 minutes, 5 secondsu you have already logged your traces of your agent in uh [clears throat] excuse me in uh let's say agent go observability. So you're fetching those
+29:1429 minutes, 14 secondstraces on your own because hey on demand is working directly in your environment in your CI/CD and things like those. So
+29:2229 minutes, 22 secondsyou fetch those you apply evaluation on top of it and we will see like the code for applying these evaluators is like
+29:2929 minutes, 29 secondsreally small um like probably what 10 20 lines of uh total code I would say um we
+29:3729 minutes, 37 secondswill do a demo there. So um you apply that there uh you don't get a dashboard because hey it's directly giving you the
+29:4429 minutes, 44 secondsresponses and a reasoning in your environment but if you're looking at the online version of it which is where you have deployed an agent your users are
+29:5329 minutes, 53 secondsinteracting with an agent. Now in that case your agent is logging all your traces to agent core observability and then the service depending on the
+30:0130 minutes, 1 secondconfiguration you have specified which is the next slide exactly in the demo where I show you how to define that configuration. So um you based on your
+30:1030 minutes, 10 secondsconfiguration the service agent code evaluation automatically fetches the trace on your behalf applies evaluation on top of it put it into a dashboard as
+30:1930 minutes, 19 secondsyou can see uh like a um a screenshot at the bottom of this slide there is a corp
+30:2730 minutes, 27 secondstravel evaluator where you can see different type of scores. Um so it it does that out of the box for you u making it super smooth and easy for you.
+30:3630 minutes, 36 secondsSo what you're saying is it's not a a lot of going into setting up evaluations, right? So my my demo is literally 27 seconds.
+30:4530 minutes, 45 secondsIt it takes 27 seconds for me to configure the um whole evaluation pipeline that then runs continuously.
+30:5430 minutes, 54 secondsExcellent. [laughter] We have a question in the chat coming up. Uh you know, so how does Amazon integrate with internal data and agent feedback to improve generative AI in its
+31:0331 minutes, 3 secondsservices? Right. So you know we do not use customer data to train our models and uh you know just to answer that
+31:1031 minutes, 10 secondsright. So uh this is not based on customer data. Yep. Exactly.
+31:1831 minutes, 18 secondsAll right. So demo time um let me know if you can. So what I have done is since uh these demos with evaluation uh they
+31:2631 minutes, 26 secondstake time um and time here is let's say I invoke an agent the trace gets generated then the evaluation happens.
+31:3331 minutes, 33 secondsjust for me to show you just one example may take a couple of minutes. So what I have done is I have just recorded them in a video and the last demo where I'm
+31:4231 minutes, 42 secondsusing the results I'm showing that live because that that's what I wanted to show you because uh like the real takeaway for you is not to like just hey
+31:5031 minutes, 50 secondsI want to set this up because that's not going to give you the value. The the value that you'll get is how do I use what this does in order for me to be
+31:5831 minutes, 58 secondsable to improve my application. Yeah. So this shows you the entire life cycle of All right. So excellent. So see the demo here in action.
+32:0732 minutes, 7 secondsSo here what I'm doing is I'm setting up my online configuration where I have three steps. One is to specify my agent
+32:1632 minutes, 16 secondsand um I'll just take pause here. So in my agent what I have done is I'm going to take a step back. You get two
+32:2432 minutes, 24 secondsoptions. One I could just directly define an endpoint of my agent. this endpoint is available to you if you have deployed your AI agent on agent core
+32:3332 minutes, 33 secondsruntime and um that's when you can just seamlessly provide a drop-down uh but in other cases when you are uh you have
+32:4232 minutes, 42 secondsdeployed your agent elsewhere which could be let's say uh Amazon EKS EC2 Lambda even you know like outside of AWS
+32:5032 minutes, 50 secondson a different cloud provider so as long as you can send those traces using a dot a dot is uh Amazon's open telemetry
+32:5832 minutes, 58 secondsdistribution ation. So as long as you can send it using that to one of the cloudatch log groups and then you can specify what that cloudatch log group
+33:0533 minutes, 5 secondsis, agent core evaluation can seamlessly work for you.
+33:0833 minutes, 8 secondsSo agents can be anywhere to in order to run the evaluation here. So you don't need to run your agents in agent core uh to be able to do the
+33:1633 minutes, 16 secondsevaluations. It's always uh good to get more visibility if you use agent core and also because like if you have your
+33:2433 minutes, 24 secondsagents uh hosted on agent core you get like those system uh level logging and system metrics too which is usually like
+33:3133 minutes, 31 secondsif you are running it elsewhere you may may not have those depending on like where you are running those. So usually what we have seen is
+33:3933 minutes, 39 secondsagent code uh related traces are 20% more richer uh than like a traditional agentic trace.
+33:4733 minutes, 47 secondsAll right. So, um, of the three, uh, steps that you need, uh, in order to set this up, this is step number one where you select or specify what your agent
+33:5633 minutes, 56 secondsis. Um, sorry, I'll go back here. Um, yeah, so we were exactly at this point.
+34:0334 minutes, 3 secondsThe next thing is for you to select the evaluators that you want. And as you can see, right, I'm just selecting them.
+34:0934 minutes, 9 secondsThere is like sup this is super easy, straightforward. If I have a custom evaluator, I can just set that up and
+34:1734 minutes, 17 secondsthat's it. Like you specify if there is any filter criterias or any sampling rate. And uh to think about filter
+34:2434 minutes, 24 secondscriterias, you can think of like let's say you are defining uh user ID or user group as a part of when your agent is
+34:3434 minutes, 34 secondsinvoked. So you can really focus on maybe you want to specify premium users as the criteria to be filtered. You can
+34:4234 minutes, 42 secondsdefine that. So whatever the criteria your business logic is define that in your trace first which is a part of observability and then this sort of
+34:5034 minutes, 50 secondspicks from there and you can define the sampling rate. It really helps you manage the cost because with continuous monitoring you are sort of getting a
+34:5734 minutes, 57 secondssense of if my agent is still performing the way I want it to and is it meeting the uh the criterias I have and once you
+35:0535 minutes, 5 secondsdo that you just save it. So when I so since I was explaining um I took more time but if you look at the the entire
+35:1435 minutes, 14 secondsrecording this is 27 seconds it took for me to like really select things through and like get it going and now what happens is go ahead.
+35:2335 minutes, 23 secondsYes. So so what we did is uh some click ops there but uh agent c evaluations does it support cloud formation or CDK right? So can we do that as well?
+35:3235 minutes, 32 secondsSo uh right now the service is in preview. So um in preview those features are not usually supported but we do have
+35:4035 minutes, 40 secondsour APIs so you could currently use the APIs.
+35:4435 minutes, 44 secondsExcellent. And we also have a question coming in the chat uh you know agent code evaluations understanding that you know it's part of the responsible AI
+35:5135 minutes, 51 secondsprogram and know should be included in to understand the security concerns of agentic uh you know frameworks out there
+35:5835 minutes, 58 secondsright so is that something uh is that how we would see this?
+36:0436 minutes, 4 secondsSo agent core eval is more so to get a sense of the quality of your agent and quality is multiffold here as we were
+36:1236 minutes, 12 secondstalking about like session level truth level and spam level. So if my agent is taking the right actions is it using the context wisely and things like those. So
+36:2136 minutes, 21 secondsthat's what the majority focus is. But let's say if you are looking into the responsible AI side of the things uh we
+36:2836 minutes, 28 secondsdo have I think one or two evaluators uh but if let's say they don't meet the needs that you have you can uh create custom evaluator
+36:3736 minutes, 37 secondsthere you go right so you have the pump template samples then you can always customize them to make your custom evaluator and I think that's a perfect segue into like how do you create a custom
+36:4636 minutes, 46 secondsevaluator in the first place so this is another uh demo of like creating custom evaluator this is a fourpart uh story
+Chapter 8: On-demand demo and workflow
+36:5436 minutes, 54 secondshere. You select the uh template just to get started quickly. Um and as uh Anilu mentioned these prompts are published
+37:0337 minutes, 3 secondspublicly. So you can also load from there or directly from here so that you have context variables. You select the model of your choice. So any model
+37:1137 minutes, 11 secondsthat's available on uh Amazon Bedrock can be used. Uh and this would also support 4.6 because hey it got launched
+37:1837 minutes, 18 secondsright. So you select all those you define the rubric that you have. Um and rubric is very critical because this is
+37:2637 minutes, 26 secondsexactly what's used in order to get a score get the category for um the evaluation task. So evaluation is a task
+37:3537 minutes, 35 secondsthat your LLM is performing in this case um given the context of the trace.
+37:4137 minutes, 41 secondsSo one quick question there is uh as we uh as you pulled up the model on the right side. So that's the uh important difference that you mentioned earlier
+37:4937 minutes, 49 secondsabout uh the built-in uh versus the custom evaluator. So in custom evaluator you can pick your model that you want to use to run the evaluations.
+37:5837 minutes, 58 secondsExactly. So in custom you pick the model and uh I also mentioned about the inference side of the thing. So inference uh management is available
+38:0638 minutes, 6 secondsonly on the built-in evaluators and not the custom evaluator because you are choosing uh things in
+38:1338 minutes, 13 secondsyour custom way. So the like service doesn't do that in that case. So the kota comes out directly from your kota.
+38:2238 minutes, 22 secondsExcellent. Okay.
+38:2538 minutes, 25 secondsSo what I'll do next is uh I'm going to quickly uh show [clears throat] you um how these specific APIs work.
+38:3438 minutes, 34 secondsUm so specifically focusing first on the on demand side of the things and then we look at the demo for on demand. Uh then
+38:4138 minutes, 41 secondswe will look into the online and demo for online and then finally how do we combine all things together and best practices from here. So uh the way on
+38:5038 minutes, 50 secondsdemand API works is you as a developer are responsible for one instrumenting your agent uh and agent instrumentation
+38:5838 minutes, 58 secondsthese days has become much easier with the uh open source libraries. uh depending on what type of agentic framework you have it may have different
+39:0639 minutes, 6 secondstype of instrumentations uh could be open telemetry based could be open inference based uh so that's some sort of like decision point for you
+39:1439 minutes, 14 secondsto decide how and what type of instrumentation you need a do supports both open telemetry as well as uh open inference so it just makes it much
+39:2339 minutes, 23 secondseasier for you to um really like instrument your agents once you have instrumented uh your agent then produces
+39:3039 minutes, 30 secondsuh the open telemetry uh session traces and spans that can then be used in order to evaluate it. Uh so you as a developer
+39:3839 minutes, 38 secondsone instrument your agent to um like fetch those traces and prepare the data set that's needed in order to be
+39:4539 minutes, 45 secondsevaluated because the whole concept of on demand is that you as a developer are in control and you want everything in
+39:5439 minutes, 54 secondsyour environment. So let's say if you're working in visual code studio, you want everything right there on demand is the way to go. uh then you invoke the APIs
+40:0340 minutes, 3 secondswhich are again invoking foundation models on Amazon bedrock and really you're getting the responses as well as the reasoning behind why the evaluation score is in your environment.
+40:1640 minutes, 16 secondsOkay. So now let's look at a demo of this. Um so what I have here is I have built a travel based agent. Uh all of
+40:2540 minutes, 25 secondsthese uh tools that it has I think seven of them.
+40:2840 minutes, 28 secondsCan you zoom that in? Uh um yes.
+40:3240 minutes, 32 secondsOkay. Uh actually I think it should be okay. Okay. Cool. Cool. Yeah.
+40:3740 minutes, 37 secondsSo if you look at this um agent, what this is doing is it is a travel helper agent. It can search things for you. It
+40:4640 minutes, 46 secondscan get you the exact information, your flight information, hotel information, any travel restrictions, things like those. All these tools are uh calling
+40:5540 minutes, 55 secondssome real uh realtime API and things like those. This is my system prompt in my baseline experimentation. Um so um I
+41:0441 minutes, 4 secondsthink I didn't cover this piece. Um so for evaluation you think about that the very first agent that you built that
+41:1241 minutes, 12 secondsacts as your baseline. It may happen that you may have ground truth data. It may also happen that you don't have ground truth data given your use case and the nuances that you may be facing.
+41:2341 minutes, 23 secondsSo it doesn't matter that what you have at that point. Ideally, yes, it's best if you have ground truth data so that
+41:3141 minutes, 31 secondsyou know it it becomes much easier to baseline things. But even if you don't have it, you can still baseline things because if you look at evaluation as a
+41:4041 minutes, 40 secondstask, uh the new LLM model and new here is like not the same LLM model that's in
+41:4841 minutes, 48 secondsyour AI agent in that session, but it could be same model, but it's like at a in a different session window, right? So
+41:5441 minutes, 54 secondsthat LLM is now the task for it is to look at what the agent did and sort of
+42:0242 minutes, 2 secondsgive you an idea of whether it was good or not. So that's the task for any of your LLM based evaluator. Uh and then you may define further subcategories
+42:1142 minutes, 11 secondsthat was it partially correct, was it like uh little bit better than partial correctly? U partially correct and things like those.
+42:2042 minutes, 20 secondsSo here uh that's what I'm doing. Uh I'm just setting up my baseline agent. The very first agent I built. This is my very first prompt.
+42:3042 minutes, 30 secondsNow what I'm doing here is um I am deploying this agent first. Reason to deploying it on a core runtime here is because I want to finally deploy this
+42:3942 minutes, 39 secondsagent in agent core runtime if and when I go to production. How does that help me is uh and I'm not covering the
+42:4642 minutes, 46 secondsprocess of deploying because I think Anel we have had like couple of sessions on show and tell about how do you deploy agents on runtime so I'm skipping that
+42:5542 minutes, 55 secondspiece but overall it's a super easy process um you containerize your agent code and deploy it so why why we are
+43:0243 minutes, 2 secondsdeploying it in the first place is because you want to test your agent exactly where it's going to run if you remember from the slides we were talking
+43:1043 minutes, 10 secondsabout earlier your agent evaluation isn't just the quality side of the things but it is also your cost and
+43:1843 minutes, 18 secondslatency and latency isn't just your agent runtime it's like the full uh story of like invoking agent your
+43:2743 minutes, 27 secondsmachine getting spun up and things like those that's that's what happens right in production so you're looking at that you're looking at quality generated from
+43:3443 minutes, 34 secondsthere so now if you look at this I'm calling this experiment equal to baseline just setting this my baseline version and I'm invoking this agent that
+43:4243 minutes, 42 secondsI deployed on agent core runtime. And if you look at this, this is just like me passing through some questions.
+43:5143 minutes, 51 secondsUm, me passing through these questions here. Oh, sorry. I think I clicked accidentally on it. So, sorry about it.
+43:5943 minutes, 59 secondsYeah, let me Yeah, right here. So, here we are. Um, maybe I'll do it this way.
+44:0944 minutes, 9 secondsUh I'll just uh manually uh move this.
+44:1344 minutes, 13 secondsYes, that that makes it much easier. So what I'm doing here is I'm really just invoking this agent by passing in some
+44:2044 minutes, 20 secondssession ID. And this session has multiple questions within it. So it's a multi-turn um experience in this case.
+44:2944 minutes, 29 secondsAnd uh what's happening here is my agent gets invoked. It invokes tools uh because it has those seven tools as I was showing earlier. And then like you
+44:3844 minutes, 38 secondscan look at these questions. Question number one, this person is uh planning their honeymoon to Maldives. Uh there is a response generated. There is a
+44:4544 minutes, 45 secondsfollow-up question with a response and things like those. In this session, there were five questions. Then session two and so on. So you can first invoke
+44:5444 minutes, 54 secondsthese. And as you see, I'm not saving anything other than just the session ids. Mhm.
+45:0145 minutes, 1 secondSo and I'm showing you the on demand side of the things. It sort of runs through all these. This is like what those questions are that I'm asking. So
+45:0845 minutes, 8 secondsthis is the first one I was specifically talking about and then other ones and then once I have asked all these
+45:1645 minutes, 16 secondsquestions my agent produced traces. Now what I'm doing is I am really just
+45:2245 minutes, 22 secondspassing the session ID to my evaluators and this is all the code that you need
+45:2945 minutes, 29 secondsin order to evaluate using on demand like 100% of the code. You are passing in the session ids and you are just
+45:3745 minutes, 37 secondsinvoking the evaluators and the these APIs know automatically that hey I have the session ID I can fetch things I can
+45:4645 minutes, 46 secondsuse these in order to perform the evaluation and give you the scores and since this is on demand I get everything right here in this environment there is
+45:5545 minutes, 55 secondsno dashboard of course hey on demand right I'm using it in an offline capacity um so moving forward this is where I'm
+46:0446 minutes, 4 secondsnow loading the results because now that my uh evaluators have performed their jobs. So I'm just loading these uh data sets here that they have created for me.
+46:1546 minutes, 15 secondsAnd as we can see I performed like eight different uh evaluator metrics. They are different type of scores that they
+46:2246 minutes, 22 secondsgenerated. I'm looking at min max also just to get like a sense of this. This is across like 20 25 sessions. Uh and
+46:2946 minutes, 29 secondsthen one of the uh specific question um where one of the sessions scored actually a zero score for goal success
+46:3746 minutes, 37 secondsbecause um my user asked something the agent did something else agent did not meet the user goal. So you can see the
+46:4446 minutes, 44 secondsfull explanation of why the evaluator gave it a zero score.
+46:4946 minutes, 49 secondsYeah. And for every evaluation that's generated there's an explanation for it.
+46:5346 minutes, 53 secondsSo there's a reasoning of why the LLM is generating that particular score so that you can understand Yeah.
+46:5946 minutes, 59 secondsTo improve the system. Uh right. So you need those that feedback as well.
+47:0347 minutes, 3 secondsExactly. So now I have since run through this like across 20 sessions but as you are testing it you may have like
+47:1147 minutes, 11 secondsthousand test cases thousand sessions because you really want to like be able to trust it. With 20 sessions you may be
+47:1947 minutes, 19 secondscomfortable doing a demo in front of your leadership but not like putting it in front of your customer on your you
+47:2547 minutes, 25 secondsknow um company's web page. So for that to happen you are doing more comprehensive testing and how that
+47:3347 minutes, 33 secondshappens is you increase your test cases and you don't have to start with like a real super set of questions of like
+47:4047 minutes, 40 secondsthousands and thousands of sample even if you have 10 right just keep them continuously build your corpus as you
+47:4747 minutes, 47 secondsmove through different stages of like building this AI agent now that this is my stage one this was
+47:5447 minutes, 54 secondsjust my baseline I then analyzed all these reasonings that I have from the evaluators
+48:0248 minutes, 2 secondsand I'll show you the full demo of what I did after this but for continuity sake assume that I did some analysis came up
+48:0948 minutes, 9 secondswith a better system prompt and updated my system prompt next that's the next step I took after I got evaluation
+48:1748 minutes, 17 secondsscores across all these um sessions so now moving a little bit forward from
+48:2448 minutes, 24 secondshere yes so this is my updated system prompt. Uh like so on a video you'll be
+48:3148 minutes, 31 secondsable to compare that these two system prompts are different. So this is my new system prompt. Everything else is same.
+48:3748 minutes, 37 secondsSame model, same temperature, everything else.
+48:4248 minutes, 42 secondsAnd I performed the same analysis again, ran through the same ondemand API again.
+48:4748 minutes, 47 secondsAnd what I see here is between these two system prompts across these eight metrics, I see some improvements. And
+48:5448 minutes, 54 secondsthat was my trial one. Since I am still doing a demo here today, um you want to like dig deeper, define success criteria
+49:0349 minutes, 3 secondsand work on that like if it is meeting that performance that you need. And from there onwards you decide whether to
+49:1049 minutes, 10 secondsdeploy it or not. And you would use your subject matter experts in order to analyze these uh reasonings that I was uh showing earlier.
+49:1949 minutes, 19 secondsBut as you scale thousands maybe 10,000 test cases even your subject matter experts can't go and read through that
+49:2749 minutes, 27 secondsbecause that's like too much of human time investment right uh what you can do is you could take some hybrid style
+49:3449 minutes, 34 secondsapproach where you have an LLM or some model and I'm going to show you a demo next about it um you can take some
+49:4249 minutes, 42 secondshybrid approach where you get these LLM models really good at understanding the
+49:4949 minutes, 49 secondstext to give you some evidence-driven uh insights around what's going bad. You
+49:5649 minutes, 56 secondshave your subject matter experts exactly look at those and then come up with like better prompts or you can even do meta prompting from there. Like you can make
+50:0550 minutes, 5 secondsit as complex as um you want it to be or as simple as you want it to be depending on um where you are in that performance threshold gap.
+50:1550 minutes, 15 secondsSo you update the whatever the criteria it is and then you evaluate you test it.
+50:1950 minutes, 19 secondsIf it looks good then you continue you improve it again. If it looks bad then maybe it on it right. Y create the stats and create a bell curve
+50:2750 minutes, 27 secondsfrom that and then understand the extremities extremities of like where the tail is why is it the case what is happening and then based on that
+50:3650 minutes, 36 secondsyeah and often times you'll find that this is like you are getting really good performance on like majority of groups
+50:4350 minutes, 43 secondswithin your data but there is one specific group of questions that your agent is not able to handle. So for an example I'll give you a good example here.
+50:5350 minutes, 53 secondsLet's say your agent has um some sort of like goal success metric and it's still
+51:0051 minutesa travel agent and you as a user are asking about some questions where your agent needs a follow-up uh request or
+51:0851 minutes, 8 secondsfollow-up information from you as a user and since you evaluate it midway maybe your evaluators would give it a zero
+51:1651 minutes, 16 secondsscore or lower score because your agent did not conduct an action there. So you also want to look at what your evaluators are doing not just what your
+51:2451 minutes, 24 secondsagent is doing because hey at the end of the day if you're using LLM as judge LLM is non-deterministic in this so your
+51:3251 minutes, 32 secondsLLMs judge or judges can also hallucinate in cases. So you want to also tailor for that that's an important point. Yeah.
+51:4051 minutes, 40 secondsYeah.
+51:4151 minutes, 41 secondsYeah. So let's say assuming that in my use case this specific metric works for me it meets my success criteria I would
+Chapter 9: Monitoring, drift, and improvement
+51:4951 minutes, 49 secondsdeploy this agent and the deployment piece is I can deploy my agent on agent core runtime or it could be elsewhere
+51:5751 minutes, 57 secondslike ECS EKS other cloud uh when my user invokes my agent I write my open telemetry based traces to agent core
+52:0452 minutes, 4 secondsobservability and then rest of the pipeline is that agent co evaluation picks from there conducts eval put score back there and you as a developer or
+52:1352 minutes, 13 secondsyour subject matter experts can go in and see now what does that dashboard looks like that you get I have been talking about this dashboard and you
+52:2252 minutes, 22 secondsknow I haven't shown you thus far so we are getting close to the end of the hour also right so yeah exactly so here's the dashboard uh
+52:3052 minutes, 30 secondsthis is like your agent code evaluation dashboard uh on top of what your agent code observability dashboard is it just
+52:3652 minutes, 36 secondsadds another um tab to it um so you one see the trends. This is like all your
+52:4452 minutes, 44 secondstrends around different evaluators that you have set up. And if you look at this closely, this is exactly those metrics that I selected in my very first demo.
+52:5352 minutes, 53 secondsSo one you get trends, but you know trends are good to get a sense of how things are. You really want to go dig
+53:0153 minutes, 1 seconddeeper into like specific trace. So I'm going to open a specific trace here. You can look at your session evaluator on
+53:0853 minutes, 8 secondsthe top here. Then you can also see your trace level evaluators. I did not in my original demo select any tool based uh
+53:1553 minutes, 15 secondsevaluator but if you do that that would also show up exactly here. So you get a score you see the reasoning in this case
+53:2253 minutes, 22 secondscorrectness is um just.5 it's because my agent decided not to use the context properly. So there was some mixup in in
+53:3153 minutes, 31 secondsthe final response by not using or uh relying on the tool responses. So that's why this result is bad. But yeah, that's
+53:3953 minutes, 39 secondsthat's really like the crux of um what the service offers you out of the box. You don't have to build this dashboard.
+53:4653 minutes, 46 secondsThis just comes out of the box.
+53:4953 minutes, 49 secondsIan, one question that I've been hearing a lot uh is about how do we you know see the data drift? So what part of the
+53:5753 minutes, 57 secondspattern do we have to notice to see the data drift that's been happening?
+54:0154 minutes, 1 secondYeah, that's an interesting question. So I'm going to go back to one of my previous slides. Remember I was showing
+54:0854 minutes, 8 secondsyou my baseline trial one and then let's say trial one is final scores for me. Uh
+54:1554 minutes, 15 secondsin order to detect drift what you are going to do is uh it's it's little bit of like scientific process also but it
+54:2354 minutes, 23 secondscan be very simple as hey I know what my trial one scores are. Is my continuous evaluation giving me similar scores?
+54:3154 minutes, 31 secondsMaybe they are within like one or 2% data from these scores. it would be a decent signal for you to look at hey is
+54:3954 minutes, 39 secondsit is there a drift or not but let's say if you want to get more nuanced around it you can look into like
+54:4754 minutes, 47 secondscalibration of these uh LM judge scores against like your subject matter scores and see whether
+54:5454 minutes, 54 secondsit's meeting your subject matter expert criterias or not. So there are multiple ways and then you can even go further down the road by like having a panel of
+55:0355 minutes, 3 secondsjudges and things like those to really like um depending on the sensitivity from here actually. But these two like
+55:1155 minutes, 11 secondsare easy ways to get started with like drift detection. Okay.
+55:1755 minutes, 17 secondsYeah. So now the um Anil, how much time do we have?
+55:2155 minutes, 21 secondsWe have actually four more minutes. So Okay. So I have one more thing I would like to ask. So
+55:2855 minutes, 28 secondsthe code that you showed where can our viewers Yeah. Uh we actually I'm just putting a link in the chat. Uh we have that going
+55:3655 minutes, 36 secondson. So I it should be coming up in a second.
+55:4055 minutes, 40 secondsVery cool. So what I'll do is I'll show you the demo of like how do you improve the agents in about a minute time. We
+55:4855 minutes, 48 secondsalready uh since Anil has shared the link um you already have the link to that code. Mhm.
+55:5555 minutes, 55 secondsSo what I have done is I have already downloaded a sample of 10 of the sessions that I had. Um and this is like
+56:0256 minutes, 2 secondsyour agent core um agent core samples repo. If you go to tutorials, uh folder number seven is evaluation. Within that
+56:1156 minutes, 11 secondsfolder number seven is using evaluation results. And I'm just using one of the notebooks in this. And um it it does
+56:1856 minutes, 18 secondslist down uh in a more comprehensive way of like what does the process of improving agents look like and how you should think about it and work through
+56:2656 minutes, 26 secondsthis. So what I'm showing you here is I have built an agent which has its own sub agent uh and it creates those sub
+56:3456 minutes, 34 secondsaent on the fly right here to analyze these reasoning scores and group them into like different type of problem areas. So you have access to all of this
+56:4356 minutes, 43 secondscode available directly in the repo. I'm skipping things through so that I can show you the meat of it. Um what I'm
+56:5056 minutes, 50 secondsdoing is I'm asking in this code to look at all my reasoning scores where the score is less than or equal to 7 for any
+56:5956 minutes, 59 secondsevaluator and then what it does is it looks at finds evidences things like those in order to find the problems that
+57:0857 minutes, 8 secondsI uh that we are seeing through evaluation and then comes up with a new system prompt. So feel free to take a
+57:1657 minutes, 16 secondslook at this. As you can see, this was my system prompt in this case. This is exactly the system prompt I used. Uh I would run it. Uh and then what what
+57:2557 minutes, 25 secondshappens is it created this um file for me. So I'm going to like uh zoom in a little so that all of us can see. So
+57:3357 minutes, 33 secondsthis is what this agent generated for me. One, it gives me summary of what is happening. It tells me the top three
+57:3957 minutes, 39 secondsproblem is one that my uh agent is fabricating tool search parameters. So it's not sticking to the user request
+57:4857 minutes, 48 secondsand it not only just like comes up with um the problems but it is really giving you the
+57:5557 minutes, 55 secondstrace ids and session ids to look at the evidence piece. Uh then tells you like of the 43 low scoring uh sessions it
+58:0358 minutes, 3 secondscomes in 10 and things like those and yeah you can continue to take a look at this. It gives you a system prompt uh at the end.
+58:1258 minutes, 12 secondsAll right. So with so yeah. So what is the takeaway for our viewers then right? We are almost at time.
+58:1958 minutes, 19 secondsYeah. So we have um one you have shared the um link already to the GitHub sample. So we have that we have
+58:2758 minutes, 27 secondsworkshops documentations and code uh SDK based uh documentation available for all of our customers. Um feel free to take a
+58:3558 minutes, 35 secondslook. Um let us know if uh you have any questions.
+58:4058 minutes, 40 secondsExcellent. So you know work on your uh improving your agent with agent core evaluations and uh uh I think uh that's that's it from this uh session today.
+58:4958 minutes, 49 secondsWe'll come back again next week uh same time. Uh thank you Ishan and Kasha for joining us and uh giving us a deep dive.
+58:5758 minutes, 57 secondsThank you for having us.
+
+
+
+
+Resources
+
+https://github.com/awslabs/agentcore-samples
+https://github.com/aws/bedrock-agentcore-sdk-python
+https://github.com/aws/bedrock-agentcore-starter-toolkit
+
+
+youtube link
+https://www.youtube.com/watch?v=i0h7xA8cqYs&list=PLhr1KZpdzukfZdp5SGgm2yBPglHNHn-Ig&index=10

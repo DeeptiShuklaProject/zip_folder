@@ -1,0 +1,503 @@
+0:3232 Hello all, welcome to another episode of AWS show and tell. I am Anil Nadimi joining from New Jersey today and uh joining along with me is Barati. In
+0:4141 secondstoday's episode, we're going to uh go into some details. We're going to do a deep dive on why we need policies for uh
+0:4848 secondsuh you know on agentic uh evaluations and how we can get there. Right? So but before we go into the details let's uh also do some introductions. Barati you want to introduce yourself?
+0:5858 secondsHi uh yeah thanks uh Anna I'm so happy to be here. I'm Barati. I'm a geni data scientist in AWS. I've been specializing
+1:071 minute, 7 secondsin responsible AI and large language models for various agentic applications across enterprises. I'm really happy to
+1:151 minute, 15 secondsbe here and talk about building new governance safeguards using policy in Amazon bedrock agent core.
+1:201 minute, 20 secondsExcellent. Barati, where are you joining from today?
+1:231 minute, 23 secondsOh, I am from Seattle and um believe it or not, it's actually sunny today. So, I I guess it's a wonderful day.
+1:291 minute, 29 secondsExcellent. Right. So, we are actually under a a heap of snow here in New Jersey. So, digging our way outside. Um
+1:371 minute, 37 secondsbut that's uh us here. Let us know in the chat where you folks are joining from and uh uh let's uh take this away.
+1:441 minute, 44 secondsRight. So in this uh deep dive series, we've already uh discussed how to bring your uh PC's into uh you know
+Chapter 2: Deep dive on policies
+1:521 minute, 52 secondsproduction. We've discussed about the frameworks strands frameworks also being able to host your uh agents in runtime
+1:591 minute, 59 secondsagent core runtime. Uh making the services like agent core memory available to store your conversational history, extract summaries out of
+2:072 minutes, 7 secondsconversations. uh also shown you how you can create MCPs using agent core MCP gateway uh but in today's conversation
+2:152 minutes, 15 secondswe want to focus more on uh how you can also enforce certain actions with your uh agentic invocations right because
+2:242 minutes, 24 secondsagents are doing these tool calling and uh you want to ensure that there are safeguards in place and uh enforcement actions that you can also take. So
+2:322 minutes, 32 secondsBarati is going to dive uh deep today to understand uh and help you understand like more about this right. So Barati
+2:392 minutes, 39 secondswhat what's all of this uh uh about this policy and policy engine right so can you talk about that yeah um I know you already set a
+Chapter 3: Agent governance need
+2:482 minutes, 48 secondswonderful stage to be able to talk about this right so we have AI agents which are proliferous across enterprises and we've all been experimenting with it um
+2:562 minutes, 56 secondsand typically these agents are also calling hundreds of tools on behalf of your behalf of you a real user or even
+3:043 minutes, 4 secondsother systems and the cost of getting um access and authoriz ization wrong whether it's through overly permissive access or slow decisions or
+3:133 minutes, 13 secondshallucinations or even brittle ad hoc checks all of this becomes unacceptable.
+3:183 minutes, 18 secondsSo the focus is on how you can bring in centralized and deterministic safeguards on controlling what agents can do um
+3:283 minutes, 28 secondswhen they're connected to all these tools like MCP savas and other agents for instance. So we want to basically have something that would align the
+3:363 minutes, 36 secondssecurity architecture and performance and be able to design and prove that a PC can meet not just your cost and
+3:433 minutes, 43 secondslatency goals but it should not sacrifice the control you want to have on your agent.
+3:473 minutes, 47 secondsThat's that's great right. So for example, if we want to have uh agents that are doing some operations on behalf of us, right? So and they are making
+3:553 minutes, 55 secondsthose tool calls, you want to have those safeguards in place and uh ensure that they can only do certain operations in a certain way, right? So we're going to
+4:034 minutes, 3 secondsdive deep into that. At this point, we're just setting the stage here for you folks uh to get you to know more about this. Uh now Bari, let's take an
+Chapter 4: Healthcare use case
+4:114 minutes, 11 secondsexample here and maybe a use case example on what uh would be most applicable, where this would be most applicable. Mhm. So think about maybe um
+4:204 minutes, 20 secondsenterprise application like a healthcare agent for instance and it's connected perhaps it's a very simple agent. It can just help you book for example
+4:284 minutes, 28 secondsappointments with your uh uh doctor right and now when I'm trying to access this agent first I'm going to
+4:354 minutes, 35 secondsauthenticate myself that this is who I am this is probably what uh on the back end they're going to authenticate myself
+4:424 minutes, 42 secondsas um exactly what patient I am with some ID and so on. Now I should have access to modify appointments that have
+4:514 minutes, 51 secondsbeen only made for myself. I should not have access to any systems which are connect which have other patient data or
+4:584 minutes, 58 secondsthe ability to modify someone else's appointments. However, when we have these kind of agents which are connected to these wide variety of tools, they
+5:065 minutes, 6 secondswithout the right control and boundaries, they can start taking unsafe actions. Now, it can show up in a couple of ways, right? um take unpredictable
+5:155 minutes, 15 secondsruntime behavior for instance. So even if the agents are very carefully designed now the decisions they take at runtime actually depend on the evolving
+5:245 minutes, 24 secondsand the tool responses. So the LLM the large language model underlying the agent is actively listening to the
+5:305 minutes, 30 secondsinformation it gets about the user as well as what responses it's getting back from the tools themselves. which means
+5:385 minutes, 38 secondsthere's also a variety of possible attacks for adversaries in terms of the inputs they can manipulate which get to
+5:445 minutes, 44 secondsthe LLM itself. Now this is not something you can fully predict ahead of time.
+5:515 minutes, 51 secondsSo uh and maybe if we take an example of maybe a case use case where there is monetary action involved like a refund policies, right? So the agent should be
+5:595 minutes, 59 secondsable to do refunds until maybe uh maybe $25 or $50. But then after that you you need to enforce some kind of policy
+6:086 minutes, 8 secondsaction that you know the agent should not be able to do refunds, right? So maybe to uh prevent any fraud or any of those actions from happening or maybe
+6:156 minutes, 15 secondsyou need a human in the loop to look at this more carefully to uh you know to allow that action to take place.
+6:216 minutes, 21 secondsMhm. That is a great example. Right. For example, they shouldn't miss like LLMs can misinterpret business rules. So you
+Chapter 5: System prompt limitations
+6:296 minutes, 29 secondscan even in a in the system prompt to a large language model tell it that do not process refunds above a certain amount because this could violate your internal
+6:386 minutes, 38 secondspolicy like approving a transaction that should uh that can meet the users criteria but it's not the business policy. Right? So your agent you can
+6:476 minutes, 47 secondsinstruct in the system prompt tell the agent be helpful to your users and in the same system prompt you can tell it do not refund above I don't know $5,000.
+6:556 minutes, 55 secondsNow which part of the instruction in the system prompt is your LLM going to listen to. Is it going to be the be helpful part which in this case the user
+7:037 minutes, 3 secondsis actually asking for a refund. So if it's being helpful it should actually process all refunds. Right? So this is also a good reason why you shouldn't put
+7:107 minutes, 10 secondsthese kind of business rules internal policies into a system prompt itself because the LLM you don't want to give a choice to the LLM whether to obey this rule or not.
+7:217 minutes, 21 secondsExactly. Right. So uh exactly and then people you know again it could be a misinterpreted misinterpreted action or maybe bad actors that are trying to play
+7:297 minutes, 29 secondsaround the system prompt uh to be exploit that right. So you need to have more uh enforcement actions in control and uh that's why we are talking about
+7:387 minutes, 38 secondsuh this new uh offering here. So let's talk about that right. So agent uh policy in agent core.
+Chapter 6: AgentCore policy concept
+7:457 minutes, 45 secondsYeah absolutely. So the TLDDR really is how do we give agents the freedom to act without letting them cross these
+7:537 minutes, 53 secondsboundaries that you didn't in intend intend for them. Right? So this is our whole premise and vision for policy in
+8:008 minutesAmazon bedrock agent core. We want to help enforce deterministic boundaries over the actions that agents can take.
+8:088 minutes, 8 secondsUm let's actually look at this with a deeper example of understand agents from scratch, how they're typically behaving
+8:168 minutes, 16 secondsand then how policy is going to help you with it. Now let's just start with this um blind agent. It can be any particular
+8:238 minutes, 23 secondsuse case. Now in this case your agent is very flexible because of this underlying large language model powering its
+8:308 minutes, 30 secondsreasoning. It's highly dynamic. It um adapts to the tool responses and user queries and um gives valid responses.
+8:398 minutes, 39 secondsAnd the behavior is defined by um the code which is typically procedural code and declarative prompts like your system
+8:478 minutes, 47 secondsprompt, the user prompt um the tool um that is attached to. But it's not just limited to this code. It's also
+8:548 minutes, 54 secondsdynamically changing its behavior based on the information returned by the environment which could be the user giving information or even the tools. Um
+9:039 minutes, 3 secondsso for our purposes let's just say this agent code isn't actively adversarial at all. Um it could be buggy but at the
+9:109 minutes, 10 secondsmoment it's not adversarial. Um however the tool responses the environment state um human interactions all of this in
+9:189 minutes, 18 secondsturn could actually be controlled by adversaries. For this case, let's just say we're starting with a it could be buggy scenario but not really actively
+9:269 minutes, 26 secondsadversarial. Now, um it's connected to two here two tools you can see here.
+Chapter 7: Security challenges
+9:329 minutes, 32 secondsOne, there's a reimbursement tool and there's a calendar reading tool. Now, we've uh in this pattern um we see all
+9:409 minutes, 40 secondsthe interactions to these tools going through a gateway. So, there's a single point of um like a BA barrier before it
+9:489 minutes, 48 secondscan reach the tools. Now even in this kind of uh common framework that we've been using for agents security is hard
+9:569 minutes, 56 secondsfor a couple of reasons. Now first we want them to be flexible and adaptable.
+10:0010 minutesUh but this so every constraint we start putting on the agents actually going to reduce the value of the agentic model.
+10:0710 minutes, 7 secondsThe so we don't want to put hardcoded rules into the agent itself because this is going to start limiting how it's going to behave with the user. We also
+10:1610 minutes, 16 secondsalready talked about how putting in rules in the system prompt is also not guaranteed that the agent will follow them. Right?
+10:2310 minutes, 23 secondsUm so this is the primary reason security is so hard with agents because they're running on LLMs which are probabilistic uh machines. The second
+10:3210 minutes, 32 secondsone is that an LLM itself which is the underlying primitive of an agent is does not have a very hard separation between
+10:4010 minutes, 40 secondswhat an instruction is and what incidental data or incidental text is.
+10:4510 minutes, 45 secondsNow what I mean by that is the LLM doesn't have a very robust mechanism for differentiating between a command and
+10:5310 minutes, 53 secondsdata. So I could have um send a a a command saying send a reimbursement to
+11:0011 minutesBob for example. But on my calendar which it has access to, I can also have a reminder to myself as a calendar block
+11:0811 minutes, 8 secondssaying reimburse Bob on this particular date. Right.
+11:1111 minutes, 11 secondsYeah. LLM sees everything as a context, right? So it's all text in the context of the LLM or maybe tokens at that point.
+11:1911 minutes, 19 secondsYeah, exactly. So all of this both the command and the data is flowing through the same context window with no architectural boundary. So it's not
+11:2711 minutes, 27 secondsdistinguishing between this is a command and this is data. So this is why I'm going to if I say reimburse Bob, should it call the reimbursement tool or should
+11:3411 minutes, 34 secondsit look at the calendar tool and retrieve this piece of data? Right? So it's not very clear to the LLM.
+11:4111 minutes, 41 secondsNow what so when we start talking about safety now what I mean is we want to start constraining the set of things the
+11:4811 minutes, 48 secondsagent can do. Now think of it as a box right every interaction go between the agent and the outside world has to pass
+11:5611 minutes, 56 secondsthrough the walls of this box and every time it p every time an interaction is happening through the walls of this box
+12:0312 minutes, 3 secondswe're going to enforce policy which is going to be very deterministically applied. um this is how we guarantee absolute safety in when your agent is interacting with tools.
+Chapter 8: Policy vs tool code
+12:1412 minutes, 14 secondsSo this is an important point right because uh agents are nondeterministic by nature uh because of the LLMs that are under the hood and uh we're trying
+12:2212 minutes, 22 secondsto add a deterministic approach here so that we can control the actions on every interaction with the agent uh that the
+12:3012 minutes, 30 secondsagent is having with the tools uh that are uh the tool calling that's happening here.
+12:3612 minutes, 36 secondsSo compare this again with uh one of those examples we've been talking about like the reimbursement tool. So let's
+12:4312 minutes, 43 secondssay your internal company policy is your agent can handle reimbursements if it is up to $1,000 and everything above this
+12:5012 minutes, 50 secondshas to go to a customer rep. Now if we just gave this as a system prompt uh now your agent may or may not listen to it.
+12:5812 minutes, 58 secondsSo it's nondeterministic but by enforcing it as a policy you're more it's always applied. Now why can't we why can't we do this in the tool itself?
+13:0713 minutes, 7 secondsRight? So again we could write the logic in the tool reimbursement tool that you know do not process re uh you know again
+13:1413 minutes, 14 secondsrefunds over $1,000. Uh why do we have to use the policy in this case?
+13:1913 minutes, 19 secondsYou can actually absolutely achieve the same goal of constraining the tool call in the agent code itself. You can just
+13:2713 minutes, 27 secondsput these business rules into your tools. But this approach has a couple of downsides. So first it would depend on
+13:3413 minutes, 34 secondsthe implementation of that code not being bypassed by the agent under any circumstance right. Um so if you have any fixed function imperative wrapper
+13:4213 minutes, 42 secondsaround this um calendar reading tool or the reimbursement tool now it can be bypassed. So if the moment you start
+13:4913 minutes, 49 secondsputting in these rules you're also limiting the flexibility of the agent and there's a very subtle burden on the developer as well. So one when the de
+13:5813 minutes, 58 secondsnow all this business logic and internal policies are being maintained in the tool code itself. So the the imperative
+14:0614 minutes, 6 secondsis now on the developer instead of the governance persona or the auditor persona. And when we start looking at
+14:1314 minutes, 13 secondsthe whole application and thinking if we have the right policies encoded now you're going to be reading a much larger
+14:2014 minutes, 20 secondscodebase just to understand what policies have been incorporated. Right?
+14:2414 minutes, 24 secondsyou don't want to always look do a full code reasoning um which can be a very tough task on large code bases
+14:3214 minutes, 32 secondsright that's a very important point right because as you make those changes within the codebase number one is it's a change within the codebase it could still be a configuration within the
+14:4014 minutes, 40 secondscodebase but you want it to be auditable you want to probably uh look at hey what if I change this instead of $1,000 if I
+14:4814 minutes, 48 secondsmake it $1500 right so if you if you want to keep playing with it and maybe not enforce it right away but being able to uh uh understand what the enforcement
+14:5714 minutes, 57 secondsactions could be, right? I think so that makes sense. And always with agents, we're also thinking about a different persona who actually wants to come in
+15:0615 minutes, 6 secondsand check what your agent is doing in production like a security team or an auditing team where they want to come and see what the policies are correct
+15:1415 minutes, 14 secondsand if it's embedded in your codebase uh one managing it for the developers is also difficult but then also even showing what internal policies are encoded becomes much harder.
+15:2615 minutes, 26 secondsMhm.
+15:2715 minutes, 27 secondsSo what we're doing with policies, we're moving this out of the agent and by doing this we get to crisply say that policy gets enforced no matter what the
+15:3615 minutes, 36 secondsagent does, no matter how the agent is abused. So we're coming back to this adversarial scenarios that could happen and also no matter what bugs could exist
+15:4415 minutes, 44 secondsin the agent code, there could be conflicting rules within the tools itself um which um have not been managed
+15:5115 minutes, 51 secondscorrectly. But despite all of this, by abstracting policy outside of it, we're be we're able to make agents safer and
+15:5915 minutes, 59 secondsalso much faster to develop because you have a more manageable codebase. Um and also you don't have to disrupt production traffic to bring in policies
+16:0616 minutes, 6 secondswhich I can also show you um when we get into the demo.
+Chapter 9: Observability integration
+16:0916 minutes, 9 secondsThat's great. Yeah. So uh we're going to look at this uh live in action in a little bit. Uh so uh Bari has some demos
+16:1716 minutes, 17 secondsuh ready to show you, but uh yeah, let's let's keep uh talking through this, right? So now we have policy that's looking at every single request that's
+16:2516 minutes, 25 secondsflowing in uh there uh and uh we have some enforcement actions that we could take.
+16:3116 minutes, 31 secondsAnother key aspect of um just safety and security about your agents is um one
+16:3916 minutes, 39 secondscontrolling what can happen which is what when we do have when we have session isolation within your agents itself for example what agent core runtime offers uh complete session
+16:4816 minutes, 48 secondsisolation. The second one is controlling what the agents can do um which is what policy helps you with. So it controls all the interactions happening between
+16:5616 minutes, 56 secondsthe agent and the outside world. And finally we also want to know what actually happens. So this is where observability comes in. So we
+17:0417 minutes, 4 secondsobservability and policy are tightly integrated in the agent core um set of primitives and we're we're tracing every
+17:1317 minutes, 13 secondsagent decision and tool invocation and giving complete visibility to the developer into the agent behavior.
+17:1917 minutes, 19 secondsSo you will be able to see when it's calling through the gateway um what tool it invoked which policy applied to it
+17:2717 minutes, 27 secondsand what the outcome was it as well. So this basically closes the loop. We are going to keep things contained um in the
+17:3417 minutes, 34 secondsagent run session or runtime um and keep them isolated. Then policy keeps the actions governed and observability keeps them accountable.
+17:4617 minutes, 46 secondsExcellent.
+Chapter 10: Policy engine setup
+17:5317 minutes, 53 secondsSo yeah, let's look at um how policy um as a primitive in agent core behaves with um everything else.
+18:0018 minutesYeah, let's dive deep into this right.
+18:0218 minutes, 2 secondsSo uh share us more about the details here.
+18:0618 minutes, 6 secondsUm so irrespective of where your agent is hosted um the primary for point of
+18:1418 minutes, 14 secondsenforcement for policy is agent core gateway. So if you gateway is configured as your typical pattern where all the
+18:2218 minutes, 22 secondstools are um added as targets and your agent is interacting through the gateway. Now you will be able to attach
+18:3018 minutes, 30 secondsa policy engine to it. So a policy engine is nothing but uh something that'll hold all your policies. And once you attach a policy engine and have
+18:3818 minutes, 38 secondspolicies in it, it's going to actively monitor all the traffic flowing into your gateway um trying to access the
+18:4518 minutes, 45 secondstools. Um what this does is it gives you a unified protection through deterministic policy enforcement. So
+18:5318 minutes, 53 secondsyou're able to intercept all the uh agent tool interactions and start governing them using your policies.
+19:0119 minutes, 1 secondAnd behind the scenes, we're also optimizing for latency, which means we can give you low latency policy evaluations, which allows real time
+19:1019 minutes, 10 secondsdecision-m. Um, the policies themselves, we're also going to look at how to author them. Um, they do use a language
+19:1719 minutes, 17 secondscalled Cedar, which is our open- source language for uh policy authorization.
+19:2119 minutes, 21 secondsBut you will also see how easy it is to author these directly in natural language and then have them converted into Cedar by the um capability for you.
+19:3119 minutes, 31 secondsFinally, I did say it also has uh integration with cloudatch itself. So this gives you a very granular visibility into policy enforcement also
+19:3919 minutes, 39 secondswith uh showing you which policy ids actually came into effect.
+19:4619 minutes, 46 secondsSo what do you say uh Anel? Should we start looking at the demo itself?
+19:5019 minutes, 50 secondsUh before we get into the demo, uh I know policy uh is something like a new primitive here for people to understand
+19:5719 minutes, 57 secondslike how long does it take to create a policy? Is it uh uh do you have to know a lot of coding? Can you do it from the
+20:0520 minutes, 5 secondsconsole like you know just just maybe talk about that right?
+20:0820 minutes, 8 secondsuh you spoke about cedar language uh maybe we want to understand a little bit more about that as well as we go into the flow right so yeah
+20:1620 minutes, 16 secondsyeah absolutely so it is actually quite um easy to just work on console if that's where you're comfortable uh be
+20:2420 minutes, 24 secondsable to create a policy engine attach this to a gateway start authoring your policies directly in natural language um so there is no barrier to knowing cedar
+20:3320 minutes, 33 secondsor even coding to get into this so this makes it actually uh very easy for also different personas other than just the
+20:4020 minutes, 40 secondsdata scientists and machine learning engineers to go in and start authoring policies for their agents itself.
+20:4520 minutes, 45 secondsSo product managers could go in there and then uh uh you know enforce I mean type the rules like in natural language and then could they see that uh in real time on on to how it performs?
+20:5620 minutes, 56 secondsYeah, absolutely. Let's actually do just that right. Um let's go into the console. Um can you confirm you see this?
+Chapter 11: Policy console demo
+21:0421 minutes, 4 secondsWe can see the screen. Okay, perfect.
+21:0721 minutes, 7 secondsSo, I'm inside my AWS uh account and I'm in the Amazon Bedrock agent core landing page. So, once you're inside your
+21:1421 minutes, 14 secondsconsole, you'll actually see how we've integrated now policy already as one of the native resources in agent core. Um
+21:2121 minutes, 21 secondsyou can see on the build panel there is policy. Now, you have three easy steps.
+21:2721 minutes, 27 secondsUh two to get started, one to start monitoring. Now, the first one is actually creating a policy engine. Now, this is what I talked about. A policy
+21:3521 minutes, 35 secondsengine is a collection of policies. So this is the first step you want to do.
+21:3921 minutes, 39 secondsThe second one is the second step is actually now attaching this policy engine to an active gateway. So you could have had a different developer in
+21:4821 minutes, 48 secondsa different team develop for example this agent which is probably a customer support agent like doing the refunds and then I'm going in as a product manager
+21:5721 minutes, 57 secondsand say hey my business rule is don't refund above $1,000. So I go and find out which gateway the developer has created and I go and attach my policy engine to it.
+22:0522 minutes, 5 secondsSo when you talk about that Barati now uh there could be maybe one policy or multiple policies right because we could have like you know refund uh policy we
+22:1322 minutes, 13 secondscould have like another policy uh can we attach multiple policies to this gateway?
+22:1722 minutes, 17 secondsYeah absolutely. So in a policy engine you can have about you can have up to thousand policies and in an account you
+22:2522 minutes, 25 secondscan have right now a thousand policy engines. Yeah, these are all soft I mean these are all quotas that you know again you can evaluate you can look at the quotas page to see if those can be
+22:3322 minutes, 33 secondsmodified but for now those are the numbers that are available right so but the answer is that yes you can attach multiple you can answer you can attach several
+22:4222 minutes, 42 secondsand multiple policies uh that which you may or may not want to do but like long story short business rules
+22:5022 minutes, 50 secondsyour um internal policies these high-risk applications where you have like these you know edge cases is where you say under no circumstances should my
+22:5922 minutes, 59 secondsagent do this. Right now these are the things you would typically put into policy to give you that say um peace of mind that your agent is going to do the
+23:0823 minutes, 8 secondsright things even under adverse uh situations.
+23:1223 minutes, 12 secondsSo let's actually go ahead and create a policy engine and say I'm doing this for my show and tell
+23:2023 minutes, 20 seconds[snorts]
+23:2823 minutes, 28 secondsNow what we've done now is actually created an empty policy engine. So you can go and once I've created it, it's in
+23:3623 minutes, 36 secondsthe status of uh creating. It's not got any gateways attached to it as you can see. And it also doesn't have any
+23:4423 minutes, 44 secondspolicies. So before we get into defining policies here, right? Uh let's actually do one
+23:5323 minutes, 53 secondspick a very concrete use case which makes it much easier to start talk here to start talking about uh creating policies and authoring them.
+24:0224 minutes, 2 secondsIs that okay? Yeah, let's do that.
+Chapter 12: Insurance use case
+24:0524 minutes, 5 secondsSo let's come back to the use case and um let's start with a insurance use case.
+24:1824 minutes, 18 secondsNow what this typically is going to do is going to take care of uh insurance underwriting use case. So you have um
+24:2724 minutes, 27 secondsbasically users who are going to go in here and create their insurance applications. But then the same agent is
+24:3524 minutes, 35 secondsactually used by multiple different personas across the underwriting um use case itself. So there could be a end
+24:4224 minutes, 42 secondsuser [clears throat] who's authenticating themselves and using the create application tool for instance.
+24:4824 minutes, 48 secondsBut you can also have the underwriters themselves using um logging into the agent with a different set of credentials and using the approval tool.
+24:5824 minutes, 58 secondsSo they're basically going in and looking at the insurance claims that have been created and approving them. Um you also have some risk analysts who can
+25:0625 minutes, 6 secondscome in and look at the risk of the models by calling the appropriate tools.
+25:0925 minutes, 9 secondsSo my point is you can repurpose this agent to serve different um users across the entire business case just by
+25:1625 minutes, 16 secondsmanipulating what kind of tools the agent is going to call based on who is using the agent. Does that make sense?
+25:2425 minutes, 24 secondsYeah. Yeah.
+25:2625 minutes, 26 secondsSo what is typically going to happen is let's say I'm an end user. I'm going to send a prompt to my agent. Now for the
+25:3325 minutes, 33 secondspurpose of policy itself, you do not have to be hosting your agent on runtime. Um this is simply an example where I'm showing let's say it's hosted
+25:4125 minutes, 41 secondsuh my agent is hosted and it's calling the gateway uh where the tools are attached. So it's going to call it um
+25:4825 minutes, 48 secondsthe model is basically going to reason about the user query. Let's say I'm asking it create an insurance application for me. I'm based in the US
+25:5625 minutes, 56 secondsregion in Seattle and my I want an insurance coverage amount of let's say um 10 million, right? Uh let's shoot for
+26:0426 minutes, 4 secondsthe moon. So I'm going to try to create this um send this query to the uh agent.
+26:0926 minutes, 9 secondsThe LLM behind the scenes is trying to understand what is the right tool attached that will help serve this user query. Um then it's going to understand
+26:1826 minutes, 18 secondslet me call the in create application tool. Um so it's going to try to call this tool on the gateway. What is going
+26:2526 minutes, 25 secondsto happen is when we start attaching this policy engine to the gateway now
+26:3126 minutes, 31 secondsbefore the tool is even invoked the policy or the request will be actively evaluated against the set of policies.
+26:4026 minutes, 40 secondsSo it's going to first check is the user under the set of conditions actually allowed to call this tool. Right? So we're going only if it is approved only
+26:4926 minutes, 49 secondsif the policy engine says yes you can call this tool will this tool call even happen and once it does the result will
+26:5726 minutes, 57 secondsbe passed back to the agent and the agent will communicate it back to the user. So I want to dive deep later on uh to understand how the user can be
+27:0427 minutes, 4 secondsauthenticated and how the tokens can be passed and maybe talk about uh the identity itself right so maybe we'll park it for a little bit later but yeah please continue
+27:1327 minutes, 13 secondswe will absolutely talk about identity as well as when I show you the a um agent in uh runtime as in my demo then
+27:2127 minutes, 21 secondswe will also see how how identity plays in but we can also address it definitely uh in depth. So let's say um your policy
+27:2927 minutes, 29 secondsactually denies this. Um then what happens is your tool call will not even happen. Um so the response will simply
+27:3827 minutes, 38 secondsbe an error code that is sent back to the agent and you can instruct your agent on what you want to tell the user.
+27:4427 minutes, 44 secondsLet's say maybe you ask them to go to customer support or maybe you ask them to first check the FAQ page. But like basically you the agent is going to get
+27:5227 minutes, 52 secondsan error code back saying it's been a policy violation and then you can instruct your agent on how to handle it.
+27:5827 minutes, 58 secondsMhm. So with this use case in mind, first let's see um gateways right we
+Chapter 13: Tool schema definition
+28:0528 minutes, 5 secondshave this gateway set up already for us uh for the insurance underwriting use case and we have three tools attached to
+28:1528 minutes, 15 secondsit uh which is this risk model tool that is for the analyst to look at the risk itself. If you go into it we will see a
+28:2528 minutes, 25 secondsschema for this. Now attaching the schema to the target is really important and the reason is there is a name for
+28:3428 minutes, 34 secondswhat this function is as well as what the different tool parameters are which is API classification and the data
+28:4228 minutes, 42 secondsgovernance. Now essentially what this means is if I want the agent to call this invoke risk model tool, it needs to
+28:5028 minutes, 50 secondspass two parameters to the model uh to the tool itself which is an API classification which can be public internal or restricted or a data
+28:5928 minutes, 59 secondsgovernance um which is a boolean so it can be true or false. Only if this is passed will the tool call even be successful.
+29:0729 minutes, 7 secondsUm we have two other tools attached which is my application tool which is allowing me to create applications as an
+29:1529 minutes, 15 secondsend user and to call this tool we have to provide it an applicant region and a coverage amount. Now the reason I'm
+29:2229 minutes, 22 secondscalling this out as important is when we start authoring policies um I told you we have this natural
+29:3029 minutes, 30 secondslanguage capability but for the LLMs which are basically understanding what policies to be
+29:3729 minutes, 37 secondscreated with a precise um syntax it's actually pulling this um schema from the
+29:4429 minutes, 44 secondsgateway to understand what is the tool name what are the tool parameters so when I go in and say allow users uh to
+29:5429 minutes, 54 secondscall the application tool only when the coverage amount is below 5 million. It
+30:0130 minutes, 1 secondhas to know exactly what the syntax for coverage amount and the tool name is. So it's going to be pulling the schema.
+30:0830 minutes, 8 secondsSo it should understand the schema and it does a pull to understand what is part of the schema and what are the parameters that the tool needs to be able to uh make a successful tool call.
+Chapter 14: Natural language to Cedar
+30:1830 minutes, 18 secondsYeah. So when your developer is actually setting up your agent to uh with tools on the gateway, they're going to be
+30:2530 minutes, 25 secondsadding the schema. Now when I go in and create my policies in my let's say show and tell uh let's start adding policies.
+30:3430 minutes, 34 secondsNow I don't have to worry. I'm just going to select my resource as that gateway which is my insurance
+30:4130 minutes, 41 secondsunderwriting gateway. Now I can just use uh text saying allow users to create applications
+30:5230 minutes, 52 secondsonly when coverage amount where do you want to cap it? I know I was aiming for 10 million as my application.
+31:0031 minutesYeah. [laughter] As the product manager, where are you going to cap it?
+31:0531 minutes, 5 secondsI would say I don't know. You pick a number, right? So okay, let's say 5 million. Maybe I was too ambitious with my 10 million. Let's
+31:1231 minutes, 12 secondssay okay any application um over 5 million we don't want the agent to process this right so we can just add
+31:2031 minutes, 20 secondsthis as natural language text here I don't want the agent to process more than $1,000 but that's me [laughter]
+31:2931 minutes, 29 seconds[gasps]
+31:3031 minutes, 30 secondsum so this is just creating an insurance application um so we don't have to worry too much right uh you can still like approve it or deny it based on what you
+31:3931 minutes, 39 secondssee now you can see here that a policy has actually been generated for you. Um, so let's start like digging into what this
+31:4831 minutes, 48 secondspolicy itself is. Um, you can see the word permit here. Now I
+31:5531 minutes, 55 secondstold you when a policy is evaluated, it explicitly takes two actions. Either it
+32:0232 minutes, 2 secondsallows an interaction to happen or it denies. So that is what this is. So this can if it's permit, it allows it to happen. If it is a forbid, it denies the
+32:1032 minutes, 10 secondstool. uh the agent tool interaction. Um the principle is basically who is you trying to call this tool through the
+32:1932 minutes, 19 secondsagent. Now this is going to be your oath identity. This is how identity is going to plug in. Your principle defines your
+32:2632 minutes, 26 secondswho. The second one is your what. So essentially what action is it trying to
+32:3332 minutes, 33 secondstake or what is this agent trying to do right? So the action is it's trying to call this application tool which is the
+32:4132 minutes, 41 secondstarget name on the gateway and inside the target it's trying to call this function called the create application.
+32:4832 minutes, 48 secondsNow you can see now why it is so important that it has the correct inline schema for the target on the gateway
+32:5532 minutes, 55 secondsitself is because it needs to pull in this proper syntax for the policy to be valid.
+33:0233 minutes, 2 secondsthe resource is my uh the AR on of my gateway uh which it just figures out because we've also attached the resource
+33:1033 minutes, 10 secondshere. And now this is the interesting bit. This these are the conditions we're going to attach to the policy. So we're essentially saying if the coverage
+33:1733 minutes, 17 secondsamount when contextinput is 5 million then we're allowing this.
+33:2533 minutes, 25 secondsNow essentially we're only allowing it if the coverage amount is 5 million or which is what we've actually expressed
+33:3333 minutes, 33 secondshere. Allow users to create applications only when coverage amount is 5 million. Right?
+33:3833 minutes, 38 secondsBut actually this was a mistake is less than 5 million is what I want to say.
+33:4533 minutes, 45 secondsAllow users to create applications only when covers less than 5 million. Now the condition part um it has this context.input. Now this is important to
+33:5433 minutes, 54 secondsdiscuss the context is everything that is flowing on the um input request to the gateway itself.
+34:0234 minutes, 2 secondsYou can see it has updated the condition now. So it says now when the context input this is going to contain all the tool parameters. So from the context
+34:1034 minutes, 10 secondsinput it parses out the coverage amount and checks that it's under 5 million. If it is, it's going to permit it. And um
+34:2034 minutes, 20 secondsif it is over 5 million, it'll be a deny action. Mhm.
+Chapter 15: Policy validation
+34:2534 minutes, 25 secondsThere is an additional thing which we also do for you which is actually performing a validity check of the CER itself. So given that this is an LLM
+34:3334 minutes, 33 secondsbehind the scenes that is auto auto formalizing your instruction into a cedar uh policy, we still run a lot of
+34:4134 minutes, 41 secondslike Cedar checks for you because Cedar as a language is constructed on automated reasoning which means we can
+34:4734 minutes, 47 secondsstart looking for overly expressive or overly permissive rules which you might not want to add by mistake. So we're
+34:5534 minutes, 55 secondsjust trying to add in extra safeguards on the console experience where you don't by any uh through any mistake
+35:0335 minutes, 3 secondscreate something that can disrupt your uh production traffic or cost uh experience that you don't desire. What I
+35:1135 minutes, 11 secondsmean is let's say I have an um policy saying allow all users to call all tools.
+35:2135 minutes, 21 secondsMhm. This is a extremely permissive policy, right? So I'm basically just allowing everybody uh permission to do
+35:2935 minutes, 29 secondseverything on this agent. Now you can already see in this insurance application, this is not desirable.
+35:3535 minutes, 35 secondsThe end user should not be able to call the approval tool, right? Otherwise, they're going to create the application and approve it themselves.
+35:4135 minutes, 41 secondsUm here you can see that we're flagging it as a allow all. So we tell you it's a overly permissive policy. It permits all
+35:4835 minutes, 48 secondsactions for all principles and you should confirm that unrestricted access is intended before applying this policy.
+35:5535 minutes, 55 secondsUm here you can see the action is a list of these various tool names. It's listed all of it and it basically permits every user.
+36:0436 minutes, 4 secondsYou brought this up bari is this um is this going to be by default is deny all by default and then do we approve only I mean allow only what we need to allow.
+36:1436 minutes, 14 secondsIs that how we designing this? Yeah, excellent question. Right. So, a policy engine is supposed to give you the maximum safety and security safeguards.
+36:2536 minutes, 25 secondsSo, essentially the moment you attach a policy engine to a gateway, the default behavior is a deny. Mhm.
+36:3236 minutes, 32 secondsSo, unless you explicitly allow things to happen, the agent is going to be blocked from accessing the outside
+36:4036 minutes, 40 secondsworld. Now if you if we think back again to this vision of safety as a box, we draw a very tight box around your agent
+36:4736 minutes, 47 secondsand say deny by default and you need to explicitly start allowing uh interactions to happen through these policies. Excellent.
+36:5536 minutes, 55 secondsNow there is also the case where you actually say okay that is too complicated for me. My use case doesn't deserve that. All I want to do is
+37:0337 minutes, 3 secondsactually have one policy for one particular tool. This is the only one I want to restrict. Right? Mhm.
+37:0837 minutes, 8 secondsThat is when you would attach policies like this saying I'm very very sure I want to attach a permit all policy. I want to allow all users to do
+37:1537 minutes, 15 secondseverything. Then you can also create an explicit deny and say I've allowed everything to happen except I don't ever
+37:2337 minutes, 23 secondswant this um approval tool to be called by anybody except the right user. Right.
+37:2937 minutes, 29 secondsSo you can create that deny and the deny is going to take precedence over a permit. So this way you can still
+37:3637 minutes, 36 secondshave exactly the right kind of policies you want even um even though you don't want this uh deny by default behavior
+37:4437 minutes, 44 secondsright because deny will take up residence right um now what's happening is when I create
+Chapter 16: SDK and console differences
+37:5137 minutes, 51 secondsthis policy it's going to fail um that's because I want to prevent people working on console by mistake creating any of
+38:0038 minutesthese policies so there is actually a a little validation mode here. Now, this is going to handle um how these warnings
+38:0938 minutes, 9 secondswill be taken care of when we start going into policy creation. If I'm in a strict mode, the moment I try to create this policy, it's going to fail.
+38:1738 minutes, 17 secondsMhm.
+38:1838 minutes, 18 secondsUm I have to explicitly change it to a permissive mode for it to be allowed. By doing these extra clicks on the console,
+38:2538 minutes, 25 secondsI'm basically indicating I'm very sure I want this policy. It's not a mistake, right? you won't the SDK behavior is a little different because the SDK is
+38:3338 minutes, 33 secondsalready uh different uh flows where you first trigger the generation and then you take that generation and create a policy out of it. Um you don't have this
+38:4238 minutes, 42 secondsvalidation modes. You only have it on the console behavior to kind of protect you from any inadvertent because you're writing the natural
+38:4938 minutes, 49 secondslanguage text and you don't want accidentally to for any of these to flow through this uh policy.
+38:5538 minutes, 55 secondsYeah, absolutely. Although the natural language to seed our policy uh creation, you can also do all of these through the SDKs.
+Chapter 17: Testing policy enforcement
+39:0539 minutes, 5 secondsSo we have questions coming in the chat where people are asking you know how do we test this right? So I guess uh yeah we're going to show that in a second here as we go into the details.
+39:1439 minutes, 14 secondsLet me just put it into permissive and then say create a policy and let's move on. Right now the we've we can create
+39:2139 minutes, 21 secondslike multiple policies like this. It needn't just be a single statement. It can also be um paragraphs uh which you
+39:2939 minutes, 29 secondscan add here with a consistent uh delimiter. The second step is now you can see my policy is active. The second step is associating it with a gateway.
+39:3739 minutes, 37 secondsRight now it's still not associated with a gateway which means it's not monitoring any traffic yet. So you can go in here select any of the gateways.
+39:4639 minutes, 46 secondsMy example is my insurance gateway. And you will go into enforcement the moment you pick one of these modes. Now you
+39:5439 minutes, 54 secondshave an emit logs only mode. This is your shadow mode. And then the second one is enable enforcement. Now this is basically going to be live, right? So
+40:0340 minutes, 3 secondsit's not just going to look at what traffic is coming in and just log a decision which is what your shadow mode does in the enable enforcement. It's
+40:1240 minutes, 12 secondsactually actively going to uh block interactions and allow interactions which are authorized through the policies. The moment you pick one of
+40:2140 minutes, 21 secondsthese modes and say associate gateway, then it's active. Then it's basically live and your policy evaluation will start happening.
+Chapter 18: Identity-based policies
+40:3140 minutes, 31 secondsUm, did that answer the question, Anel? Were there others questions?
+40:3540 minutes, 35 secondsWe we we are getting some questions. I'm taking them in the chat, but uh yeah.
+40:4040 minutes, 40 secondsYeah. Let's actually uh I'm eager to kind of jump into the agent itself and show you what is happening. So before that right let's see some of those
+40:4840 minutes, 48 secondspolicies I've already created for the insurance um application. So we saw three tools just to remember there was
+40:5540 minutes, 55 secondsapplication tool uh risk model tool and then approval tool and let's look at some of these policies I've created. Now um here I'm permitting
+41:0541 minutes, 5 secondsusers to call the application creation tool when the coverage amount is less than 5 million. Um this is exactly what
+41:1441 minutes, 14 secondswe also tested from natural language to cedar. So this is the first policy. The second policy I have is for the risk
+41:2241 minutes, 22 secondsmodel tool and basically what I'm trying to do is a condition on the identity
+41:2841 minutes, 28 secondsitself on my principle. my principle um the identity is going to flow through as
+41:3541 minutes, 35 secondsthe JWT token with which this user is authenticating themselves uh with their associated identity um which associated
+41:4441 minutes, 44 secondsIDP which could uh which is attached as your agent core identity on the gateway right um now this IDP is or the JWT
+41:5341 minutes, 53 secondstoken is going to have a list of like claims about who this person is you can add claims like uh a department name and
+42:0042 minutessay a department name can be finance or you could belong to an engineering department. Now essentially what I'm saying is only if you're in the finance
+42:0942 minutes, 9 secondsdepartment are you allowed to call the risk model tool. Anybody outside the finance department should not be able to access the risk models tool. So that is what this policy is doing.
+42:1942 minutes, 19 secondsUm so that from the JW token and then allow the policy to evaluate this uh particular invocation. Right. So yeah
+42:2842 minutes, 28 secondspolicy is automatically doing that. you are going to just configure uh on the gateway you would have configured um
+Chapter 19: Live demo interactions
+42:3542 minutes, 35 secondsidentity now in my case I'm actually using cognto as my inbound identity okay and I'm going to get a bearer token for
+42:4442 minutes, 44 secondsmyself from cognto and use that in my invocations to the gateway now policy will be able to see this information
+42:5342 minutes, 53 secondsabout what is in my JWT token directly and evaluate it Cool.
+43:0043 minutesUm now just to remember we have two policies attached um on this gateway and
+43:0843 minutes, 8 secondsnow we can look into the agent itself.
+43:1543 minutes, 15 secondsNow let me restart this agent. What it's a very simple uh strand agent which is
+43:2343 minutes, 23 secondsconnected to the gateway and it's pulling all the tools from the gateway. Now I'm saying run interactive agent.
+43:3043 minutes, 30 secondsNow you can see what it's first doing is um is getting my access token from cognto and I'm also printing out for you
+43:3943 minutes, 39 secondswhat information I have on my IDP claim which is I have a department name. Right now I'm a user belonging to the
+43:4643 minutes, 46 secondsengineering department. I have a employee level cost center. These don't really matter from the perspective of policy right. But what is important is I'm in the engineering department. Mhm.
+43:5543 minutes, 55 secondsNow I'm also telling you printing out what tools this agent basically has. And
+44:0244 minutes, 2 secondsyou can see the only tool it actually has available to it is the application tool.
+44:0944 minutes, 9 secondsAnd the reason is you can remember there were three tools, right? But the first thing is there is a deny by default um
+44:1744 minutes, 17 secondsprinciple in action. There were no policies explicitly permitting me to see
+44:2444 minutes, 24 secondsor use the um approval tool. So I'm not able to see it at all. The second one
+44:3244 minutes, 32 secondswas the risk model tool. But the risk model tool can only be used by people who are in the finance department and I'm in the engineering department. So I can't see the tool either.
+44:4144 minutes, 41 secondsSo this is where policy is interacting.
+44:4444 minutes, 44 secondspolicy is applying not just on the agent tool interactions but also on the list tools API uh when the agent is trying to
+44:5344 minutes, 53 secondscall the gateway and check what tools do I have for my um purpose. Mhm.
+Chapter 20: Handling policy violations
+44:5944 minutes, 59 secondsSo because I don't see it, I naturally can't even call this risk model tool.
+45:0545 minutes, 5 secondsBut let's try to create some applications. Let's say I want to create an application for 10 million. That was
+45:1245 minutes, 12 secondsmy initial desire. and I'm based in the US region.
+45:1845 minutes, 18 secondsNow the agent is thinking and it understands it needs to call the application tool but it's not able to
+45:2545 minutes, 25 secondscall the tool due to a possible uh policy violation. Um and it says please check access with your per uh permissions and what else can I help you
+45:3345 minutes, 33 secondswith? Now, this is text that I instructed my strands agent to say every time it runs into a policy violation.
+45:3945 minutes, 39 secondsBut basically, it's getting an error code back when it's trying to call the You're looking at the exception, then letting the agent respond back.
+45:4545 minutes, 45 secondsMhm. Yeah. Absolutely. Um, now let's just try to create uh maybe for 1 million. I gave up on my hopes for 10
+45:5345 minutes, 53 secondsmillion. Still in the US region and I'm trying to say an application for 1 million. Mhm.
+45:5845 minutes, 58 secondsSo now it's able to call the tool. You can see um my tool is just a simple lambda function that's just replying to you saying hey I've created this
+46:0746 minutes, 7 secondsapplication for you for this coverage amount um with this particular ID. So it's able to successfully call the tool.
+46:1346 minutes, 13 secondsSo the policies actively been checking what the coverage amount is and deciding whether to allow that interaction to happen or not.
+46:2446 minutes, 24 secondsNow there is a another thing we want to check which is also the policy we attached to uh the user ident user
+46:3246 minutes, 32 secondsidentity itself which is on the risk model tool right so for this purpose let me actually switch my role from being in engineering to finance
+46:4046 minutes, 40 secondsI wish it was that easy for the code purposes it is um [laughter] so let's say I want to update my
+46:4846 minutes, 48 secondsdepartment to finance Now you can just think of these as helper scripts uh which are for the
+46:5646 minutes, 56 secondspurpose of the demo basically manipulating um the cognto claim by injecting um this
+47:0447 minutes, 4 secondsuh custom claims into it which is my department name and so on. So it basically changed my cognto claims uh to
+Chapter 21: Department policy test
+47:1347 minutes, 13 secondsuh finance department. Now when I restart my agent, you will see that I'm in the finance
+47:2247 minutes, 22 secondsdepartment. You can see it's extracting the custom claim and it understands I'm in the finance department. You can already see when I'm uh in the available
+47:3147 minutes, 31 secondstools, it's able to see this risk model tool. Uh let's invoke the risk model tool.
+47:4047 minutes, 40 secondsAnd I believe it needs the API classification. Uh so you can find the sample to the code uh in the chat uh and it's also in the
+47:4947 minutes, 49 secondsdescription of the video. But uh that's something we can do as well.
+47:5347 minutes, 53 secondsMhm. Yeah, absolutely. All the samples are on uh GitHub agent core page. So you can find everything I'm showing you um
+48:0148 minutes, 1 secondin the notebooks there for you to execute as well. We also have some workshops for you to uh go into full use cases and execute that if uh that's what
+48:0948 minutes, 9 secondsyou want to track. But you can see in this case that it's been able to actually invoke the risk model because I'm in the finance department. So it's basically calling this like helper
+48:1748 minutes, 17 secondslambda and saying success. It's been able to give you my uh risk score and so on.
+48:2248 minutes, 22 secondsSo we have some questions in the chat here. Right. So when an agent obtains a list of tools, can the information be brought back to the user? I would like
+48:2948 minutes, 29 secondsmy user to be advised of the tools that the agent has access to. Right. So yeah. Mhm.
+48:3548 minutes, 35 secondsYeah. Absolutely. I can even ask let's say the here I'm explicitly printing out um from my strands agent what I can see
+48:4348 minutes, 43 secondsright let's say your user is actually not able to see this but you can I can also as a user just ask uh what tools
+48:5048 minutes, 50 secondscan I use right and the agent understands what question I'm asking and it tells you also it tells you there's an application tool these are the
+48:5848 minutes, 58 secondsparameters you need to call it there's a risk model tool these are the parameters you need so as long as the LLM driving the agent actually has this information, it's going to reply to you.
+49:0849 minutes, 8 secondsIt's going to try to be helpful and tell you what information it has.
+Chapter 22: Tool visibility check
+49:1249 minutes, 12 secondsRight? And we also have question about 82A. Uh you know again Darcoin is asking uh if uh this is supported in 8way mode
+49:2049 minutes, 20 secondslike if agent agent communication is involved so uh you know does it include that right?
+49:2849 minutes, 28 secondsA2A is simply is just a protocol, right?
+49:3149 minutes, 31 secondsBut the idea behind it is I understand you have agents performing some tasks and then you have a different agent which is actually accessing this agent for information or interacting with it.
+49:4149 minutes, 41 secondsNow you can actually attach this agent also as a target on your gateway and then all of this comes into play again. So you can basically say I have a
+49:4949 minutes, 49 secondsresearch assistant agent don't call this research assistant in under these certain set of uh conditions.
+49:5649 minutes, 56 secondsand the gateway, right? Yeah. Yeah. Exactly.
+50:0250 minutes, 2 secondsUm so yeah, we've already seen now how to author policies um how to attach them to a gateway. We've created a small
+50:1050 minutes, 10 secondstrans agent. We see how it interacts but policy enforces both on the list tools API as well as the interaction between
+50:1950 minutes, 19 secondsthe agent and tool itself. So we're able to control it with policies. Um with Cedar itself we saw the deny by default
+50:2650 minutes, 26 secondsbehavior. Uh default uh deny takes precedence. Now the one thing we still want to see is how does observability
+50:3350 minutes, 33 secondslook like right? We said it's integrated with cloudatch logs. Now um what is happening here? Now once you go into
+Chapter 23: CloudWatch observability
+50:4350 minutes, 43 secondsum so gateways actually has uh you want to turn on tracing and logging here. So on my insurance uh gateway I've actually
+50:5250 minutes, 52 secondsturned on tracing and I'm also feeding all these logs to cloudatch. Mhm.
+50:5950 minutes, 59 secondsSo we can go into now cloudatch and when we go into the
+51:0751 minutes, 7 secondsparticular gateway you will see all the traces as traffic coming into the gateway being captured here.
+51:1351 minutes, 13 secondsSo as we get into this Barati uh you know there's one question that's asked and we touched on this as well. How can you run uh this in monitor mode? Right.
+51:2251 minutes, 22 secondsSo uh is that something that uh we can show as well?
+51:2651 minutes, 26 secondsBy monitor mode, do you mean you don't want to enforce anything?
+51:3051 minutes, 30 secondsCorrect. Right. So you simply want to So what you would do is when I'm attaching my policy engine
+51:3751 minutes, 37 secondsto my um gateway here. You can see this policy engine with these two policies are attached to the insurance gateway.
+51:4651 minutes, 46 secondsMhm. Right now it's in the enforce mode.
+51:4951 minutes, 49 secondsBut what I want to do is convert this into um the shadow only mode.
+51:5651 minutes, 56 secondsRight?
+51:5851 minutes, 58 secondsSo if you put this in the shadow mode, then it's basically going to only log things, but it won't take any action.
+52:0752 minutes, 7 secondsIt'll tell you that $10 million insurance application is denied, but it will not block that interaction. It'll simply log it for you. Mhm.
+Chapter 24: Monitoring policy drift
+52:1552 minutes, 15 secondsSo you can see here now it's in log only. Excellent.
+52:2052 minutes, 20 secondsSo let's look into Cloudatch. We see 74 invocations over the multiple times I've done this demo and uh or and tested it.
+52:3152 minutes, 31 secondsNow what is interesting to note is you will actually see all the policy decisions as well. Um, so you will
+52:3852 minutes, 38 secondsalready see over time how many of my policy decisions were allowed, how many were denied. And remember that this is
+52:4652 minutes, 46 secondsnot just for a tool call, but also every time your agent is asking, hey, what tools do I have? Right? Every time you spin up an agent, it's going to first
+52:5452 minutes, 54 secondsquery the gateway and check what tools do I have. So it also applies to this and you can see which policies are
+53:0253 minutes, 2 secondsapplied, how many times it allowed and denied. Uh but another interesting thing we show you is actually the mismatches.
+Chapter 25: Trace analysis
+53:1053 minutes, 10 secondsYeah, I was going to ask you right. So if the tools names are changing or the details of the tools are changing, right? So and then uh the agent has
+53:1853 minutes, 18 secondsalready uh you know the policy engine has already obtained it and if the developers are changing the tools, how does this work?
+53:2653 minutes, 26 secondsYeah. Um, so essentially if your developers go in and change the tool names or the tool parameters, um, and
+53:3453 minutes, 34 secondsprobably you've not really kept track of what policies were attached to this and haven't updated them accordingly. We actually identify and track this for you
+53:4253 minutes, 42 secondsand show you as mismatched policies. So we're also tracking tool drift. So let's say that insurance claims application
+53:4953 minutes, 49 secondsactually changed and maybe the coverage amount has been rewarded or it's taking in different parameters now, right? So we actually track this difference and
+53:5853 minutes, 58 secondsactually show you that as mismatch policy. So you can set up um cloud alarms for instance and if there's any mismatch policy that fires up say go in
+54:0754 minutes, 7 secondsand look at what your tool parameters are and tool name is and go in and evaluate if your policies are up to date. Mhm.
+54:1654 minutes, 16 secondsSo within the um so within Yeah. basically your gateway all these traces are being captured and let's just
+54:2554 minutes, 25 secondslook into uh one trace that I dug into that list of SNA4 to already show you right so you can see that there are
+54:3254 minutes, 32 secondsdifferent events that happen first it's trying to call the gateway uh let's actually not see this for a moment it tried to in first it's going to call the
+54:4154 minutes, 41 secondsgateway and try to invoke a tool then the policy is basically allowing or denying that action so there is a
+54:4854 minutes, 48 secondsauthorization action happening And then finally once it's allowed um it's able to call that risk model tool itself. Now
+54:5654 minutes, 56 secondsif we look at this uh trace itself you will see
+55:0455 minutes, 4 secondsthat it's been trying to call the risk model tool
+55:1555 minutes, 15 secondspolicy author. So under policy authorization, it's going to tell you what decision it took, which is allow
+55:2455 minutes, 24 secondsand you will also see what the determinist determining policy was. So you're able to identify.
+55:3055 minutes, 30 secondsMhm. You're able Exactly. So you're able to audit it. So if you say an action happened or um then you will also explicitly see what was
+55:3755 minutes, 37 secondsthe determining policy that allowed that action to happen. Maybe you want to go and update this or maybe this was um
+55:4455 minutes, 44 secondsright. So you're able to trace back every agent decision back to a rule you've incorporated. So this is how you're really controlling what the agent does.
+Chapter 26: Guardrails vs policy
+55:5355 minutes, 53 secondsAnd do you have a sample of uh one of the policies that is uh denied? One of the tool call actions that was denied.
+56:0056 minutesOh yeah, absolutely no. So let's actually look at a deny
+56:1256 minutes, 12 secondsor uh you know I I think uh we could we could take a look at that but maybe since we're getting close to the end of the there's a question here about uh
+56:1956 minutes, 19 secondsguardrails as well. So uh we have guardrails and uh we also have uh you know this policy engine right so can you
+56:2656 minutes, 26 secondstell uh our viewers what is the difference here between the guardrails and policy engine.
+56:3256 minutes, 32 secondsMhm. So guardrails and uh very specifically also bedro guardrails is going to help uh help you control what
+Chapter 27: Conclusion
+56:3956 minutes, 39 secondsthe LLM or the agents can say. So it's basically your safeguard that is going to come between the user and the LLM.
+56:4756 minutes, 47 secondsIt's going to both protect the LLM from what bad queries can go in from the user to the LLM, but also protect any bad responses from your LLM going to your
+56:5656 minutes, 56 secondsuser. Right now, policy is um behind the scenes. It's going to control what the agents can do. So, it's going to control
+57:0457 minutes, 4 secondsagents to tools and this is the layer where it's intercepting and controlling, right?
+57:0857 minutes, 8 secondsSo, guardrails help you help you control what the agent can say and policy helps you control what the agent can do.
+57:1657 minutes, 16 secondsExcellent. Yeah, that's uh you know great. And I know we're getting close to the end of the hour, Barati. Now uh do you have like uh you know any takeaways
+57:2557 minutes, 25 secondsfor our viewers as we uh get close to the end of the hour here?
+57:3057 minutes, 30 secondsYeah, absolutely. Anal thank you so much first of all for having me. It's been a blast uh walking through the use case and talking about how policy can help
+57:3757 minutes, 37 secondsyou build in um safeguards to control what the agent can do. Um we have policy in Amazon Bedrock agent core. It's going
+57:4557 minutes, 45 secondsto help you govern, audit and uh trust your agents. So it's actively intercepting all the uh traffic flowing
+57:5357 minutes, 53 secondsin to agent core gateway at the moment and governing them through these deterministic policies that you're creating. Now um it also has very low
+58:0058 minuteslatency policy evaluation for real-time decision- making. We also saw how it's deeply integrated with cloudatch uh inte
+58:0758 minutes, 7 secondscloudatch for you to have this complete audit trail and visibility into what your agent is doing in runtime. So yeah
+58:1558 minutes, 15 secondswith that so we have uh we've shown how to uh not only deploy your agents uh into production uh in the prior episodes but
+58:2358 minutes, 23 secondsin this one we focus more on the governance and enforcing controls uh but before you put them in in place you can uh create your policies look at this in
+58:3258 minutes, 32 secondsmonitor mode and then once you feel uh comfortable then you can put those enforcement actions in place right so uh this is uh from uh today's episode in
+58:4158 minutes, 41 secondsdiving deep into agent core uh you know the policy in agent core. Uh but uh come back again next week and we'll uh have
+58:4958 minutes, 49 secondsmore uh coming up uh you know in this same channel. Uh thank you again for joining the live stream today. We'll see you next time. Thanks Barati.
+
+
+Resuorces:
+https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy.html
+https://aws.amazon.com/blogs/aws/amazon-bedrock-agentcore-adds-quality-evaluations-and-policy-controls-for-deploying-trusted-ai-agents/
+
+https://github.com/awslabs/agentcore-samples/tree/main/01-tutorials/08-AgentCore-policy
+
+https://catalog.workshops.aws/agentcore-getting-started/en-US
+
+https://catalog.workshops.aws/agentcore-deep-dive/en-US
+
+you tube link
+https://www.youtube.com/watch?v=q_9htaugcgI&list=PLhr1KZpdzukfZdp5SGgm2yBPglHNHn-Ig&index=11

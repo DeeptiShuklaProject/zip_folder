@@ -1,0 +1,493 @@
+
+0:3030 secondsHello everyone, welcome to another episode of AWS show and tell. I am your host Anil Naniminti joining from New Jersey today and joining along with me is Akasha.
+0:4141 secondsRight. Hi everyone. Um my name is Akasha Seag.
+0:4545 secondsI'm a gen data scientist with the agent core team with the agent core memory team. Um and I'm joining from Durham
+0:5252 secondstoday. I'm here for a conference. Um, and yeah, the weather is amazing. I I'm loving it here. A break from New York
+1:011 minute, 1 secondCity where I was going to ask you, right? Because I know that last week you were in New York when we were chatting about it, but uh Okay, great. So, is this like an AI conference?
+1:101 minute, 10 secondsIt's an AI conference. It's more focused on open source. So, all of the um yeah, all of the um open source communities here, it's great to interact with them.
+1:191 minute, 19 secondsAWS supports all of them uh with full heart. So it's good to be here.
+1:251 minute, 25 secondsYeah, that's amazing. Right. So yeah, and by the way of introductions, I'm Anil Nadimi. Uh I'm a senior solutions artist here. I uh work with uh enterprise
+1:341 minute, 34 secondscustomers in the web 3 fintech space. Uh more like the cryptocurrency space. So that's kind of what I support in my domain. Uh but in today's episode, we're
+1:431 minute, 43 secondsgoing to chat about uh AI agents, but uh you know AI agents doing things differently, right? So uh what we've
+1:511 minute, 51 secondsspoken in the past is agents being able to uh you know being able to create PC's going from PC's to production being able
+1:591 minute, 59 secondsto uh get the power of large language models looping through the tools and able to you know giving them the ability
+2:062 minutes, 6 secondsto solve problems. We've also had in the past episodes where we discussed about uh uh memory uh observability right so
+2:142 minutes, 14 secondsevaluations and and many other agent core suite of services but uh in today's episode we're going to talk about
+2:212 minutes, 21 secondsepisodic memory right so uh maybe we'll we're going to break this down uh for you between uh Akasha and me and uh give
+2:292 minutes, 29 secondsyou an insight into what episodic memory is and how we get there and we're going to give you some analogies of you know
+2:362 minutes, 36 secondshow we and compare that with our real world of you know how we do maybe and I think I let Akasha give that analogy and
+2:432 minutes, 43 secondsthen uh about parenting I guess right so how that compares with agents so that was a good one uh so we'll talk about that but uh just
+2:532 minutes, 53 secondsgetting into uh agentic memory akasha uh like why don't we set the stage uh for
+Chapter 2: Concept of episodic memory
+3:003 minutesuh you know why we need uh more than semantic memory and and maybe let's break this down as well. Yeah and I
+3:073 minutes, 7 secondsthink uh today we are also going to be focusing a lot on the patterns that we are seeing in production agents you know
+3:153 minutes, 15 secondslike in 2025 2024 2025 we were talking about PC's we were talking about how to build agents and then towards the end of
+3:233 minutes, 23 seconds2025 when our customers matured when uh enterprises started to put this into production we were talking a lot about
+3:313 minutes, 31 secondsproduction ready agents you know and today that the industry has matured even further when people have
+3:403 minutes, 40 secondsput their agents in production. Now I think it is important to understand how production agents should work should
+3:483 minutes, 48 secondsevolve should learn over time and you know should learn from the experiences that the real users are providing them
+3:553 minutes, 55 secondswith and that's exactly why we are here today. We are talking about episodic memory. How we can enable our agents to
+4:044 minutes, 4 secondslearn from um from the user experiences to u personalize the the conversations
+4:134 minutes, 13 secondsthat they're having with the user to add some more context to add some personalization. And this is what uh what we're going to be covering today.
+4:214 minutes, 21 secondsAnd the agents have probably done in the past, right? Interacting with the users, being able to uh achieve an outcome, doing some reasoning. So, uh you know,
+4:294 minutes, 29 secondsepisodic memory will also bring that uh recap of that reasoning maybe in a way, right? So, uh to be able to perform and
+4:374 minutes, 37 secondsuh deliver results for the next customer or next interaction I should say, next interaction. Yes, next interaction. So, it's talking to its future self.
+4:454 minutes, 45 secondsIt's like, okay, next time I do this, I better I better be smarter than the last time I did it before. Yes. Right. So, excellent.
+4:544 minutes, 54 secondsAll right, let's get for that. Mhm. All right.
+Chapter 3: Pillars of user experience
+5:005 minutesSo, as I was talking about it, right, we've been making a lot of progress on the technical side like on the reasoning side, we are talking about tool use, the
+5:095 minutes, 9 secondsplanning of the agents, calling different APIs, standardizing the protocols.
+5:145 minutes, 14 secondsum using different kind of databases. So we are working a lot on how to make uh a complex multi-step workflows or how to solve the complex problems.
+5:265 minutes, 26 secondsBut once we move to production the real world hits different. So that's where
+5:315 minutes, 31 secondsthe user experience the um the real user queries is what counts and then users
+5:395 minutes, 39 secondshave to feel that this agent is actually understanding um what I'm trying uh to
+5:485 minutes, 48 secondsto share with it right so yeah the analogy Anel and me were talking about last time um so it's like sending our
+5:565 minutes, 56 secondskids to school you know so no matter how well you have nurtured your kid, once you actually send them
+6:036 minutes, 3 secondsout to the real world, they would face it, they would experience the world very differently, right? Um
+6:126 minutes, 12 secondsit's not the bookish knowledge anymore, right? It's it's the practical reality.
+6:156 minutes, 15 seconds[laughter]
+6:166 minutes, 16 secondsYeah.
+6:176 minutes, 17 secondsAnd the same thing with agents. No matter how well we have tested it, no many no matter how many different kind of questions or queries we have tested
+6:266 minutes, 26 secondsit on, given it given um different kind of scenarios, different kind of instructions in the system prompt. Mh.
+6:336 minutes, 33 secondsWhen the real user talks to it, it will have more and newer experiences than it has seen in during this test testing.
+6:436 minutes, 43 secondsRight.
+6:446 minutes, 44 secondsRight. Um and that's where we have to improve it. And this is just one level of um user experience. The second level
+6:516 minutes, 51 secondsis where we have to adapt it to every user differently because we are humans.
+6:586 minutes, 58 secondsEach one of us have our own preferences, have our own ways of working, um have
+7:057 minutes, 5 secondsyou know our styles of everything we do, right? We want to uh we want to have it in a certain way, right? And just like
+7:127 minutes, 12 secondsus humans, you know, each time we move to a different team, each time we have a different manager, a new friend, we change the way we interact with them.
+7:227 minutes, 22 secondsAnd therefore, that's exactly what we expect our agents to do as well. So this
+7:297 minutes, 29 secondsboth of these things together is what consists of a good user experience, right? So let's break it down. So, so no
+7:387 minutes, 38 secondsmatter how much technical ability you give, I think I'm trying to understand it, right? So, you need to still get the real world experience by uh I mean and
+7:467 minutes, 46 secondsthen that interaction uh can be used to make the agent take uh you know performance much better. I mean when I say performance not the speed but maybe
+7:557 minutes, 55 secondsthe ability to solve a problem maybe the quality of the agent response yes the accuracy the
+8:028 minutes, 2 secondsum the efficiency everything right. So along with personalization also the agent itself improves the way it works.
+8:088 minutes, 8 secondsIt learns from the past. Um and that's what guides our user experience. So let's break it down right looking at the
+8:178 minutes, 17 secondsthree different pillars of what a good user experience looks like. Um so first one is the personalization aspect where
+8:258 minutes, 25 secondswe want to make sure that our users feel special. you know uh we want to give it a good uh customer
+8:338 minutes, 33 secondsexperience or user experience. So this is where we want to learn over time the facts about the user, the preferences of
+8:418 minutes, 41 secondsthe user, the role, the communication style, all of these things about the user right over time. Um so for example,
+8:508 minutes, 50 secondsright, we can um think of also in in terms of personas. Uh so let's say uh
+8:568 minutes, 56 secondsAlice is a user who is uh who prefers technical reports uh in a much detailed form. So she has an engineering
+9:059 minutes, 5 secondsbackground. She wants it to be very detailed. She wants to have all the references and everything. Versus person number two, let's name her Carol. She's
+9:149 minutes, 14 secondsa director. She only want executive summaries. She only wants a highle information of like what happened? Did
+9:219 minutes, 21 secondsyou solve it or not? That that's it, right? It's the same incident. It's the same agent, but they want response in a
+9:309 minutes, 30 secondscompletely different way. So this is where personalization really helps right.
+9:369 minutes, 36 secondsUm the second pillar uh that I want to touch upon is the context awareness. So this is where we are making our agents
+9:459 minutes, 45 secondsaware about um the previous conversations that it has had. So to make it some more uh to make it context aware of what has happened in the past.
+9:569 minutes, 56 secondsUm so this can include you know summaries of different sessions that uh has occurred or facts about the user. So
+10:0410 minutes, 4 secondsit could you know overlap with personalization to some extent but you need to still get the previous conversation history back or else people
+10:1210 minutes, 12 secondswill feel that hey why am I repeating myself again right so you want that the history conversational history to be persisting
+10:1910 minutes, 19 secondsexactly and also like to have a you know a nice follow-up you know so uh hey I remember last time we talked about you
+10:2710 minutes, 27 secondshad this issue I hope it was resolved okay now uh is there anything else I can do for you or you It's it's a good user
+10:3510 minutes, 35 secondsum experience to have that um feeling that okay the they remember what I had asked previously. Right.
+10:4410 minutes, 44 secondsRight.
+10:4410 minutes, 44 secondsUm so I have that recap in some form. Um so this is context awareness. Now the
+10:5110 minutes, 51 secondsthird one and my favorite one um the self-arning bit. So this is where we talk about learning from different
+11:0011 minutesepisodes, different past experiences that the agent has had with the user, right? And these episodes that I'm talking about is not just going to be,
+11:0911 minutes, 9 secondsyou know, um um some kind of a summary of the past, but more detailed analysis of what had happened, uh what had
+11:1611 minutes, 16 secondsoccurred, um what was the root cause, how was it solved, what tools were used, like a very detailed analysis of, you know, every bit of that episode.
+11:2811 minutes, 28 secondsUm and then uh a more advanced um level of that episode would be to generalize this
+11:3711 minutes, 37 secondsinformation uh in in the form of reflections. So this is where we say uh that okay based on you know these episodes that have
+11:4511 minutes, 45 secondshappened to me I feel that most of the times this is what is the issue or this
+11:5211 minutes, 52 secondsis what has happened right like think about us you know when we join just let's say we have just joined a new
+12:0012 minutesengineering role um the day one at job is basically we are doing everything by the book right we are doing each and everything that we have learned in our
+12:0812 minutes, 8 secondsuniversities Um and then six months later we're like oh this incident. Ah yeah I remember in
+12:1712 minutes, 17 secondsJanuary 4th there was something similar that happened. So you just remember something from the past. That's what you know we have uh what we say as episodes what we relate to as episodes.
+12:2812 minutes, 28 secondsMhm. Um and then two three years into the role once you get more senior um you start observing patterns right you start
+12:3612 minutes, 36 secondsunderstanding okay generally this is how it works um so you start saying okay you know most of the times this is what has
+12:4512 minutes, 45 secondsbeen the root cause so let's start from there instead of taking it by the book and taking it step by step um so that's what experience is all about
+12:5412 minutes, 54 secondsand this is what we want also to give to our agents so that they can um solve the
+13:0213 minutes, 2 secondsproblems or let's say do the tasks faster and in a more efficient way.
+13:0613 minutes, 6 secondsSo you're helping the agent graduate then you know so into a more senior role or maybe get promoted.
+13:1313 minutes, 13 secondsYes. To promoted. They never graduate but they they get promote. Yes. Exactly.
+13:1813 minutes, 18 secondsRight. So um graduate is a level where you're like now now you're now you're great. Um I think this is more of a gradual
+13:2513 minutes, 25 secondslearning. It it's a continuous improvement.
+13:2813 minutes, 28 secondsUm all right so let's zoom a bit more into the self-learning bit.
+Chapter 4: Components of self-learning
+13:3313 minutes, 33 secondsSo what are the different components of self-arning right? What do we want or what do we expect out of an agent that is able to self-learn or self- evvolve.
+13:4313 minutes, 43 secondsSo first bit is for it to remember what instances has it had before what has it seen before. So this is where we are
+13:5013 minutes, 50 secondstalking about episodic memory right we it can recall the episodes. Okay, this is what has happened in the past. This um these were the successful samples.
+14:0114 minutes, 1 secondThis was the unsuccessful experience that I've had and so on. Mhm.
+14:0514 minutes, 5 secondsUh the second component is the reflection part where we generalize these um experiences and we create some
+14:1214 minutes, 12 secondsuh we synthesize some patterns, some um general guidelines out of it, right?
+14:1914 minutes, 19 secondsThat hey mostly this is how you solve this issue.
+14:2314 minutes, 23 secondsAnd then the third one is we want the agent to evaluate um itself based on so next time when it is using uh those
+14:3114 minutes, 31 secondsreflections it's you know it has another episode how well did it perform or analyzing its own uh episodes analyzing
+14:3914 minutes, 39 secondsits own reflections so it's able to evaluate what have I done was it correct was it not correct was this approach
+14:4614 minutes, 46 secondsbetter than the other um the remediation that I uh that I gave was the user happy about it. So things like this it's able
+14:5414 minutes, 54 secondsto evaluate itself and in this phase do you also capture the interaction from the user right because the users will give thumbs up thumbs down we beble able to uh you know
+15:0315 minutes, 3 secondscapture those as well right yes so every episode should capture that information as well um and then based on that evaluate how
+15:1115 minutes, 11 secondsthe experience was and how the episode actually came into play. Um and then the fourth component the most important
+15:1915 minutes, 19 secondscomponent is the adaptation bit where we allow the agent to learn from all of this from step one 2 three and based on
+15:2615 minutes, 26 secondsthat adapt and improve right so this is where it learns how how should I act differently next time what are the guidelines to be differently in
+15:3615 minutes, 36 secondsa particular situation because it's not super generic right but we can say oh if this kind of situation occurs behave in
+15:4315 minutes, 43 secondsthe certain manner So that's where you wanted to adapt but for specific situations.
+15:4915 minutes, 49 secondsSo keep it more dynamic um for different use cases, different situations that can occur.
+15:5415 minutes, 54 secondsSo is it uh is it also the same as like you know when when you're allowing the agent uh you know are we allowing the agent to self-evaluate or are we saying that we want to evaluate the agents?
+16:0516 minutes, 5 secondsThat's a very good point. Um so actually in production systems to some extent we do want the agents to
+16:1316 minutes, 13 secondsself-evaluate because we cannot supervise each and every situation. Mhm.
+16:1716 minutes, 17 secondsBut so just like we were taking the example of a you know a child going off to school. Um so as a parent you you
+16:2716 minutes, 27 secondswant them to learn by themselves but you still want to keep an eye you want to know what they are doing. Is it okay? So
+16:3416 minutes, 34 secondsif something has a drastic failover or something drastic happens you want to control it. So therefore in production
+16:4316 minutes, 43 secondssystems we do recommend that besi like aside the agent learning and improving by themselves you should also have other
+16:5116 minutes, 51 secondsmeasures or other metrics that are um let's say keeping an eye on the agent to
+16:5816 minutes, 58 secondsevaluate it to observe it to see what's happening and um and based on that perhaps in some cases you might also
+17:0617 minutes, 6 secondsneed manual eval manual adaptation uh alongside what agent is by itself doing
+17:1317 minutes, 13 secondsokay so what I think you know to convert that into our analogy you're as a the parent is still responsible to make sure
+17:2017 minutes, 20 secondsthat the evaluations are looked at right so report cards of the you know the child is looked at so you maybe looking
+17:2717 minutes, 27 secondsat the agentic performance more closely and understand that it's doing correctly and then make those changes so that uh
+17:3517 minutes, 35 secondsit can uh adapt better I guess exactly exactly Um so now to put that
+17:4217 minutes, 42 secondsinto more concrete terms um like in terms of like how do we build it? How do we actually see this right?
+Chapter 5: Bedrock agent core overview
+17:5117 minutes, 51 secondsUm so we have bedrock agent core uh which is our platform which is the most advanced agentic platform for production
+17:5917 minutes, 59 secondsready agents. So this is essentially everything that you need to put your agents into production. Um this is model
+18:0818 minutes, 8 secondsagnostic, framework agnostic. So you can bring in any of your strands agents, langraph, crowi, lang chain, any of the frameworks or any of the model providers
+18:1718 minutes, 17 secondsyou want. And to put them into production, you can use uh different these different services to um yeah to
+18:2518 minutes, 25 secondsto put them in production safely, securely and scalably, right? Um and in the context of what we were talking about the self-learning
+18:3318 minutes, 33 secondsagents. So memory of course is providing us with um all of the all of the capabilities that we need to learn from
+18:4118 minutes, 41 secondsthe past experiences right episodic summary user preferences uh semantic all of those. But then we
+18:5018 minutes, 50 secondsjust like how as a parent you should keep an eye you um you have to you know
+18:5618 minutes, 56 secondsyou can use the uh the traces from gen observability to feed into the learning pipeline so that you can keep an eye
+19:0519 minutes, 5 secondsbecause you know famously one of my colleagues uh always use this analogy.
+19:0919 minutes, 9 secondsSo he says what you cannot see you cannot measure and what you cannot measure you cannot improve and therefore
+19:1719 minutes, 17 secondsuh you need observability in place to be able to measure something and you need uh evaluations therefore the measurement
+19:2519 minutes, 25 secondsor the metrics in place to at the end improve uh your agents flywheel effect flywheel effect
+19:3319 minutes, 33 secondsyes exactly so that's what closes the quality feedback loop right that's what improves um our agents.
+19:4219 minutes, 42 secondsAll right. Now, let's focus on uh memory since that's our topic for today.
+19:4719 minutes, 47 secondsOkay. And I'll also uh just give a brief that uh you know for folks who are watching this uh live stream, there is a demo that is also coming up uh you know we're going to talk through the some of
+19:5619 minutes, 56 secondsthe content here and then yes show this in a demo. Uh thank you for the teaser.
+20:0420 minutes, 4 secondsAll right.
+20:0620 minutes, 6 secondsSo uh I'm going to start just to give an high level uh overview of what agent core memory is.
+Chapter 6: Agent core memory architecture
+20:1320 minutes, 13 secondsUh so when the agent is having the interactions with the users, it creates these raw messages, right? The the
+20:2120 minutes, 21 secondsmessages that uh come in from the conversation that is going to and fro between the agent and the user. So those
+20:2820 minutes, 28 secondsuh those conversations is what we capture as raw events.
+20:3320 minutes, 33 secondsMhm. and we store them into a raw storage into the short-term memory. So this is essentially a data store that you just take in the messages or the checkpoints or the um the agent state.
+20:4620 minutes, 46 secondsSo anything you want to store as it is, you would store that in the raw storage in the short-term memory, right? And the
+20:5420 minutes, 54 secondsshort-term memory can live up to 365 days. So it's not that short term, but it's essentially take it to be the raw
+21:0121 minutes, 1 seconduh storage, right? Now based on the configuration you have created based on what you choose um of like how do you
+21:1121 minutes, 11 secondswant to give a good user experience to your users you configure some strategies for long-term so you say let's say I
+21:1921 minutes, 19 secondswant to create episodic memory strategy so in those cases you would uh pick any of uh one or more of those strategies
+21:2821 minutes, 28 secondsand then those based on the strategies you've configured those events would then flow into a memory extraction module which is a processing pipeline.
+21:3721 minutes, 37 secondsWe'll go into it uh in a bit of what this entails, what this means, but essentially this then creates memory
+21:4621 minutes, 46 secondsrecords and stores them into long-term memory from where you can retrieve it, right? you can retrieve it and append it
+21:5321 minutes, 53 secondsinto your um into your conversation to add more context when the user let's say having another conversation
+22:0022 minutesum to add more context from the previous episodes from the previous chats um and so on. So from your previous example,
+22:0822 minutes, 8 secondslet's say uh let's say Carol is going to Paris now, right? So would you consider that as a I mean Carol going to Paris as
+22:1722 minutes, 17 secondsa as a long-term storage item? I mean it could still be like you know she's searching for the flights to go to Paris, right? So an extraction of that
+22:2522 minutes, 25 secondswould be like you know hey uh from this interaction I understand that Carol is going to Paris, right? So that will be an item that could be stored.
+22:3322 minutes, 33 secondsYeah. So it depends on what you've configured as in uh if let's say I say in my application I do not need anything else. I only want user preferences to be
+22:4222 minutes, 42 secondsstored. So in that case Carol going to Paris is not relevant for me. Right?
+22:4722 minutes, 47 secondsBecause it does not mean that Carol likes Paris. She's just going to Paris for some reason. But if Carol mentions, oh, I'm super excited. I really enjoy
+22:5522 minutes, 55 secondsParis last time I went there. Um, with this you can implicitly detect that okay probably Carol like uh likes Paris so
+23:0423 minutes, 4 secondsthat's going to be extracted but not every piece of information that you send in would be extracted because it has to be relevant to that strategy right understood.
+23:1323 minutes, 13 secondsYeah. Um so agent core memory is providing you with a fully serverless um
+23:2023 minutes, 20 secondsmanaged service and it's providing you with a built-in encryption in transit and in rest. It's providing you with flexible name spaces. Uh you can scope
+23:3023 minutes, 30 secondsmemory differently uh for memory sharing or uh if you want to keep it separate per agent completely um yeah completely
+23:3923 minutes, 39 secondsuh on the design you want to have and you do not have to manage the infrastructure. So you don't have to predefine how you know how big a vector
+23:4823 minutes, 48 secondsstore do I want to have. You can just keep storing memories and it'll automatically accommodate all of that.
+23:5323 minutes, 53 secondsAnd that's really important in a production system, right? We don't want to pay uh pay for um let's say 10 uh
+24:0124 minutes, 1 secondgigabytes up front, but we want to only pay for what we use. And that's exactly what this is for.
+24:0724 minutes, 7 secondsAnd a quick question, right? So can agent core memory be used independently uh in uh like outside of uh using maybe
+24:1624 minutes, 16 secondsruntime or gateway? I know that there is a suite of services there, right? So can you clarify that?
+24:2124 minutes, 21 seconds100%. Um so all the agent core services can be used independently. Of course they work really well together but they
+24:2924 minutes, 29 secondscan all be used independently. Uh same for agent core memory.
+24:3424 minutes, 34 secondsIt provides you with the APIs and you can use those APIs to call from any um any runtime or any kind of uh a compute wherever you're running your agent.
+24:4524 minutes, 45 secondsSo you can yeah run it anywhere.
+24:4724 minutes, 47 secondsAll right. So to focus to go a bit deeper into the long-term memory. So short-term is fairly simple, right? We
+24:5524 minutes, 55 secondsare storing all of the messages as as it is. It is um yeah storing in the information scoping it based on the user
+25:0425 minutes, 4 secondsID sorry the actor ID and the session ID and well of course the memory store that
+25:1125 minutes, 11 secondsyou store it in. For long-term memories we have different strategies. So as we also mentioned before so first one is the summary memory a summary strategy.
+25:2225 minutes, 22 secondsUh this is what creates a condensed representation of the interaction. So it it summarizes the conversation but topic
+25:2925 minutes, 29 secondswise. So it has all of that uh information all of the key points of the conversation in in a summary.
+25:4025 minutes, 40 secondsUm the second one is the user preferences which is what um stores and learns from the uh user behavior
+25:4925 minutes, 49 secondsthe interaction style the choices that the user takes. So the preferences and the um likes and dislikes of the user
+25:5625 minutes, 56 secondsessentially right uh the semantic facts is where it literally stores the factual information
+26:0326 minutes, 3 secondsuh coming in from the from the conversation. So anything about like uh any domain specific information any factual
+26:1226 minutes, 12 secondsum information that's what goes into semantic and then we have episodic which is what allows our agents to retain um
+26:2126 minutes, 21 secondsand reason over their own experiences so they can reflect back and you know create uh generalized insights or hints
+26:2926 minutes, 29 secondsfor themselves for their future selves essentially. Um and tying this back actually to the first slide that we were
+26:3626 minutes, 36 secondsdiscussing where we were talking about the good user experience, right? Um so we were talking about the personalization bit. So personalization
+26:4426 minutes, 44 secondsis what uh user preferences and to some extent semantic uh provides us with. Uh the second one we were talking about is
+26:5326 minutes, 53 secondsthe context awareness, right? That's where summaries um and semantic facts would help.
+26:5926 minutes, 59 secondsMhm. The third one we talked about was the self-arning and that's where episodic memory would come into play. So
+27:0627 minutes, 6 secondsall of these strategies have been created uh to enhance that user experience.
+27:1227 minutes, 12 secondsUm but in case any of these do not really solve your use uh solve the uh
+27:2027 minutes, 20 secondsproblem for your use case, you can also override the prompts. The prompts are public. You can look at them in the documentation.
+27:2727 minutes, 27 secondsThey're in the chat right now. I've already added them. Yep, perfect. Thank you. And so you can override uh the prompts or the models if
+27:3627 minutes, 36 secondsyou want to use uh another ones. Um or you can create a completely own pipeline of your own if you want to have a
+27:4327 minutes, 43 secondsself-managed. So this is something um then you can fully create a custom pipeline uh for your use case. Right
+Chapter 7: Episodic memory extraction
+27:5327 minutes, 53 secondsnow let's touch upon what do we mean by this? you know this black box we created of the extraction pipeline. Um so how
+28:0228 minutes, 2 secondsdoes it work? So the raw events that were coming in we configured a strategy
+28:0928 minutes, 9 secondsand an event and the events that are coming in with the strategy um we wait for k messages or x seconds of
+28:1728 minutes, 17 secondsinactivity and based on that uh it runs an asynchronous pipeline. So this pipeline would be running asynchronously
+28:2528 minutes, 25 secondsso that the conversation is not being interrupted right this is going to be running in the background.
+28:3128 minutes, 31 secondsUm so the first step that takes place um is going to be the memory extraction. So
+28:3828 minutes, 38 secondsthat's where it extracts the relevant information. So the example that you were taking about Carol going to Paris
+28:4528 minutes, 45 secondsor let's say the car Carol said oh I really enjoy going to Paris. Um so from short-term memory this information will
+28:5228 minutes, 52 secondsflow in here and let's say we configured a user preferences strategy. Um this extraction bit will uh this extraction
+29:0129 minutes, 1 secondstep will extract this information that Carol really likes going to Paris. Mhm.
+29:0729 minutes, 7 secondsUm then the consolidation bit will look at the similar similar memories before.
+29:1329 minutes, 13 secondsHey, has like has um Carol talked about going to Paris before or like is it flights or is it hotels or you know which part of Paris? I think right.
+29:2229 minutes, 22 secondsSo that Yeah, that's also the context. Yes.
+29:2629 minutes, 26 secondsMhm. Um so it looks at the uh vector store what has Carol talked about uh Paris before
+29:3429 minutes, 34 secondsand based on that retrieves similar information and based on what similar information it has found in the existing
+29:4229 minutes, 42 secondsvector store about Carol it will either add a new piece of information so it'll add a new record if let's say this
+29:4929 minutes, 49 secondsinformation did not exist this is a new information or it can update. So update would be the case where let's say there
+29:5729 minutes, 57 secondswas some contradictory information that occurred in the past. Let's say previously 5 years ago carol said uh I
+30:0430 minutes, 4 secondsdon't like uh Paris right now. I'm super frustrated. Something like this. Uh so there's some contradictory information
+30:1230 minutes, 12 secondsand therefore we need to update that right something changed and so many times we keep changing our
+30:1930 minutes, 19 secondspreferences. So I mean that's very natural. Right.
+30:2230 minutes, 22 secondsRight. Um and or and or perhaps Carol said, "I like going to uh France and now
+30:3130 minutes, 31 secondsuh Carol is talking specifically about Paris." So you might want to make it more exhaustive. You know, you want to complete that uh that same information.
+30:3930 minutes, 39 secondsSo you would update in in both of these cases.
+30:4330 minutes, 43 secondsUm the third operation would be when let's say this information already exists, we don't need to update it. We
+30:5030 minutes, 50 secondsdon't need to add anything new. then we would just skip this information because there's no point of adding redundant uh
+30:5730 minutes, 57 secondsinformation. Maybe Carol is just searching for the same, you know, the flight for maybe a better deal. Yeah.
+31:0231 minutes, 2 secondsYou know, so just there's no need to update anything, right? So just Yes. Um and therefore we embed an index and then put it into the vector store, right?
+31:1031 minutes, 10 secondsSo that's how it goes. Um so for the the three strategies that we talked about,
+31:1731 minutes, 17 secondsthis is the pipeline for that. But for episodic, it's slightly different, right? For episodic, it works in three
+31:2431 minutes, 24 secondssteps. So the extraction that takes place is not just on the uh on one level but on two levels. Mhm.
+31:3131 minutes, 31 secondsSo first one is the turn extraction um which is for every turn for the every agent turn it extracts that it looks at
+31:4131 minutes, 41 secondsthat it evaluates it understands it what happened what was the action taken what what is the assessment um you know what exact what tools were
+31:5031 minutes, 50 secondscalled how did it go so all of this information is taken into um is like kind of broken down and understood right
+31:5831 minutes, 58 secondson the turn level and then once the goal of the agent is completed. Once the agent has actually done its task well
+32:0732 minutes, 7 secondsthen the episode extraction is being triggered and then it creates an episode out of that of like on a general level
+32:1432 minutes, 14 secondshow did the agent perform right so it's not super granular anymore it is more on the general episode level so think about
+32:2232 minutes, 22 secondsit in this sense um like when we have a meeting right we take notes on whatever important we see right so every time
+32:3132 minutes, 31 secondssomeone says something we just note on whatever we find uh important.
+32:3632 minutes, 36 secondsBut at the end of the meeting, we then look at all of the notes and then summarize them and say, "Okay, this is
+32:4432 minutes, 44 secondsuh you know, we then create a full uh summary of the entire meeting." So that's essentially the episode.
+32:5232 minutes, 52 secondsSo, but uh in this case, do we still capture the reasoning of the agent and then do we persist that?
+32:5932 minutes, 59 secondsYes. So it it creates multiple uh different attributes um which talks about you know different
+33:0733 minutes, 7 secondskind of um so what was the agent tasked to do what did it actually do uh and so on. So there's different uh things that
+33:1533 minutes, 15 secondsare coming out of it and also assesses itself. It also creates an assessment of itself and a reflection of its own um
+33:2433 minutes, 24 secondsdoing of like how did the agent perform and then after this on the episode level after this is done it then retrieves
+33:3233 minutes, 32 secondssimilar episodes from the past or from the other uh interactions from the vector store and then creates reflection
+33:3933 minutes, 39 secondson a general level where it creates um where it creates generalized guidelines for the agent along with when Is it
+33:4833 minutes, 48 secondsrelevant? Right? And I I would really recommend you to read uh the blog post that we have here because this will give
+33:5633 minutes, 56 secondsyou a lot more information. We also have examples there so that you can look at um and you can uh yeah understand it much more much better.
+34:0734 minutes, 7 secondsSo highly recommend it. All right. Now let's go to the demo.
+Chapter 8: Architecture and streaming demo
+34:1434 minutes, 14 secondsAll right. Um so what we are going to build today or what we're going to look at today is um a web UI which is
+34:2434 minutes, 24 secondsinteracting with an application built using flask. Um the application uses trans agents uh to create these agents.
+34:3434 minutes, 34 secondsThe those agents have um been connected with agent core memory using hooks. So
+34:4134 minutes, 41 secondsit sends those messages into short-term memory and asynchronously uh it is being created as episodes and
+34:4834 minutes, 48 secondsthen further reflections and those reflections are being those episodes and those
+34:5534 minutes, 55 secondsreflections are being sent to the Amazon Kinesis data stream. So this is a feature that agent core memory has
+35:0335 minutes, 3 secondsrecently launched um that is to be able to stream this information into some other
+35:1135 minutes, 11 secondsum yeah another place that you can you know use to essentially uh add some custom logic. So, so from Asian core
+35:1935 minutes, 19 secondsmemory you would get some um you would get this information recollection right that's coming up and says hey you
+35:2835 minutes, 28 secondssupposed to do this activity have you really completed that right so I mean we are all used to asking the agent to do something and perform an action but uh
+35:3635 minutes, 36 secondsand then it remembers but maybe the agent itself could uh recollect and remind us
+35:4335 minutes, 43 secondsso this I think um this is more in terms of notifications where you want to know if there's a new episode being created
+35:5135 minutes, 51 secondsfor any reason, right? You could, for example, want it to have a human in the loop. You might want to know every time a new reflection is created, I want to
+36:0036 minutesum add this into the kinesis data stream from which I want to look at every reflection myself. Could be a could be a
+36:0836 minutes, 8 secondsa case, right? or you might want to analyze or aggregate that data uh or do something more with it, right? So you
+36:1736 minutes, 17 secondscould use them for anything um if you want to further process this information. So we just provide u this
+36:2636 minutes, 26 secondsoptionality um to our customers that they can stream that information and you can stream
+36:3436 minutes, 34 secondseither the entire messages whatever is being created in long-term memory or you can just stream in the metadata. So you can just say okay give me give me the
+36:4336 minutes, 43 secondsinformation that okay there's a new memory record that is being created so that I can retrieve that memory record from the agent core memory right
+36:5136 minutes, 51 secondsso it could be for anything um so this example that we are uh that we're going to show in this case we will use it to
+36:5936 minutes, 59 secondsum add some categorization and some aggregation logic so that we can create a dashboard on top so we will we will
+37:0837 minutes, 8 secondslook at Now, if you give me a second, I want to just refresh my credentials
+Chapter 9: Incident response demo
+37:1637 minutes, 16 secondsso that I am connected to our AWS account and I will
+37:2437 minutes, 24 secondsget um my demo up and running.
+37:3337 minutes, 33 secondsSo folks out there, let us know if you are actually using agent core memory or memory in general, right? To be able to
+37:4137 minutes, 41 secondsmake your agenting interactions much more personalized or uh if you are already looking at uh episodic memory in
+37:4837 minutes, 48 secondsa different open source repository, let us know in the chat. And uh yeah.
+37:5637 minutes, 56 secondsAll right. Um can you see my IT incident response agent? Yes. Yes.
+38:0338 minutes, 3 secondsWhat is this uh demo going to do now?
+38:0538 minutes, 5 secondsSo this is an incident response agent which is able to um receive. So as a user I can send in hey this is the
+38:1438 minutes, 14 secondsissues that that are occurring and it should be able to resolve that in uh resolve that incident and then give me a report of hey I've solved this problem and this is what it is.
+38:2538 minutes, 25 secondsSo here what we are going to look at is three different versions. Um we will look at when there's no memory. Uh when
+38:3438 minutes, 34 secondsthere's episodic memory and then when there's episodic memory plus reflections, right? So we we can compare
+38:3938 minutes, 39 secondsit um kind of yeah uh we can compare it with with and without memory.
+38:4838 minutes, 48 secondsUm so let's start with I don't know let's pick any of the topics and on the
+38:5638 minutes, 56 secondsright hand side is our memory inspector which shows us what our memory
+39:0039 minutes[clears throat]
+39:0139 minutes, 1 secondhas so in this case I mean we just see the inspector with just information in store um so we have already
+39:1039 minutes, 10 secondsgiven in some episodes so I've hydrated the memory with really 10 different like super different cases
+39:1839 minutes, 18 secondsum where you know it it had some different IT incidents um and based on that it created reflections. So one thing to observe
+39:2539 minutes, 25 secondshere is that the reflections are more than the episodes which is interesting right uh so it doesn't need to be one is to one or one like it doesn't have to be
+39:3539 minutes, 35 secondsless than the episodes or more than the episodes it really depends on what you are sending in because it's creating those hints for different use cases
+39:4439 minutes, 44 secondsright and those use cases and those hints have to be very specific of like what to do in what situations um so we will look at the reflections
+39:5239 minutes, 52 secondsand I think we'll get more idea of what is happening I think when you see it then you can connect better right so yes yes yes exactly um and we have like
+40:0040 minutesdifferent tools in here so that that the agent can use so it essentially gives us the incident that it's been resolved that's what's happening this is the
+40:0940 minutes, 9 secondsresolution these are the findings so do that so this uh IT incident response agent is doing some actions to fix some problem
+40:1640 minutes, 16 secondsyes uh so we basically gave it an issue being like hey API latency was spiked to 5 seconds across all endpoints This was
+40:2440 minutes, 24 secondsthe error rate. It happened 30 minutes ago, right? Solve it.
+40:2940 minutes, 29 secondsSo it gives us the I have this is this was the root cause. This is the resolution that I've done and like yeah
+40:3840 minutes, 38 secondsthese are the key metrics. Um so now we are using episodes and reflections. So one thing if you observed last time the
+40:4640 minutes, 46 secondstools that was the the number of tools that were used without memory were five and this time it used three tools for the exact same question.
+40:5840 minutes, 58 secondsSo like the idea of self-arning is also to improve the efficiency of the agent.
+41:0441 minutes, 4 secondsRight? So it not just gave us a better response but also gave it faster because it used less number of tools.
+41:1141 minutes, 11 secondsMhm.
+41:1241 minutes, 12 secondsRight. Right. So it does the same task but just faster and less um tools. So less trial and error that it goes
+41:2141 minutes, 21 secondsthrough. Right? Okay. Let's look at the episodes.
+41:2541 minutes, 25 secondsSo first of all, every episode and every reflection that comes in will give you a relevant score of how relevant is this
+41:3241 minutes, 32 secondsis this with the current situation that is at hand. Right? So based on that you can also filter out if you want. This could
+41:4141 minutes, 41 secondsum also be important for some cases if you want. Um and within an episode you see it gives you a detail of what
+41:5141 minutes, 51 secondshappened and then different step wise information on okay what happened on
+41:5741 minutes, 57 secondsevery different step and then a reflection overall for that whole episode. So it looks at its entire
+42:0542 minutes, 5 secondsepisode and says okay this is what I have figured out and this is what the agent did this was a better approach
+42:1142 minutes, 11 secondsthis is what um yeah this is what was the uh let's say the approach that was taken
+42:1942 minutes, 19 secondsright so we it create we configured it to take two relevant episodes and then two relevant uh reflections
+42:2742 minutes, 27 secondswithin reflections you would notice we have the same relevant score we have a topic So it gives us a uh a topic which is what is this reflection about right?
+42:3942 minutes, 39 secondsSo this is about database connection pool exhaustion diagnostics.
+42:4342 minutes, 43 secondsMhm. And this will give us some hints of what to do or how should the agent perform
+42:5142 minutes, 51 secondsand also gives us a use case of when does this apply when is this relevant because
+42:5942 minutes, 59 secondsthese hints and I think this is what we have been doing with our system prompts we've been giving it so many instructions
+43:0843 minutes, 8 secondsand those instructions apply to very certain use cases you know like very specific situations.
+43:1443 minutes, 14 secondsSpecific situations, right? So because we are predefining like what could happen there.
+43:1843 minutes, 18 secondsExactly. And then I think this is a much better way of looking at it because our agents are doing a lot many different
+43:2643 minutes, 26 secondskind of tasks and we have to make sure that for every different task just like not every user is the same not every task is the same.
+43:3643 minutes, 36 secondsSo you have to handle them differently, right? For some tasks you have to be more u detail oriented. For some tasks
+43:4343 minutes, 43 secondsyou have to just do them faster. So therefore the kind of context that has to go into the model should be different should be more tailored.
+43:5443 minutes, 54 secondsUm and therefore this approach of taking reflections and creating dynamic
+44:0044 minutesguidelines of um what should this you what should this agent do in this certain use case or in this certain
+44:0744 minutes, 7 secondssituation how should it behave how should it perform so that's where this is I find it very beautiful I I
+44:1644 minutes, 16 secondslike this is yeah this is fascinating and do we also like sometimes agent says okay now I'm going to wait for the human to give some
+44:2444 minutes, 24 secondsfeedback and then take the feedback and then incorporate that as part of the interaction. Yes.
+44:3044 minutes, 30 secondsDo you think that the episodic memory would also capture those items?
+44:3344 minutes, 33 secondsYes. Yes, definitely. Um I mean one thing just to highlight is that you uh within the application you are the one
+44:4044 minutes, 40 secondswho are sending those uh information to the short-term memory, right? So when you want to capture episodic memory, please make sure you also send in the
+44:4844 minutes, 48 secondstools and the user feedback and everything.
+44:5344 minutes, 53 secondsBecause if the agent core memory doesn't get that information, it also cannot process that information. So just to um
+45:0145 minutes, 1 secondbe very clear about it that you are responsible to send that information to the short term so that it can process
+45:0845 minutes, 8 secondsit. Okay. So this is one example we've seen. I also want to go to maybe one
+45:1545 minutes, 15 secondsdifferent perspective. So let's say we take this example where we talk about all HTTPS traffic is failing. Um customers are seeing SSL certificate.
+45:2545 minutes, 25 secondsSo what this did it used six tools. It did the root cause analysis. It did the resolution
+45:3445 minutes, 34 secondswhich says restarted the API gateway service with backup certificate deployment and for certificate renewal. So it's now operational. Okay.
+45:4345 minutes, 43 secondsMhm. Now let's do the same thing with um memory.
+45:5145 minutes, 51 secondsLet's see what it does.
+45:5945 minutes, 59 secondsAll right. Um so one of course it reduced the number of tools that it used
+46:0746 minutes, 7 secondsbut also the important thing to notice is the resolution. It did. It's restarted the API gateway with the ACM
+46:1446 minutes, 14 secondscertificate. All good. And since DNS validation and ACM were already configured, we deployed it to um ACM and
+46:2246 minutes, 22 secondsa certificate to the load balancer restoring HTTPS functionality. So it did a more exhaustive resolution.
+46:3146 minutes, 31 secondsIt looked at the previous things that were uh resolved and did a more um
+46:3846 minutes, 38 secondsexhaustive. So in this case the DNS validation was also checked but if you remember in the previous one we were not
+46:4546 minutes, 45 secondsuh looking at that. So it's just uh to yeah just to just to make it uh more
+46:5546 minutes, 55 secondsprominent that we are not just using less number of tools so making it faster more efficient but also doing a bit more
+47:0347 minutes, 3 secondsexhaustive resolution if we have the information or the patterns that have you know that we have seen from the past.
+47:1047 minutes, 10 secondsUm yes and then so this is what we have been doing as let's say I am a
+47:1847 minutes, 18 secondsyeah a an engineer who is doing these resolution but then also from an admin perspective so you remember we did the streaming bit
+Chapter 10: Dashboard and insights analysis
+47:2747 minutes, 27 secondscorrect and I streamed uh through the kinesis to a lambda function and that lambda was writing back to this dashboard so this
+47:3447 minutes, 34 secondsis the dashboard that I was creating and it's a very basic dashboard but just to give an idea of what we are trying to
+47:4147 minutes, 41 secondsachieve here. Um so we I wanted to create a distribution in terms of
+47:4847 minutes, 48 secondsseverity of how critical is the is the incident that happened right so is it P1 P2 so I classify them into u P1 P2 then
+47:5847 minutes, 58 secondsI create categories for this now this is all one one because as I said I really created very different episodes sorry
+48:0548 minutes, 5 secondsdifferent chats and therefore um it's one each but but you can essentially like create
+48:1348 minutes, 13 secondsthose categories and see you know which categories uh are the issues more more coming in or less uh there
+48:2248 minutes, 22 secondsand then you can also look at the reflections of what was learned and as you said as a human in the loop you can then look at those reflections and say
+48:3048 minutes, 30 secondsokay no this is not what I want or perhaps this is an important one I want to expand it or do something so you can directly write into read or write into
+48:3848 minutes, 38 secondsthe agent core memory as well Um and then you can just look at all different learned insights, maybe
+48:4648 minutes, 46 secondsevaluate them as you like and then look at different situations that occurred uh and what was the assessment that took place. So you can you know use that
+48:5548 minutes, 55 secondsinformation that is in the memory to also perhaps categorize it, analyze it um to
+49:0349 minutes, 3 secondsdo more I don't know aggregation of of uh statistics or anything that you want to do to to achieve out of it. So that's
+49:1149 minutes, 11 secondscompletely on you of how you want to use it.
+49:1449 minutes, 14 secondsI just use it for a dashboard. So that uh because I wanted to classify um so essentially you get the real-time events from the memory on record
+49:2249 minutes, 22 secondscreation or updates or deletion so that you can take like action uh in of polling right so I think this changes whole dynamics of things
+49:3049 minutes, 30 secondsexactly now Akasha just to you know recap going back to one of you know couple of things that you mentioned right so we had like
+49:3849 minutes, 38 secondsless episodes and more reflection can you speak about why that happened okay um So as you see right all of the reflections are topic based.
+49:5149 minutes, 51 secondsSo within one conversation that we have seeded in uh it was talking about a full incident and says okay this this is what
+49:5949 minutes, 59 secondsuh this is what happened and then this was the task that took place. So it could be the case where we were having
+50:0750 minutes, 7 secondsdifferent um analysis or different uh how to say different use cases within
+50:1550 minutes, 15 secondsthe specific because when we having a conversation with the agent it's not necessary that we are talking about one specific topic right
+50:2250 minutes, 22 secondswithin that whole conversation it could extract oh these are the two different two important insights that I created.
+50:2950 minutes, 29 secondsSo that's kind of what happened here. So maybe like a gave it. Mhm.
+50:3550 minutes, 35 secondsSo chats that I gave it were like uh 50 messages long or so and therefore it
+50:4250 minutes, 42 secondsextracted two different um I I yeah I actually haven't seen if it's two per episode or not but essentially
+50:5050 minutes, 50 secondsit is able to also look at yeah look at also cross episodes right so different episodes it looks at and then it understands okay
+50:5950 minutes, 59 secondsacross these five things I see that this is a general pattern that I have created so it's it doesn't have to be one is to two or one is to five or anything. It
+51:0851 minutes, 8 secondsreally depends on what kind of conversation is going in. Um in most of the cases like where we are talking about very general conversation you know
+51:1651 minutes, 16 secondsuh where the user is sharing something like a travel agent or so there you'll find really less reflections because the situations are not that different. Mhm.
+51:2451 minutes, 24 secondsVersus here we are giving it so many different situations right you see the categories are not overlapping at all.
+51:3251 minutes, 32 secondsSo um it's able to yeah it's able to um create more reflections. So if you look at the reflections right let's take an example.
+51:4351 minutes, 43 secondsSo here the reflection is not about DNS or anything. It's about how do I do post incident documentation. Mhm. This is a root cause analysis.
+Chapter 11: Learned insights and patterns
+51:5151 minutes, 51 secondsRight. So this is exactly what we when we solve problems and we've had many customer interactions where we say hey
+51:5951 minutes, 59 secondswe want to integrate our DevOps into like an AI pipeline and let the AI troubleshoot uh before the agent before
+52:0652 minutes, 6 secondsthe engineer is coming on call uh have the summary ready right so it can reflect look at you know what are all the incidents that happened in the past
+52:1552 minutes, 15 secondswhen there's a new issue that's created and then keep a summary ready for the agent uh to be able to say Hey, uh, now that you're logged in, this is all the
+52:2352 minutes, 23 secondstroubleshooting I did. In the past, we did all these five things. You can now start and give your inputs as to how I should proceed, you know. Is that how you could do? Yeah.
+52:3252 minutes, 32 secondsYes. Yeah. Yeah.
+52:3552 minutes, 35 secondsUm, yeah. So, essentially this is more like derived
+52:4452 minutes, 44 secondsuh insights, you know, like what it learned of like how do I do infrastructure assessment? Mhm. before the incident remediation.
+52:5252 minutes, 52 secondsUh so of course this yeah just taking it from one perspective one incident happened it did some
+53:0053 minutesassessment before the incident remediation it did some um some documentation after the incident so
+53:0753 minutes, 7 secondslet's say in this case it'll have these two different insights right but of course it's a very abstract very vague
+53:1453 minutes, 14 secondsmapping criteria but I'm just giving an example of how it could lead to more reflections than the episodes but That's
+53:2253 minutes, 22 secondsusually in for most of the cases it's not uh that that common like I've not seen it for 99% of the cases it's yeah
+53:3253 minutes, 32 secondsum all right so now we have covered a lot about the user you know user journey
+53:3853 minutes, 38 secondsand how do we improve based on the user maybe let's get back to the presentation yeah I want to also ask like maybe as we
+53:4653 minutes, 46 secondsget through the next slides right so how do we put some boundaries on these um interactions because we want some episodes some memory interactions to be
+53:5553 minutes, 55 secondslike you know very specific and not have the agent you know overlap on its memory recollection abilities
+Chapter 12: Security and closing
+54:0354 minutes, 3 secondsI mean that's that's the biggest challenge in production right how do we make sure we have enough guardrails that the agent can function what we want it
+54:1154 minutes, 11 secondsto do but it doesn't go beyond that like it doesn't go rogue um so that's where we want to keep those
+54:1954 minutes, 19 secondsboundaries we want to keep those guard rails we want to have some enforcements um built in. So that's uh one of the
+54:2754 minutes, 27 secondsbiggest challenges that we have we we are seeing our enterprises uh enterprise customers facing. So
+54:3554 minutes, 35 secondsthat's where I want to uh talk about the scoping memory for production right what are the layers of uh scoping our memory
+54:4454 minutes, 44 secondsuh bit when we are putting or when we have our agent in production or when we are putting in production.
+54:5054 minutes, 50 secondsSo first uh layer is around the short-term memory which is uh for short-term memory scoping you scope it
+54:5754 minutes, 57 secondsbased on the memory ID, the actor ID and the session ID. So these are the three identifiers you create to put um any of
+55:0555 minutes, 5 secondsyour messages or any of your uh events into the short-term memory. So the raw data store that we were talking about,
+55:1255 minutes, 12 secondsright? So this way you know you don't have any crosser cross session bleed. So
+55:1955 minutes, 19 secondsAlice cannot see what Candace was doing or you know what Bob is doing or there
+55:2555 minutes, 25 secondscannot be any mix of uh different users or different actors.
+55:3155 minutes, 31 secondsUm so that's the layer one the fundamental one right now on the layer
+55:3755 minutes, 37 secondstwo which is what is flowing in from the from the layer one by the way just to uh
+55:4455 minutes, 44 secondskind of uh remember back. Um so the information that we put in in the short-term memory is what is flowing
+55:5155 minutes, 51 secondsinto long-term memory. So on top of what we what scoping we did here, we are also scoping it in terms of namespaces,
+56:0056 minutesright? The name spaces is essentially a hierarchical path that we can create uh with we have we allow three different
+56:0856 minutes, 8 secondsvariables you can add strategy ID uh actor ID and and session ID, right? So
+56:1556 minutes, 15 secondsthose are the variables you can use to create a hierarchical path to make it as granular as you want or to keep it super
+56:2256 minutes, 22 secondshigh level. That's completely the design decision that you have to take um while building your agents, right? But this
+56:3056 minutes, 30 secondsway you can control uh what information can be retrieved or from which namespace can the information
+56:3856 minutes, 38 secondsbe retrieved, right? So essentially uh you know controlling the blast radius.
+56:4456 minutes, 44 secondsYeah, if you can put it that way.
+56:4656 minutes, 46 secondsSo yeah, what information do I have access to? So you can control that bit.
+56:5156 minutes, 51 secondsAnd we've discussed this in a deep dive uh you know on agent core memory. So I've I've linked that episode in the chat. You can take a look at that so that you can see what is that name
+57:0057 minutesspace. How do you control that? More on more in that link there.
+57:0357 minutes, 3 secondsYes. Yes. Yes. Thank you so much. Um all right. And then layer three is then more enforcement. Right now we're talking
+57:1257 minutes, 12 secondsabout hard security enforcement. So this is on the IM uh level where we want to make sure that you know that our agents
+57:2057 minutes, 20 secondsare given certain policy are given certain um condition that they cannot cross. So
+57:2857 minutes, 28 secondsthey h they are given very specific boundaries that they cannot uh go beyond.
+57:3457 minutes, 34 secondsUh so this is where we can can use the IM roles with uh the actor ID condition
+57:4157 minutes, 41 secondskeys so that only an actor can access uh the memory that it's assigned. Mhm.
+57:4857 minutes, 48 secondsAnd then we also have recently launched resource-based policies which allow you to identify which resource is actually
+57:5657 minutes, 56 secondsaccessing this uh memory. So with this you can say with this you can identify which agent uh is able to access your
+58:0458 minutes, 4 secondsmemory right. So you can um combine these two to actually enforce uh the
+58:1258 minutes, 12 secondsaccess on yeah on the agent for the agent. So, so this is good, right? So, to break it
+58:1958 minutes, 19 secondsdown, we have we are creating how uh you know the the short-term memory the the long-term memory scoping that creating
+58:2758 minutes, 27 secondsepisodes out of that but then we talking about how you can bring security so that uh you know you're adding those
+58:3458 minutes, 34 secondsguardrails uh from uh interact I mean from the code and the actors also like to not be able to interact with the other memories.
+58:4458 minutes, 44 secondsYes. Yes. All right. Um I think we're almost on time, right? Yeah.
+58:5158 minutes, 51 secondsSo I would want to share some resources here.
+58:5558 minutes, 55 secondsUm please also look at the episodic memory blog post. It is much more it is
+59:0359 minutes, 3 secondsit is super detailed. Uh we've put a lot of effort into it. It has examples also at the end in the appendex. So you can
+59:1159 minutes, 11 secondslook at it how it works the detailed uh diagram and I would highly recommend for
+59:1759 minutes, 17 secondsyou to try it out see how it's how it's working for your use case and if you have any questions please reach out to
+59:2559 minutes, 25 secondsus um put it in the comments we definitely um do keep an eye and respond timely.
+59:3559 minutes, 35 secondsYeah. Excellent. Thank you for diving deep into the details of episodic memory today Akasha and uh we'll come back to you folks with another episode on the AW
+59:4459 minutes, 44 secondsshow and tell for next week but until then uh thank you for joining the live stream today. Thank you.
+
+
+
+
+
+
+Resources:
+https://github.com/awslabs/agentcore-samples/tree/main/01-tutorials/04-AgentCore-memory
+https://github.com/aws/bedrock-agentcore-sdk-python
+
+https://github.com/aws/bedrock-agentcore-starter-toolkit
+
+
+youtube link
+https://www.youtube.com/watch?v=1EEIGsKIjGA&list=PLhr1KZpdzukfZdp5SGgm2yBPglHNHn-Ig&index=12
