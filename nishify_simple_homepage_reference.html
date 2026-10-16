@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nishify — Simple Learning Homepage</title>
+<style>
+:root{--ink:#17213f;--muted:#66728c;--orange:#f07800;--purple:#6e58d9;--line:#e7e9f2;--bg:#f7f8fc}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
+.topbar{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(18px,5vw,72px);gap:22px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:850;font-size:22px;letter-spacing:-.6px}.mark{width:27px;height:27px;border-radius:8px;background:linear-gradient(135deg,#ff9d44,#7958e9);transform:rotate(-9deg)}
+nav{display:flex;align-items:center;gap:24px;font-size:13px;color:var(--muted)}nav a{text-decoration:none;color:inherit}nav a:first-child{color:var(--orange);font-weight:750}.account{font-size:12px;color:var(--muted)}
+main{max-width:1140px;margin:32px auto;padding:0 22px}
+.hero{background:linear-gradient(110deg,#fff 0%,#fff 65%,#f1efff 100%);border:1px solid #eae8f7;border-radius:23px;padding:clamp(28px,5vw,54px);box-shadow:0 12px 34px #1b264c0a}
+.eyebrow{font-size:11px;font-weight:850;letter-spacing:1.15px;color:var(--purple);text-transform:uppercase}
+h1{font-size:clamp(32px,4.2vw,50px);line-height:1.12;letter-spacing:-1.8px;max-width:760px;margin:17px 0 15px}
+h1 span{color:var(--orange)}.intro{font-size:16px;line-height:1.75;color:var(--muted);max-width:660px;margin:0}
+.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:26px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:47px;padding:0 19px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:750;border:1px solid transparent}
+.primary{background:var(--orange);color:white;box-shadow:0 5px 12px #f0780026}.secondary{background:white;color:var(--purple);border-color:var(--line)}
+.subtext{font-size:12px;color:var(--muted);margin-top:15px}
+.section{margin-top:32px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:15px}.section h2{font-size:21px;letter-spacing:-.5px;margin:0 0 5px}.section p{font-size:13px;color:var(--muted);margin:0}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:20px}.icon{width:43px;height:43px;border-radius:12px;background:#f2f5f4;display:grid;place-items:center;font-size:22px;margin-bottom:13px}.tag{font-size:10px;letter-spacing:.7px;font-weight:850;color:var(--purple)}.card h3{font-size:15px;margin:7px 0}.card p{font-size:12px;line-height:1.6;color:var(--muted);margin:0}.card a{display:inline-block;margin-top:15px;color:var(--purple);font-size:12px;font-weight:750;text-decoration:none}
+.continue{display:none;grid-template-columns:1fr 1fr;gap:16px}.continue.visible{display:grid}.progress-card{background:white;border:1px solid var(--line);border-radius:16px;padding:20px}.progress-card h3{font-size:15px;margin:0 0 7px}.progress-card p{font-size:12px;color:var(--muted);margin:0}.bar{height:6px;background:#edeef5;border-radius:8px;margin:15px 0 7px;overflow:hidden}.bar span{display:block;width:0;height:100%;background:var(--orange)}.tiny{font-size:11px;color:var(--muted)}.foot{font-size:11px;color:#8991a5;text-align:center;padding:32px 0}
+@media(max-width:760px){.topbar{height:auto;min-height:64px;flex-wrap:wrap;padding:13px 18px}nav{order:3;width:100%;overflow:auto;padding-bottom:5px;gap:18px}.account{margin-left:auto}main{padding:0 14px;margin:22px auto}.hero{padding:27px 23px}.cards{grid-template-columns:1fr}.continue.visible{grid-template-columns:1fr}h1{letter-spacing:-1.1px}.intro{font-size:14px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#home" style="text-decoration:none;color:inherit"><span class="mark"></span>Nishify</a>
+  <nav aria-label="Main navigation"><a href="#home">Home</a><a href="#learning">My Learning</a><a href="#paths">Learning Paths</a><a href="#practice">Practice</a><a href="#career">Career Growth</a></nav>
+  <div class="account" id="account">Guest · Sign in</div>
+</header>
+<main>
+  <section class="hero" id="home">
+    <div class="eyebrow" id="eyebrow">START SMALL. GROW EVERY DAY.</div>
+    <h1 id="headline">Build skills in minutes. <span>Grow for what’s next.</span></h1>
+    <p class="intro" id="intro">Learn through bite-sized lessons, practise with real activities, and get guidance when you need it. Make progress that fits your day.</p>
+    <div class="actions">
+      <a class="btn primary" href="#paths" id="primary">Explore learning paths →</a>
+      <a class="btn secondary" href="#signin" id="secondary">Sign in</a>
+    </div>
+    <div class="subtext" id="subtext">Explore learning paths first. Sign in when you're ready to start a protected lesson and save your progress.</div>
+  </section>
+
+  <section class="section" id="learning">
+    <div class="section-head"><div><h2 id="sectionTitle">Find a path that fits your goal</h2><p id="sectionCopy">Explore subjects and see what you can learn before you get started.</p></div></div>
+    <div class="continue" id="continuePanel">
+      <article class="progress-card"><h3 id="continueTitle">Continue learning</h3><p id="continueCopy">Pick up where you left off.</p><div class="bar"><span id="barFill"></span></div><div class="tiny" id="progressLabel">Progress is loading…</div><div class="actions"><a class="btn primary" href="#my-learning">Continue learning →</a></div></article>
+      <article class="progress-card"><h3>Your learning, in one place</h3><p>See your enrolled courses and continue your next lesson from My Learning.</p><div class="actions"><a class="btn secondary" href="#my-learning">View My Learning →</a></div></article>
+    </div>
+  </section>
+
+  <section class="section" id="paths">
+    <div class="section-head"><div><h2>Explore learning paths</h2><p>Choose a goal. Learn step by step. Put your skills into practice.</p></div></div>
+    <div class="cards">
+      <article class="card"><div class="icon">☁️</div><div class="tag">CLOUD & AI</div><h3>AWS & AI Foundations</h3><p>Build practical cloud and AI skills through short lessons and guided activities.</p><a href="#path-aws">View learning path →</a></article>
+      <article class="card"><div class="icon">🤖</div><div class="tag">GENERATIVE AI</div><h3>Build with Generative AI</h3><p>Explore key concepts, try examples, and apply what you learn in useful projects.</p><a href="#path-genai">View learning path →</a></article>
+      <article class="card"><div class="icon">🐧</div><div class="tag">DEVELOPER SKILLS</div><h3>Linux & Developer Essentials</h3><p>Build confidence with clear explanations and hands-on challenges.</p><a href="#path-linux">View learning path →</a></article>
+    </div>
+  </section>
+  <section class="section" id="practice"><div class="section-head"><div><h2>Make your next 10 minutes count</h2><p>Learn one useful idea, practise it, and keep moving forward.</p></div></div></section>
+  <div class="foot" id="career">Nishify · Learn at your pace. Build skills for what’s next.</div>
+</main>
+<script>
+// Preview only. In the real application, derive these values from authenticated user,
+// enrollment and progress data rather than a hardcoded state selector.
+function setLearnerState(state, data={}) {
+  const panel = document.getElementById('continuePanel');
+  const primary = document.getElementById('primary');
+  const secondary = document.getElementById('secondary');
+  const note = document.getElementById('subtext');
+  if (state === 'guest') {
+    document.getElementById('account').textContent = 'Guest · Sign in';
+    document.getElementById('eyebrow').textContent = 'START SMALL. GROW EVERY DAY.';
+    document.getElementById('headline').innerHTML = 'Build skills in minutes. <span>Grow for what’s next.</span>';
+    document.getElementById('intro').textContent = 'Learn through bite-sized lessons, practise with real activities, and get guidance when you need it. Make progress that fits your day.';
+    primary.textContent = 'Explore learning paths →'; primary.href = '#paths';
+    secondary.textContent = 'Sign in'; secondary.href = '#signin';
+    note.textContent = "Explore learning paths first. Sign in when you're ready to start a protected lesson and save your progress.";
+    document.getElementById('sectionTitle').textContent = 'Find a path that fits your goal';
+    document.getElementById('sectionCopy').textContent = 'Explore subjects and see what you can learn before you get started.';
+    panel.classList.remove('visible');
+  } else if (state === 'signed-no-enrolment') {
+    document.getElementById('account').textContent = 'Welcome back · Learner';
+    document.getElementById('eyebrow').textContent = 'YOUR NEXT STEP STARTS HERE';
+    document.getElementById('headline').innerHTML = 'What would you like to <span>learn today?</span>';
+    document.getElementById('intro').textContent = 'Choose a learning path, explore what you’ll learn, and enrol when you’re ready.';
+    primary.textContent = 'Explore learning paths →'; primary.href = '#paths';
+    secondary.textContent = 'My Learning'; secondary.href = '#my-learning';
+    note.textContent = 'You’re signed in. Choose a path to get started; your enrolled courses will appear here once you enrol.';
+    document.getElementById('sectionTitle').textContent = 'Choose your first learning path';
+    document.getElementById('sectionCopy').textContent = 'Review the outcomes and course details before enrolling.';
+    panel.classList.remove('visible');
+  } else {
+    document.getElementById('account').textContent = 'Welcome back · Learner';
+    document.getElementById('eyebrow').textContent = 'YOUR LEARNING, YOUR GROWTH';
+    document.getElementById('headline').innerHTML = 'Keep building skills. <span>One lesson at a time.</span>';
+    document.getElementById('intro').textContent = 'Continue an enrolled course, practise a concept, or explore your next challenge.';
+    primary.textContent = 'Continue learning →'; primary.href = '#learning';
+    secondary.textContent = 'Explore more paths'; secondary.href = '#paths';
+    note.textContent = '';
+    document.getElementById('sectionTitle').textContent = 'Pick up where you left off';
+    document.getElementById('sectionCopy').textContent = 'Resume your saved lesson or review your learning progress.';
+    panel.classList.add('visible');
+    document.getElementById('progressLabel').textContent = data.progress == null ? 'Loading your saved progress…' : `${data.progress}% complete`;
+    document.getElementById('barFill').style.width = data.progress == null ? '0%' : `${Math.max(0,Math.min(100,data.progress))}%`;
+  }
+}
+setLearnerState('guest');
+</script>
+</body>
+</html>
